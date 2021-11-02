@@ -4,7 +4,7 @@ import wx
 # not yet implemented in any way
 # saving this one for someone else to do, so I dont do all the UI
 
-class Creation(wx.Panel):
+class Search(wx.Panel):
     #init method, initial constructor, this is what is run when it is first called
     def __init__(self, parent):
         super().__init__(parent)
@@ -13,10 +13,11 @@ class Creation(wx.Panel):
         self.Back_Button = wx.Button(parent=self, label="Back", pos=(0, 0), size=(50, 50))
         self.Back_Button.Bind(wx.EVT_BUTTON, parent.setPrevious)
 
+
         # UI implementation here:
 
 
-        # load in user data
+        # load in user DataManagement
         self.update_user()
 
     # one of the most important UI functions, this is where the window resize gets handled

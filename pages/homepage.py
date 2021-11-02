@@ -25,8 +25,8 @@ class Homepage(wx.Panel):
         self.Searchbar.SetFont(font_searchtext)
 
         #more button declarations
-        self.Settings = wx.Button(parent=self, label="Settings", pos=(255, 0), size=(70, 50))
-        self.Settings.Bind(wx.EVT_BUTTON, parent.setSettings)
+        # self.Settings = wx.Button(parent=self, label="Settings", pos=(255, 0), size=(70, 50))
+        # self.Settings.Bind(wx.EVT_BUTTON, parent.setSettings)
 
         self.Account = wx.Button(parent=self, label="Account", pos=(350, 0), size=(80, 50))
         self.Account.Bind(wx.EVT_BUTTON, parent.setAccount)
@@ -60,8 +60,8 @@ class Homepage(wx.Panel):
         #apply the new size to the window layout,
         #much of the items do not need to be changed since they stay on the sidebar or topbar
         self.Recipe_main.SetSize((size[0]-50, size[1]-50))
-        self.Searchbar.SetSize((size[0]-380, 48))
-        self.Settings.SetPosition((size[0] - 150, 0))
+        self.Searchbar.SetSize((size[0]-310, 48))
+        # self.Settings.SetPosition((size[0] - 150, 0))
         self.Account.SetPosition((size[0]-80, 0))
 
     # all pages must implement this, even if they dont use it

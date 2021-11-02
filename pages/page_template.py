@@ -1,9 +1,9 @@
 import wx
 
-# not yet implemented in any way
-# saving this one for someone else to do, so I dont do all the UI
 
-class Execution(wx.Panel):
+# template, if we need to add another page, start by copying this one
+
+class Example(wx.Panel):
     #init method, initial constructor, this is what is run when it is first called
     def __init__(self, parent):
         super().__init__(parent)
@@ -15,11 +15,12 @@ class Execution(wx.Panel):
         # UI implementation here:
 
 
-        # load in user data
+        # load in user DataManagement
         self.update_user()
 
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
+        # gets the size of the current window, so we can scale everything to it
         size = self.GetSize()
 
     # gets called when a panel is reloaded, not required to do anything but must be here

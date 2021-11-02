@@ -1,5 +1,15 @@
 import wx
 
+# Depreciated
+"""
+
+This Class Is no longer used for anything
+
+"""
+# Depreciated
+
+
+
 class Settings(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)

@@ -18,6 +18,9 @@ class Account(wx.Panel):
         self.Sign_in = wx.Button(parent=self, label="Sign in", pos=(350, 90), size=(80, 50))
         self.Sign_in.Bind(wx.EVT_BUTTON, self.Sign_in_example)
 
+        self.Units = wx.Button(parent=self, label="Metric", pos=(340, 160), size=(100, 50))
+        self.Units.Bind(wx.EVT_BUTTON, self.change_units)
+
         self.Account_name = wx.StaticText(parent=self, pos=(100, 90), size=(150, 20))
         self.Account_age = wx.StaticText(parent=self, pos=(100, 110), size=(150, 20))
         self.Account_available = wx.StaticText(parent=self, pos=(100, 160), size=(150, 70))
@@ -36,6 +39,7 @@ class Account(wx.Panel):
         self.tool_del = wx.Button(parent=self, label="Del", pos=(0, 0), size=(50, 50))
 
         self.update_user()
+
         # there is supposed to be a way to render panels inside panels, but I couldnt get it to work, might be worth looking at again
         # self.pantry = pn.Pantry(self, True)
         #
@@ -64,13 +68,26 @@ class Account(wx.Panel):
         self.ingredient_box.SetPosition((int(size[0] * .25) - 20, size[1] - 60))
         self.ingredient_box.SetSize(100, 50)
 
-    # updates the fields with user data if it is available
+    # updates the fields with user DataManagement if it is available
     def update_user(self):
         self.Account_name.SetLabel("Name: {}".format(self.parent.user.username))
         self.Account_age.SetLabel("Account age: {}".format(self.parent.user.account_age))
         self.Account_available.SetLabel("Permissions: \n{}".format(self.parent.user.permissions))
         self.tools_list.SetValue(self.parent.user.tools)
         self.ingredients_list.SetValue(self.parent.user.pantry)
+
+    # called on button press
+    def change_units(self, event=None):
+        self.parent.user.settings["Metric"] = not(self.parent.user.settings["Metric"])
+        self.update_units()
+
+    # changes the units in the GUI
+    def update_units(self):
+        if self.parent.user.settings["Metric"]:
+            self.Units.SetLabel("Metric")
+        else:
+            self.Units.SetLabel("Imperial")
+        #TODO some code here to send the units update to the server, using the user class
 
     # to be replaced by real function, this is for demo purposes only
     def Sign_in_example(self, event):
