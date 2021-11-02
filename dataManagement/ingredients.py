@@ -12,14 +12,14 @@ class Ingredients:
         self.__items = []
 
         # always defaults to metric
-        # this does not denote how the DataManagement is stored in the list, but how the user requests it
+        # this does not denote how the dataManagement is stored in the list, but how the user requests it
         # units are always shown dynamically, to avoid converting between units and gathering +- errors
         self.__unit = "metric"
 
         # useful for debugging, might not end up being needed
         self.__origin = "empty"
 
-    # example with dummy DataManagement
+    # example with dummy dataManagement
     def example(self):
         self.__unit = "metric"
         self.__origin = "example"

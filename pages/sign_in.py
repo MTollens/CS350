@@ -18,7 +18,7 @@ class Sign(wx.Panel):
         self.Cancel = wx.Button(parent=self, label="Cancel", pos=(0, 0), size=(100, 50))
         self.Cancel.Bind(wx.EVT_BUTTON, parent.setAccount)
 
-        # if submit is chosen then we will send some DataManagement to the user class to validate the login
+        # if submit is chosen then we will send some dataManagement to the user class to validate the login
         self.Confirm = wx.Button(parent=self, label="Login", pos=(0, 0), size=(100, 50))
         self.Confirm.Bind(wx.EVT_BUTTON, self.example)
 
@@ -28,8 +28,8 @@ class Sign(wx.Panel):
         self.Confirm.SetPosition((size[0] - 150, size[1] - 70))
         self.Cancel.SetPosition((size[0] - 300, size[1] - 70))
 
-    # runs the example, which loads the dummy user demo DataManagement
-    # we also need to remember to switch panels as well as send the DataManagement
+    # runs the example, which loads the dummy user demo dataManagement
+    # we also need to remember to switch panels as well as send the dataManagement
     def example(self, event=None):
         self.parent.user.example_login()
         self.parent.setAccount()

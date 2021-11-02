@@ -14,7 +14,10 @@ class Pantry(wx.Panel):
         #UI delclaration here
         self.Back_Button = wx.Button(parent=self, label="Back", pos=(0, 0), size=(50, 50))
         # if not self.inline:
-        #     self.Back_Button.Bind(wx.EVT_BUTTON, parent.setPrevious)
+        self.Back_Button.Bind(wx.EVT_BUTTON, parent.setPrevious)
+
+        self.Home_button = wx.Button(parent=self, label="Home", pos=(350, 0), size=(80, 50))
+        self.Home_button.Bind(wx.EVT_BUTTON, parent.setHomepage)
 
         # main content window, this is where the actual ingredients go
         self.ingredients_list = wx.TextCtrl(parent=self, pos=(60, 60), size=(200, 100), style=wx.TE_READONLY | wx.TE_MULTILINE)
@@ -42,6 +45,7 @@ class Pantry(wx.Panel):
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
         size = self.GetSize()
+        self.Home_button.SetPosition((size[0]-80, 0))
         self.ingredients_list.SetPosition((50, 50))
         self.ingredients_list.SetSize(int(size[0]/2)-40, size[1]-140)
         self.tools_list.SetPosition((int(size[0]/2)+20, 50))

@@ -68,7 +68,7 @@ class Account(wx.Panel):
         self.ingredient_box.SetPosition((int(size[0] * .25) - 20, size[1] - 60))
         self.ingredient_box.SetSize(100, 50)
 
-    # updates the fields with user DataManagement if it is available
+    # updates the fields with user dataManagement if it is available
     def update_user(self):
         self.Account_name.SetLabel("Name: {}".format(self.parent.user.username))
         self.Account_age.SetLabel("Account age: {}".format(self.parent.user.account_age))

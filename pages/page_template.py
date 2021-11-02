@@ -15,7 +15,7 @@ class Example(wx.Panel):
         # UI implementation here:
 
 
-        # load in user DataManagement
+        # load in user dataManagement
         self.update_user()
 
     # one of the most important UI functions, this is where the window resize gets handled

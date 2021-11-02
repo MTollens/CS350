@@ -33,6 +33,8 @@ class Homepage(wx.Panel):
 
         self.Favorites = wx.Button(parent=self, label="Favorites", pos=(0, 100), size=(50, 50))
         self.Recent = wx.Button(parent=self, label="Recent", pos=(0, 150), size=(50, 50))
+        self.Test = wx.Button(parent=self, label="Test", pos=(0, 200), size=(50, 50))
+        self.Test.Bind(wx.EVT_BUTTON, parent.setTest)
 
         txt_style = wx.VSCROLL | wx.HSCROLL | wx.BORDER_SIMPLE
         self.Recipe_main = wx.html.HtmlWindow(self, -1,

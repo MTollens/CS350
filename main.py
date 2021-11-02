@@ -1,11 +1,11 @@
 #the main UI library
 import wx
-# the panels from the Pages sub directory
-from Pages import sign_in as sn, settings as st, search as sh, pantry as pn, homepage as hp, execution as ex, \
-    creation as cr, account as ac
+# the panels from the pages sub directory
+from pages import sign_in as sn, search as sh, pantry as pn, homepage as hp, execution as ex, \
+    creation as cr, account as ac, test_page as tt
 
-# the user class that handles interactions between the data and the UI
-import user as user
+# the user class that handles interactions between the dataManagement and the UI
+from dataManagement import user as user
 
 # main class, contains all the others
 class Frame(wx.Frame):
@@ -16,8 +16,8 @@ class Frame(wx.Frame):
         self.user = user.User()
 
         # panels list, do not change the order of this list, or all the panels will reference the wrong ones
-        self.__panels = [hp.Homepage(self), ac.Account(self), sn.Sign(self), pn.Pantry(self), st.Settings(self),
-                       sh.Search(self), cr.Creation(self), ex.Execution(self)]
+        self.__panels = [hp.Homepage(self), ac.Account(self), sn.Sign(self), pn.Pantry(self), sh.Search(self),
+                         cr.Creation(self), ex.Execution(self), tt.Test(self)]
 
         # used to manage the back button, as well as to know what panel we should be on
         self.current_panel = 0
@@ -86,18 +86,23 @@ class Frame(wx.Frame):
         self.__setPanel_visible(panel)
 
     def setSettings(self, event=None):
-        panel = 4
+        # settings panel was depreciated, will send to account
+        panel = 1
         self.__setPanel_visible(panel)
 
     def setSearch(self, event=None):
-        panel = 5
+        panel = 4
         self.__setPanel_visible(panel)
 
     def setCreation(self, event=None):
-        panel = 6
+        panel = 5
         self.__setPanel_visible(panel)
 
     def setExecution(self, event=None):
+        panel = 6
+        self.__setPanel_visible(panel)
+
+    def setTest(self, event=None):
         panel = 7
         self.__setPanel_visible(panel)
 
