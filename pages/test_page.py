@@ -15,6 +15,14 @@ class Test(wx.Panel):
         self.dropdown = wx.ComboBox(parent=self, pos=(100,100), size=(150,50))
         self.dropdown.SetItems(["first", "second", "third"])
 
+        self.start = wx.Button(parent=self, label="New", pos=(50, 50), size=(50, 50))
+        self.start.Bind(wx.EVT_BUTTON, self.add_button)
+        self.list = []
+        self.list_y_start = 100
+        self.list_increment = 50
+        self.list_count = 0
+        self.list_x_start = 100
+
         # load in user dataManagement
         self.update_user()
 
@@ -27,3 +35,9 @@ class Test(wx.Panel):
     # this is where user information should be loaded in
     def update_user(self):
         pass
+
+    def add_button(self, event=None):
+        temp = wx.Button(parent=self, label="{}".format(self.list_count),
+                         pos=(self.list_x_start, self.list_y_start+self.list_increment*self.list_count), size=(50, 50))
+        self.list_count += 1
+        self.list.append(temp)

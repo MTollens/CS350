@@ -1,10 +1,12 @@
 import wx
 from wx import html
 
+empty = ["", " ", None]
+
 class Homepage(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
-
+        self.parent = parent
 
         # simple button declaration
         self.Pantry = wx.Button(parent=self, label="Pantry", pos=(0, 0), size=(60, 50))
@@ -14,7 +16,7 @@ class Homepage(wx.Panel):
         self.New_recipe.Bind(wx.EVT_BUTTON, parent.setCreation)
 
         self.Search = wx.Button(parent=self, label="Search", pos=(120, 0), size=(110, 50))
-        self.Search.Bind(wx.EVT_BUTTON, parent.setSearch)
+        self.Search.Bind(wx.EVT_BUTTON, self.search)
 
         # creates the font for the searchbar
         font_searchtext = wx.Font(20, family=wx.FONTFAMILY_MODERN, style=0, weight=100,
@@ -31,10 +33,12 @@ class Homepage(wx.Panel):
         self.Account = wx.Button(parent=self, label="Account", pos=(350, 0), size=(80, 50))
         self.Account.Bind(wx.EVT_BUTTON, parent.setAccount)
 
-        self.Favorites = wx.Button(parent=self, label="Favorites", pos=(0, 100), size=(50, 50))
+        self.Favorites = wx.Button(parent=self, label="Picks", pos=(0, 100), size=(50, 50))
         self.Recent = wx.Button(parent=self, label="Recent", pos=(0, 150), size=(50, 50))
-        self.Test = wx.Button(parent=self, label="Test", pos=(0, 200), size=(50, 50))
-        self.Test.Bind(wx.EVT_BUTTON, parent.setTest)
+        self.Help = wx.Button(parent=self, label="Help", pos=(0, 50), size=(50, 50))
+        self.Help.Bind(wx.EVT_BUTTON, parent.setHelp)
+        # self.Test = wx.Button(parent=self, label="Test", pos=(0, 200), size=(50, 50))
+        # self.Test.Bind(wx.EVT_BUTTON, parent.setTest)
 
         txt_style = wx.VSCROLL | wx.HSCROLL | wx.BORDER_SIMPLE
         self.Recipe_main = wx.html.HtmlWindow(self, -1,
@@ -65,6 +69,13 @@ class Homepage(wx.Panel):
         self.Searchbar.SetSize((size[0]-310, 48))
         # self.Settings.SetPosition((size[0] - 150, 0))
         self.Account.SetPosition((size[0]-80, 0))
+
+    def search(self, event=None):
+        if self.Searchbar.GetValue() not in empty:
+            self.parent.anon_search(self.Searchbar.GetValue())
+            self.Searchbar.SetValue("")
+        else:
+            self.Searchbar.SetHint("Enter a search Here!")
 
     # all pages must implement this, even if they dont use it
     def update_user(self):

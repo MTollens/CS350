@@ -2,7 +2,7 @@
 import wx
 # the panels from the pages sub directory
 from pages import sign_in as sn, search as sh, pantry as pn, homepage as hp, execution as ex, \
-    creation as cr, account as ac, test_page as tt
+    creation as cr, account as ac, test_page as tt, help as hl
 
 # the user class that handles interactions between the dataManagement and the UI
 from dataManagement import user as user
@@ -17,7 +17,7 @@ class Frame(wx.Frame):
 
         # panels list, do not change the order of this list, or all the panels will reference the wrong ones
         self.__panels = [hp.Homepage(self), ac.Account(self), sn.Sign(self), pn.Pantry(self), sh.Search(self),
-                         cr.Creation(self), ex.Execution(self), tt.Test(self)]
+                         cr.Creation(self), ex.Execution(self), tt.Test(self), hl.Help(self)]
 
         # used to manage the back button, as well as to know what panel we should be on
         self.current_panel = 0
@@ -60,6 +60,11 @@ class Frame(wx.Frame):
         self.__panels[panel].Show()
         self.Layout()
 
+    # this allows the reuse of the search function that the search page uses, so the homepage code isnt unique
+    def anon_search(self, keyword):
+        self.user.search(keyword)
+        self.setSearch()
+
 
     # performs the function of a back button
     def setPrevious(self, event=None):
@@ -69,12 +74,14 @@ class Frame(wx.Frame):
 
     # for setting a specific panel, mostly to simplify use from within a panel
     # to avoid needing to send arguments, and to simplify the process for developing
-    def setAccount(self, event=None):
-        panel = 1
-        self.__setPanel_visible(panel)
-
     def setHomepage(self, event=None):
         panel = 0
+        self.__setPanel_visible(panel)
+
+    def setAccount(self, event=None):
+        panel = 2
+        if self.user.signed_in:
+            panel = 1
         self.__setPanel_visible(panel)
 
     def setSignin(self, event=None):
@@ -104,6 +111,10 @@ class Frame(wx.Frame):
 
     def setTest(self, event=None):
         panel = 7
+        self.__setPanel_visible(panel)
+
+    def setHelp(self, event=None):
+        panel = 8
         self.__setPanel_visible(panel)
 
     #end of panel selectors

@@ -3,7 +3,7 @@ import wx
 
 # template, if we need to add another page, start by copying this one
 
-class Example(wx.Panel):
+class Help(wx.Panel):
     #init method, initial constructor, this is what is run when it is first called
     def __init__(self, parent):
         super().__init__(parent)
@@ -11,6 +11,9 @@ class Example(wx.Panel):
 
         self.Back_Button = wx.Button(parent=self, label="Back", pos=(0, 0), size=(50, 50))
         self.Back_Button.Bind(wx.EVT_BUTTON, parent.setPrevious)
+
+        # self.Info = wx.StaticText(self.parent, pos=(60, 60), label="insert help here")
+
 
         # UI implementation here:
 

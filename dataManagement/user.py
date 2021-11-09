@@ -15,10 +15,14 @@ class User():
         self.tools = "None"  # list of strings
         self.pantry = "None"  # list of formatted strings (to include amount + unit)
 
-        # should be converted to a list of Booleans, so that they can be checked against when the permissions are relevant
-        self.permissions = "view and search for recipes"  # list of bools
+        # # should be converted to a list of Booleans, so that they can be checked against when the permissions are relevant
+        # self.permissions = "view and search for recipes"  # list of bools
         # loads the default settings to the instance that is running
         self.settings = User.settings_default
+
+        # working variables, these do not need to be saved
+        self.current_search = ""
+
 
 
     # this is purely for demo purposes, it is not intended for Production in any way, nor is it representative of any final product
@@ -29,10 +33,20 @@ class User():
         self.recipes = "chicken and rice\ncorndog\nwaffles\nsloppy joe"  # list of keys to recipes in the DB
         self.tools = "whisk\ncutting board\nblender\ngrill"  # list of strings
         self.pantry = "chicken\nrice\nflour\nground beef"  # list of formatted strings (to include amount + unit)
-        self.permissions = "View and Search for recipes \nCreate recipes\nExecute recipes"  # list of bools
+        # self.permissions = "View and Search for recipes \nCreate recipes\nExecute recipes"  # list of bools
         self.settings = User.settings_default
         self.settings["Metric"] = True
 
+    def example_guest(self):
+        self.signed_in = False
+        self.username = "Guest"
+        self.account_age = "N/A"  # should probably be an int in the future, but str for example purpose
+        self.recipes = ""  # list of keys to recipes in the DB
+        self.tools = ""  # list of strings
+        self.pantry = ""  # list of formatted strings (to include amount + unit)
+        # self.permissions = "View and Search for recipes \nCreate recipes\nExecute recipes"  # list of bools
+        self.settings = User.settings_default
+        self.settings["Metric"] = True
 
     # here are the getters and setters for all the specific requests that need to be done at any point
 
@@ -49,4 +63,8 @@ class User():
 
     def login(self):
         pass
+
+    def search(self, keyword):
+        self.current_search = keyword
+        # TODO database stuff goes here
 
