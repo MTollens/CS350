@@ -90,11 +90,23 @@ class Account(wx.Panel):
 
     # changes the units in the GUI
     def update_units(self):
-        if self.parent.user.settings["Metric"]:
+        if self.parent.user.metric:
             self.Units.SetLabel("Metric")
         else:
             self.Units.SetLabel("Imperial")
         #TODO some code here to send the units update to the server, using the user class
+
+    # similar function as metric but for setting public/private account
+    def change_public(self, event=None):
+        self.parent.user.public = not(self.parent.user.public)
+        self.update_public()
+
+    def update_public(self):
+        if self.parent.user.public:
+            self.Units.SetLabel("Public")
+        else:
+            self.Units.SetLabel("Private")
+        #TODO some code here to send the update to the server, using the user class
 
     # to be replaced by real function, this is for demo purposes only
     def Sign_in_example(self, event):

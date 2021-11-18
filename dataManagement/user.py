@@ -36,8 +36,8 @@ class User():
         self.tools = "whisk\ncutting board\nblender\ngrill"  # list of strings
         self.pantry = "chicken\nrice\nflour\nground beef"  # list of formatted strings (to include amount + unit)
         # self.permissions = "View and Search for recipes \nCreate recipes\nExecute recipes"  # list of bools
-        self.settings = User.settings_default
-        self.settings["Metric"] = True
+        self.metric = True
+        self.public = True
 
     def example_guest(self):
         self.signed_in = False
@@ -47,8 +47,8 @@ class User():
         self.tools = ""  # list of strings
         self.pantry = ""  # list of formatted strings (to include amount + unit)
         # self.permissions = "View and Search for recipes \nCreate recipes\nExecute recipes"  # list of bools
-        self.settings = User.settings_default
-        self.settings["Metric"] = True
+        self.metric = True
+        self.public = False
 
     # here are the getters and setters for all the specific requests that need to be done at any point
 
