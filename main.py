@@ -23,8 +23,8 @@ class Frame(wx.Frame):
         self.__panels = [hp.Homepage(self), ac.Account(self), sn.Sign(self), pn.Pantry(self), sh.Search(self),
                          cr.Creation(self), ex.Execution(self), tt.Test(self), hl.Help(self)]#, cs.ContentScroller(self)]
     
-        self.__ContentScroller = wx.lib.scrolledpanel.ScrolledPanel(parent=self, size=(500,500), pos=(0,100), style=wx.SIMPLE_BORDER)
-        self.__ContentScroller.resize_main = resize_main
+        # self.__ContentScroller = wx.lib.scrolledpanel.ScrolledPanel(parent=self, size=(500,500), pos=(0,100), style=wx.SIMPLE_BORDER)
+        # self.__ContentScroller.resize_main = resize_main
 
         # used to manage the back button, as well as to know what panel we should be on
         self.current_panel = 0
@@ -67,11 +67,11 @@ class Frame(wx.Frame):
         self.__panels[panel].Show()
         self.Layout()
 
-    def ContentScrollerVisible(self, set):
-        # panel = 9
-        self.__ContentScroller.Bind(wx.EVT_SIZE, self.__ContentScroller.resize_main)
-        self.__ContentScroller.Show()
-        self.__ContentScroller.SetupScrolling(set)
+    # def ContentScrollerVisible(self, set):
+    #     # panel = 9
+    #     self.__ContentScroller.Bind(wx.EVT_SIZE, self.__ContentScroller.resize_main)
+    #     self.__ContentScroller.Show()
+    #     self.__ContentScroller.SetupScrolling(set)
 
     # this allows the reuse of the search function that the search page uses, so the homepage code isnt unique
     def anon_search(self, keyword):
