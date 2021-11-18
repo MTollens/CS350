@@ -10,12 +10,6 @@ class Search(wx.Panel):
         self.parent = parent
 
         # simple button declaration
-        # self.Pantry = wx.Button(parent=self, label="Pantry", pos=(0, 0), size=(60, 50))
-        # self.Pantry.Bind(wx.EVT_BUTTON, parent.setPantry)
-        #
-        # self.New_recipe = wx.Button(parent=self, label="New \nRecipe", pos=(60, 0), size=(60, 50))
-        # self.New_recipe.Bind(wx.EVT_BUTTON, parent.setCreation)
-
         self.Search = wx.Button(parent=self, label="Search", pos=(0, 0), size=(110, 50))
         self.Search.Bind(wx.EVT_BUTTON, self.search)
 
@@ -33,31 +27,9 @@ class Search(wx.Panel):
 
         self.Home = wx.Button(parent=self, label="Home", pos=(350, 0), size=(80, 50))
         self.Home.Bind(wx.EVT_BUTTON, parent.setHomepage)
-        #
-        # self.Favorites = wx.Button(parent=self, label="Picks", pos=(0, 100), size=(50, 50))
-        # self.Recent = wx.Button(parent=self, label="Recent", pos=(0, 150), size=(50, 50))
-        # self.Help = wx.Button(parent=self, label="Help", pos=(0, 50), size=(50, 50))
-        # # self.Test = wx.Button(parent=self, label="Test", pos=(0, 200), size=(50, 50))
-        # self.Test.Bind(wx.EVT_BUTTON, parent.setTest)
 
-        txt_style = wx.VSCROLL | wx.HSCROLL | wx.BORDER_SIMPLE
-        self.Recipe_main = wx.html.HtmlWindow(self, -1,
-                                       size=(400, 200),
-                                       style=txt_style,
-                                               pos=(0,50))
+        self.Scroller = wx.ScrolledCanvas(parent=self, pos=(0,100), size=(200,200))
 
-        self.Recipe_main.LoadFile("resources/Search_Results.html")
-
-        # this is some leftover code that may end up being relevant again if we switch to the other HTML renderer
-        # excuse the names, the websites that are used for this example were used because they contain only basic HTML
-        # i did not want to have any javascript to worry about for the example
-
-        # self.Recipe_main.SetPage
-        # self.Recipe_main.LoadPage("resources/The Best Motherfucking Website.htm")
-        # self.Recipe_main.SetPage("resources/Baked Fish and Chips Recipe - NYT Cooking.htm")
-        # with open("resources/The Best Motherfucking Website.htm", "r") as file:
-        #     self.Recipe_main.SetPage( "https://www.google.com")
-        # self.Recipe_main.LoadURL("file://C:\\Users\\fox11\\PycharmProjects\\VCS350\\resources\\The Best Motherfucking Website.htm")
 
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
@@ -65,7 +37,8 @@ class Search(wx.Panel):
         size = self.GetSize()
         #apply the new size to the window layout,
         #much of the items do not need to be changed since they stay on the sidebar or topbar
-        self.Recipe_main.SetSize((size[0], size[1]-50))
+        # self.Recipe_main.SetSize((size[0], size[1]-50))
+        self.Scroller.SetSize((size[0], size[1]-100))
         self.Searchbar.SetSize((size[0]-190, 48))
         # self.Settings.SetPosition((size[0] - 150, 0))
         self.Home.SetPosition((size[0]-80, 0))

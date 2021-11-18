@@ -85,7 +85,7 @@ class Account(wx.Panel):
 
     # called on button press
     def change_units(self, event=None):
-        self.parent.user.settings["Metric"] = not(self.parent.user.settings["Metric"])
+        self.parent.user.metric = not(self.parent.user.metric)
         self.update_units()
 
     # changes the units in the GUI

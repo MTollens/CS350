@@ -1,11 +1,15 @@
 #the main UI library
 import wx
+import wx.lib.scrolledpanel
 # the panels from the pages sub directory
 from pages import sign_in as sn, search as sh, pantry as pn, homepage as hp, execution as ex, \
-    creation as cr, account as ac, test_page as tt, help as hl
+    creation as cr, account as ac, test_page as tt, help as hl, content_scroll_sub as cs
 
 # the user class that handles interactions between the dataManagement and the UI
 from dataManagement import user as user
+
+def resize_main(self, event=None):
+    pass
 
 # main class, contains all the others
 class Frame(wx.Frame):
@@ -17,7 +21,10 @@ class Frame(wx.Frame):
 
         # panels list, do not change the order of this list, or all the panels will reference the wrong ones
         self.__panels = [hp.Homepage(self), ac.Account(self), sn.Sign(self), pn.Pantry(self), sh.Search(self),
-                         cr.Creation(self), ex.Execution(self), tt.Test(self), hl.Help(self)]
+                         cr.Creation(self), ex.Execution(self), tt.Test(self), hl.Help(self)]#, cs.ContentScroller(self)]
+    
+        self.__ContentScroller = wx.lib.scrolledpanel.ScrolledPanel(parent=self, size=(500,500), pos=(0,100), style=wx.SIMPLE_BORDER)
+        self.__ContentScroller.resize_main = resize_main
 
         # used to manage the back button, as well as to know what panel we should be on
         self.current_panel = 0
@@ -60,11 +67,16 @@ class Frame(wx.Frame):
         self.__panels[panel].Show()
         self.Layout()
 
+    def ContentScrollerVisible(self, set):
+        # panel = 9
+        self.__ContentScroller.Bind(wx.EVT_SIZE, self.__ContentScroller.resize_main)
+        self.__ContentScroller.Show()
+        self.__ContentScroller.SetupScrolling(set)
+
     # this allows the reuse of the search function that the search page uses, so the homepage code isnt unique
     def anon_search(self, keyword):
         self.user.search(keyword)
         self.setSearch()
-
 
     # performs the function of a back button
     def setPrevious(self, event=None):
@@ -100,6 +112,7 @@ class Frame(wx.Frame):
     def setSearch(self, event=None):
         panel = 4
         self.__setPanel_visible(panel)
+        self.ContentScrollerVisible(True)
 
     def setCreation(self, event=None):
         panel = 5
