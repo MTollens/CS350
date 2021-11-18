@@ -23,6 +23,7 @@ class Homepage(wx.Panel):
                        underline=False, faceName="", encoding=wx.FONTENCODING_DEFAULT)
         #create the searchbar
         self.Searchbar = wx.TextCtrl(parent=self, pos=(230,1), size=(220,48))
+        self.Searchbar.Bind(wx.EVT_KEY_DOWN, self.searchbar_keypress)
         # set the font as the search font
         self.Searchbar.SetFont(font_searchtext)
 
@@ -48,17 +49,6 @@ class Homepage(wx.Panel):
 
         self.Recipe_main.LoadFile("resources/lorem.html")
 
-        # this is some leftover code that may end up being relevant again if we switch to the other HTML renderer
-        # excuse the names, the websites that are used for this example were used because they contain only basic HTML
-        # i did not want to have any javascript to worry about for the example
-
-        # self.Recipe_main.SetPage
-        # self.Recipe_main.LoadPage("resources/The Best Motherfucking Website.htm")
-        # self.Recipe_main.SetPage("resources/Baked Fish and Chips Recipe - NYT Cooking.htm")
-        # with open("resources/The Best Motherfucking Website.htm", "r") as file:
-        #     self.Recipe_main.SetPage( "https://www.google.com")
-        # self.Recipe_main.LoadURL("file://C:\\Users\\fox11\\PycharmProjects\\VCS350\\resources\\The Best Motherfucking Website.htm")
-
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
         # get the new window size after the resize event
@@ -70,6 +60,17 @@ class Homepage(wx.Panel):
         # self.Settings.SetPosition((size[0] - 150, 0))
         self.Account.SetPosition((size[0]-80, 0))
 
+    # handles all the keypresses of the searchbar
+    # checks the keypress event, if it is the enter key (return)
+    # it will perform the search function, else it will be handled normally
+    def searchbar_keypress(self, event):
+        if event.GetKeyCode() == 13:
+            self.search()
+        else:
+            event.Skip()
+
+    # stores the search string in the users.py file, so that it is acessable to all the relevant classes
+    # and so that all the various search places use the same interface
     def search(self, event=None):
         if self.Searchbar.GetValue() not in empty:
             self.parent.anon_search(self.Searchbar.GetValue())

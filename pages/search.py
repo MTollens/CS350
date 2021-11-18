@@ -19,6 +19,7 @@ class Search(wx.Panel):
         #create the searchbar
         self.Searchbar = wx.TextCtrl(parent=self, pos=(110,1), size=(220,48))
         # set the font as the search font
+        self.Searchbar.Bind(wx.EVT_KEY_DOWN, self.searchbar_keypress)
         self.Searchbar.SetFont(font_searchtext)
 
         #more button declarations
@@ -28,7 +29,7 @@ class Search(wx.Panel):
         self.Home = wx.Button(parent=self, label="Home", pos=(350, 0), size=(80, 50))
         self.Home.Bind(wx.EVT_BUTTON, parent.setHomepage)
 
-        self.Scroller = wx.ScrolledCanvas(parent=self, pos=(0,100), size=(200,200))
+        # self.Scroller = wx.ScrolledCanvas(parent=self, pos=(0,100), size=(200,200))
 
 
     # one of the most important UI functions, this is where the window resize gets handled
@@ -38,7 +39,7 @@ class Search(wx.Panel):
         #apply the new size to the window layout,
         #much of the items do not need to be changed since they stay on the sidebar or topbar
         # self.Recipe_main.SetSize((size[0], size[1]-50))
-        self.Scroller.SetSize((size[0], size[1]-100))
+        # self.Scroller.SetSize((size[0], size[1]-100))
         self.Searchbar.SetSize((size[0]-190, 48))
         # self.Settings.SetPosition((size[0] - 150, 0))
         self.Home.SetPosition((size[0]-80, 0))
@@ -47,6 +48,18 @@ class Search(wx.Panel):
     def update_user(self):
         self.Searchbar.SetHint(self.parent.user.current_search)
 
+
+    # handles all the keypresses of the searchbar
+    # checks the keypress event, if it is the enter key (return)
+    # it will perform the search function, else it will be handled normally
+    def searchbar_keypress(self, event):
+        if event.GetKeyCode() == 13:
+            self.search()
+        else:
+            event.Skip()
+
+    # stores the search string in the users.py file, so that it is acessable to all the relevant classes
+    # and so that all the various search places use the same interface
     def search(self, event=None):
         if self.Searchbar.GetValue() not in empty:
             #use the offical search channel

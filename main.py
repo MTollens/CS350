@@ -112,7 +112,7 @@ class Frame(wx.Frame):
     def setSearch(self, event=None):
         panel = 4
         self.__setPanel_visible(panel)
-        self.ContentScrollerVisible(True)
+        # self.ContentScrollerVisible(True)
 
     def setCreation(self, event=None):
         panel = 5
