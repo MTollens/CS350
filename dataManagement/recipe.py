@@ -32,3 +32,12 @@ class Recipe():
 
     def delete(self):
         pass
+
+    # this function is for viewing the recipe as a tile in searches
+    # it extends
+    def UI(self, parent):
+        #picture
+        #name
+        #rating
+        #view
+        pass

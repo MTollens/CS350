@@ -1,11 +1,13 @@
 class User():
     # values defined before the __init__ are class variables, they are not intended to be changed in this case
-    settings_default = {"Metric": False}
+    # settings_default = {"Metric": False, }
 
     # initial constructor, this is what runs when it is initialized inside of main.py
     def __init__(self, key=None):
         # is the user signed in?
         self.signed_in = False
+
+        self.public = False
 
         self.username = "Guest"
         self.account_age = "0"  # should probably be an int in the future, but str for example purpose
@@ -18,8 +20,8 @@ class User():
         # # should be converted to a list of Booleans, so that they can be checked against when the permissions are relevant
         # self.permissions = "view and search for recipes"  # list of bools
         # loads the default settings to the instance that is running
-        self.settings = User.settings_default
-
+        # self.settings = User.settings_default
+        self.metric = False
         # working variables, these do not need to be saved
         self.current_search = ""
 
