@@ -21,6 +21,9 @@ class Account(wx.Panel):
         self.Units = wx.Button(parent=self, label="Metric", pos=(70, 140), size=(100, 50))
         self.Units.Bind(wx.EVT_BUTTON, self.change_units)
 
+        self.Public = wx.Button(parent=self, label="Public", pos=(180, 140), size=(100, 50))
+        self.Public.Bind(wx.EVT_BUTTON, self.change_public)
+
         self.recipe_list = wx.TextCtrl(parent=self, pos=(60, 60), size=(200, 100), style=wx.TE_READONLY | wx.TE_MULTILINE)
         # self.ingredients_list.Show()
 
@@ -103,9 +106,9 @@ class Account(wx.Panel):
 
     def update_public(self):
         if self.parent.user.public:
-            self.Units.SetLabel("Public")
+            self.Public.SetLabel("Public")
         else:
-            self.Units.SetLabel("Private")
+            self.Public.SetLabel("Private")
         #TODO some code here to send the update to the server, using the user class
 
     # to be replaced by real function, this is for demo purposes only
