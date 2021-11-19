@@ -8,8 +8,6 @@ from pages import sign_in as sn, search as sh, pantry as pn, homepage as hp, exe
 # the user class that handles interactions between the dataManagement and the UI
 from dataManagement import user as user
 
-def resize_main(self, event=None):
-    pass
 
 # main class, contains all the others
 class Frame(wx.Frame):
@@ -21,10 +19,11 @@ class Frame(wx.Frame):
 
         # panels list, do not change the order of this list, or all the panels will reference the wrong ones
         self.__panels = [hp.Homepage(self), ac.Account(self), sn.Sign(self), pn.Pantry(self), sh.Search(self),
-                         cr.Creation(self), ex.Execution(self), tt.Test(self), hl.Help(self)]#, cs.ContentScroller(self)]
+                         cr.Creation(self), ex.Execution(self), tt.Test(self), hl.Help(self)]
     
-        # self.__ContentScroller = wx.lib.scrolledpanel.ScrolledPanel(parent=self, size=(500,500), pos=(0,100), style=wx.SIMPLE_BORDER)
-        # self.__ContentScroller.resize_main = resize_main
+        self.__ContentScroller = cs.ContentScroller(self)
+        self.__ContentScroller.Bind(wx.EVT_SIZE, self.__ContentScroller.resize_main)
+
 
         # used to manage the back button, as well as to know what panel we should be on
         self.current_panel = 0
@@ -54,7 +53,7 @@ class Frame(wx.Frame):
 
 
     # for setting an arbitrary panel as the main panel not to be used directly
-    def __setPanel_visible(self, panel):
+    def __setPanel_visible(self, panel, secondary=False):
         # panel switching referenced from:
         # https://stackoverflow.com/questions/8810514/change-panel-with-button-wxpython
         self.__panels[panel].update_user()
@@ -65,13 +64,12 @@ class Frame(wx.Frame):
             self.__panels[x].Hide()
         self.__panels[panel].Bind(wx.EVT_SIZE, self.__panels[panel].resize_main)
         self.__panels[panel].Show()
+        if secondary:
+            self.__ContentScroller.Show()
+        else:
+            self.__ContentScroller.Hide()
         self.Layout()
 
-    # def ContentScrollerVisible(self, set):
-    #     # panel = 9
-    #     self.__ContentScroller.Bind(wx.EVT_SIZE, self.__ContentScroller.resize_main)
-    #     self.__ContentScroller.Show()
-    #     self.__ContentScroller.SetupScrolling(set)
 
     # this allows the reuse of the search function that the search page uses, so the homepage code isnt unique
     def anon_search(self, keyword):
@@ -111,8 +109,7 @@ class Frame(wx.Frame):
 
     def setSearch(self, event=None):
         panel = 4
-        self.__setPanel_visible(panel)
-        # self.ContentScrollerVisible(True)
+        self.__setPanel_visible(panel, True)
 
     def setCreation(self, event=None):
         panel = 5

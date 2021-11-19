@@ -1,4 +1,4 @@
-import ingredients
+from dataManagement import ingredients as ings
 
 
 class Recipe():
@@ -6,7 +6,7 @@ class Recipe():
         # a string or int that is a key to a specific user in the users table of the DB
         self.owner = owner
         # refer to the ingredients class
-        self.ingredients = ingredients.Ingredients()
+        self.ingredients = 0#ings.Ingredients()
         # "money shot" of the dish storage format TBD
         self.image = ""
         # an identifier for the recipe
@@ -16,6 +16,9 @@ class Recipe():
 
         # a list of strings?
         self.tags = ""
+
+        # not sure if should be string, or float
+        self.average_rating = ""
 
 
     def save(self):

@@ -1,5 +1,5 @@
 import wx
-from wx import html
+import wx.lib.scrolledpanel
 
 empty = ["", " ", None]
 
@@ -29,7 +29,9 @@ class Search(wx.Panel):
         self.Home = wx.Button(parent=self, label="Home", pos=(350, 0), size=(80, 50))
         self.Home.Bind(wx.EVT_BUTTON, parent.setHomepage)
 
-        # self.Scroller = wx.ScrolledCanvas(parent=self, pos=(0,100), size=(200,200))
+        # IMPORTANT
+        # the search panel does not implement the content scroll by itself, it uses the parent rendering another frame to do it
+        # so dont expect to find it here
 
 
     # one of the most important UI functions, this is where the window resize gets handled
@@ -47,7 +49,6 @@ class Search(wx.Panel):
     # all pages must implement this, even if they dont use it
     def update_user(self):
         self.Searchbar.SetHint(self.parent.user.current_search)
-
 
     # handles all the keypresses of the searchbar
     # checks the keypress event, if it is the enter key (return)
