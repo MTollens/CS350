@@ -22,7 +22,7 @@ class Homepage(wx.Panel):
         font_searchtext = wx.Font(20, family=wx.FONTFAMILY_MODERN, style=0, weight=100,
                        underline=False, faceName="", encoding=wx.FONTENCODING_DEFAULT)
         #create the searchbar
-        self.Searchbar = wx.TextCtrl(parent=self, pos=(230,1), size=(220,48))
+        self.Searchbar = wx.TextCtrl(parent=self, pos=(230,1), size=(220,48), style=wx.TE_PROCESS_ENTER)
         self.Searchbar.Bind(wx.EVT_KEY_DOWN, self.searchbar_keypress)
         # set the font as the search font
         self.Searchbar.SetFont(font_searchtext)
