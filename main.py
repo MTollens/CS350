@@ -20,13 +20,17 @@ class Frame(wx.Frame):
         # panels list, do not change the order of this list, or all the panels will reference the wrong ones
         self.__panels = [hp.Homepage(self), ac.Account(self), sn.Sign(self), pn.Pantry(self), sh.Search(self),
                          cr.Creation(self), ex.Execution(self), tt.Test(self), hl.Help(self)]
-    
+
+        # secondary panel that handles the content view, is rendered on top of specified panels
         self.__ContentScroller = cs.ContentScroller(self)
         self.__ContentScroller.Bind(wx.EVT_SIZE, self.__ContentScroller.resize_main)
 
+        # list of panels that should show the ContentScroller
+        self.secondary = [0,4]
+
 
         # used to manage the back button, as well as to know what panel we should be on
-        self.current_panel = 0
+        self.current_panel = 2
         self.previous_panel = 0
 
         # specify that they should all have the same resize properties
@@ -53,22 +57,29 @@ class Frame(wx.Frame):
 
 
     # for setting an arbitrary panel as the main panel not to be used directly
-    def __setPanel_visible(self, panel, secondary=False):
+    def __setPanel_visible(self, panel):
         # panel switching referenced from:
         # https://stackoverflow.com/questions/8810514/change-panel-with-button-wxpython
         self.__panels[panel].update_user()
+
         self.previous_panel = self.current_panel
         self.current_panel = panel
+
         # size = self.GetSize()
         for x in range(len(self.__panels)):
             self.__panels[x].Hide()
         self.__panels[panel].Bind(wx.EVT_SIZE, self.__panels[panel].resize_main)
         self.__panels[panel].Show()
-        if secondary:
+        if panel in self.secondary:
             self.__ContentScroller.Show()
         else:
             self.__ContentScroller.Hide()
         self.Layout()
+
+
+    # used to resize the content window on panels that utilize it
+    def resize_secondary(self, size, position):
+        self.__ContentScroller.resize_main(None, size, position)
 
 
     # this allows the reuse of the search function that the search page uses, so the homepage code isnt unique
@@ -79,6 +90,8 @@ class Frame(wx.Frame):
     # performs the function of a back button
     def setPrevious(self, event=None):
         panel = self.previous_panel
+        if panel == 2:
+            panel = 0
         self.__setPanel_visible(panel)
         self.previous_panel = 0
 
@@ -109,7 +122,7 @@ class Frame(wx.Frame):
 
     def setSearch(self, event=None):
         panel = 4
-        self.__setPanel_visible(panel, True)
+        self.__setPanel_visible(panel)
 
     def setCreation(self, event=None):
         panel = 5

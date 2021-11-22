@@ -45,6 +45,7 @@ class Search(wx.Panel):
         self.Searchbar.SetSize((size[0]-190, 48))
         # self.Settings.SetPosition((size[0] - 150, 0))
         self.Home.SetPosition((size[0]-80, 0))
+        self.parent.resize_secondary((size[0], size[1]-100), (0,100))
 
     # all pages must implement this, even if they dont use it
     def update_user(self):

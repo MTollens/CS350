@@ -2,21 +2,27 @@ from dataManagement import recipe as rcp
 import wx
 
 # by default RecipeBox instances are 200 pixels wide, and 250 tall, (200,250)
-class RecipeBox():
+class RecipeBox(wx.Window):
     #default constructor, no arguments given
     def __init__(self, parent, position=(0,0)):
+        self.size = (200, 250) # can be changed, but intended to be static
+        wx.Window.__init__(self, parent=parent, pos=position, size=self.size)
         self.parent = parent
         self.position = position
-        self.size = (200, 250)
         self.box = wx.StaticBox(parent=parent)
         self.make_button = wx.Button(parent=parent)
         # self.image = wx.BitmapButton()
         bmp = self.load_image("resources/nofile.png")
         bmp.SetSize(self.size)
         self.image = wx.BitmapButton(parent=parent, bitmap=bmp)
+        self.title = ""
 
     def reposition(self, root_position):
         assert isinstance(self.image, wx.BitmapButton)
+
+        self.SetPosition(root_position)
+        self.position = root_position
+
         self.box.SetPosition(self.position)
         self.box.SetSize(self.size)
 
@@ -31,21 +37,28 @@ class RecipeBox():
     def fill(self, recipe):
         assert isinstance(recipe, rcp.Recipe), "must pass an instance of recipe.py - > Recipe"
 
-    # binds both buttons to the overall function's binding
-    def Bind(self, event, function):
-        self.image.Bind(event, function)
-        self.make_button.Bind(event, function)
 
     # fills the object with dummy data for testing purposes
     def dummy(self):
-        title = "Baked Fish and Chips"
+        self.title = "Baked Fish and Chips"
         rating = "(5)"
         star = "★"
         unfilled = "☆"
         rating = rating + " " + star*4 + unfilled
-        temp = title[:int(self.size[0]/2)] + "\n" + rating
+        temp = self.title[:int(self.size[0]/2)] + "\n" + rating
         self.make_button.SetLabel(temp)
         self.image.SetBitmap(self.load_image("resources/fishandchips.jpg"))
+
+    # fills the boxes with information so that the status is clear when there are no results
+    def empty(self):
+        self.title = "End of Results"
+        rating = "(0)"
+        star = "★"
+        unfilled = "☆"
+        rating = rating + " " + unfilled*5
+        temp = self.title[:int(self.size[0]/2)] + "\n" + rating
+        self.make_button.SetLabel(temp)
+        # self.image.SetBitmap(self.load_image("resources/fishandchips.jpg"))
 
     # load file bitmap and return it as a bitmap object
     # for use with the "image" object
@@ -64,3 +77,6 @@ class RecipeBox():
         image = image.Scale(width, height, wx.IMAGE_QUALITY_HIGH)
         result = wx.Bitmap(image)
         return result
+
+    def button_pressed(self, event=None):
+        self.parent.parent.text_click()

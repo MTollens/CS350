@@ -43,12 +43,12 @@ class Homepage(wx.Panel):
         self.Test.Bind(wx.EVT_BUTTON, parent.setTest)
 
         txt_style = wx.VSCROLL | wx.HSCROLL | wx.BORDER_SIMPLE
-        self.Recipe_main = wx.html.HtmlWindow(self, -1,
-                                       size=(400, 200),
-                                       style=txt_style,
-                                               pos=(50,50))
-
-        self.Recipe_main.LoadFile("resources/lorem.html")
+        # self.Recipe_main = wx.html.HtmlWindow(self, -1,
+        #                                size=(400, 200),
+        #                                style=txt_style,
+        #                                        pos=(50,50))
+        #
+        # self.Recipe_main.LoadFile("resources/lorem.html")
 
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
@@ -56,10 +56,11 @@ class Homepage(wx.Panel):
         size = self.GetSize()
         #apply the new size to the window layout,
         #much of the items do not need to be changed since they stay on the sidebar or topbar
-        self.Recipe_main.SetSize((size[0]-50, size[1]-50))
+        # self.Recipe_main.SetSize((size[0]-50, size[1]-50))
         self.Searchbar.SetSize((size[0]-310, 48))
         # self.Settings.SetPosition((size[0] - 150, 0))
         self.Account.SetPosition((size[0]-80, 0))
+        self.parent.resize_secondary((size[0]-50, size[1]-50), (50,50))
 
     # handles all the keypresses of the searchbar
     # checks the keypress event, if it is the enter key (return)

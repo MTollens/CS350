@@ -51,9 +51,6 @@ import wx
 import wx.lib.scrolledpanel
 from pages.custom_widgets import RecipeBox as RecipeBox
 
-# def ContentScroller(parent, size, pos=(100,0)):
-#     return wx.lib.scrolledpanel.ScrolledPanel(parent, -1, size=size, pos=pos,
-#                                                     style=wx.SIMPLE_BORDER)
 
 class ContentScroller(wx.lib.scrolledpanel.ScrolledPanel):
     def __init__(self, parent, size=(600, 355), pos=(0, 100)):
@@ -61,30 +58,75 @@ class ContentScroller(wx.lib.scrolledpanel.ScrolledPanel):
                                                     # style=wx.SIMPLE_BORDER)
         self.parent = parent
         self.SetupScrolling(True)
+        # self.SetAutoLayout(True)
         self.Hide()
 
-        self.bSizer = wx.BoxSizer(wx.VERTICAL)
-        # self.itemlist = [
-        # wx.Button(self,label="Reload",pos=(0,0),size=(50,50))
-        # ]
-        self.itemlist = [
-        RecipeBox(self, (0,0)),
-        RecipeBox(self, (0,270)),
-        RecipeBox(self, (0, 270 *2))
-        ]
+        self.bSizer = wx.GridSizer(4, 10, 10, 10)
 
 
-    def compile_contents(self):
-        self.bSizer = wx.BoxSizer(wx.VERTICAL)
-        for x in self.itemlist:
-            self.bSizer.Add(x, 0, wx.ALL, 5)
+        # self.precompile()
+
+        # regenerates the sizer of items
+        # self.compile_contents()
+        for x in range(3):
+            self.bSizer.Add(RecipeBox(self), 0, wx.ALL, 5)
+            # self.bSizer.Add(wx.Button(self), 0, wx.ALL, 5)
+            # if x > 5:
+            #     print("break")
+            # self.bSizer.Add(RecipeBox(self), )
+
         self.SetSizer(self.bSizer)
+        self.Layout()
 
 
 
-    def resize_main(self, event=None):
+    # commit the changes to the item positions
+    def compile_contents(self):
+        # for x in self.itemlist:
+        #     self.bSizer.Detach(x)
+        # self.bSizer = wx.BoxSizer(wx.VERTICAL)
+        # for x in self.itemlist:
+        #     self.bSizer.Add(x, 0, wx.ALL, 5)
+        # self.SetSizer(self.bSizer)
+        pass
+
+    # generates the positions of the internal objects
+    def precompile(self):
+        pass
+        # size = self.parent.GetSize()
+        # # print("size[0] % 210")
+        # columns = int(size[0] / 210)
+        # print("{}  /  {}  = {}".format(size[0], 210, columns))
+        # print(columns)
+        # if columns <= 0:
+        #     columns = 1
+        # c_column = 0
+        # c_row = 0
+        #
+        # for x in self.itemlist:
+        #     x.SetPosition((210*c_column, 260*c_row))
+        #     # self.bSizer.Add(x, 0, wx.ALL, 5)
+        #     c_column += 1
+        #     # print("{}  {}".format(c_column, c_row))
+        #     if c_column > columns:
+        #         c_row += 1
+        #         c_column = 0
+
+
+    def resize_main(self, event=None, size_external=None, position_external=None):
+        if size_external:
+            self.SetSize(size_external)
+            # self.bSizer.SetMinSize()
+
+        if position_external:
+            self.SetPosition(position_external)
         # gets the size of the current window, so we can scale everything to it
         size = self.parent.GetSize()
+
+        #
+        # self.precompile()
+        # self.compile_contents()
+
         # self.SetSize((size[0], size[1]-100))
         # for x in self.bSizer:
         #     x.SetSize((50, size[1]-20))
