@@ -24,6 +24,7 @@ class Homepage(wx.Panel):
         #create the searchbar
         self.Searchbar = wx.TextCtrl(parent=self, pos=(230,1), size=(220,48), style=wx.TE_PROCESS_ENTER)
         self.Searchbar.Bind(wx.EVT_KEY_DOWN, self.searchbar_keypress)
+        self.Searchbar.SetHint("Featured Recipes for you!")
         # set the font as the search font
         self.Searchbar.SetFont(font_searchtext)
 
@@ -39,8 +40,9 @@ class Homepage(wx.Panel):
         self.Favorites = wx.Button(parent=self, label="Picks", pos=(0, 100), size=(50, 50))
         self.Recent = wx.Button(parent=self, label="Recent", pos=(0, 150), size=(50, 50))
 
-        self.Test = wx.Button(parent=self, label="Test", pos=(0, 200), size=(50, 50))
-        self.Test.Bind(wx.EVT_BUTTON, parent.setTest)
+        # do not delete
+        # self.Test = wx.Button(parent=self, label="Test", pos=(0, 200), size=(50, 50))
+        # self.Test.Bind(wx.EVT_BUTTON, parent.setTest)
 
         txt_style = wx.VSCROLL | wx.HSCROLL | wx.BORDER_SIMPLE
         # self.Recipe_main = wx.html.HtmlWindow(self, -1,

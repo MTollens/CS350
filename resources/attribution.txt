@@ -1,6 +1,11 @@
-VCS350\resources\Raindropmemory-Merry-Go-Round-Doc.ico
+CS350\resources\Raindropmemory-Merry-Go-Round-Doc.ico
 belongs to
 http://raindropmemory.deviantart.com/
 
 
 
+CS350\resources\arrow_right.png
+CS350\resources\arrow_left.png
+both belong to:
+https://thoseawesomeguys.com/prompts/
+https://www.youtube.com/channel/UC2wNnyb3vWhOt0K6LpBrtGg

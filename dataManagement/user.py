@@ -22,7 +22,6 @@ class User():
         self.current_search = ""
 
 
-
     # this is purely for demo purposes, it is not intended for Production in any way, nor is it representative of any final product
     def example_login(self):
         self.signed_in = True
@@ -45,24 +44,30 @@ class User():
         # self.permissions = "View and Search for recipes \nCreate recipes\nExecute recipes"  # list of bools
         self.metric = True
         self.public = False
+    # the above two functions should be removed as soon as the proper login stuff is ready
+
 
     # here are the getters and setters for all the specific requests that need to be done at any point
-
+    # private functions have __ at the beginning, this means that they are for internal class use only
     def __load_from_db(self):
         pass
 
     def __save_to_db(self):
         pass
 
-    # we may need to implement some kind of deadman switch to send the logout info to the server
-    # if we even need to send that to the server
+    # these are the function that are acessable publicly
     def logout(self):
         pass
 
     def login(self):
         pass
 
-    def search(self, keyword):
+    # should only be called from main.py, handled by the anon_search for panels to interact with it
+    def search(self, keyword, keywords=None):
+        # if there are no keywords then send an empty list
+        if keywords is None:
+            keywords = []
+        # this value is stored so that panels can show the current search in a textbox hint
         self.current_search = keyword
         # TODO database stuff goes here
 

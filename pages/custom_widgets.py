@@ -16,6 +16,7 @@ class RecipeBox(wx.Window):
         bmp.SetSize(self.size)
         self.image = wx.BitmapButton(parent=parent, bitmap=bmp)
         self.title = ""
+        self.reposition(self.position)
 
     def reposition(self, root_position):
         assert isinstance(self.image, wx.BitmapButton)
@@ -32,6 +33,9 @@ class RecipeBox(wx.Window):
         self.make_button.SetPosition((self.position[0], self.position[1]+self.size[1]-50))
         self.make_button.SetSize((self.size[0], 50))
 
+
+    def OnResize(self, event=None):
+        self.reposition(self.position)
 
     # load from a recipe class
     def fill(self, recipe):
@@ -59,6 +63,16 @@ class RecipeBox(wx.Window):
         temp = self.title[:int(self.size[0]/2)] + "\n" + rating
         self.make_button.SetLabel(temp)
         # self.image.SetBitmap(self.load_image("resources/fishandchips.jpg"))
+
+    def next_page(self):
+        self.title = "Next Page"
+        self.make_button.SetLabel(self.title)
+        self.image.SetBitmap(self.load_image("resources/arrow_right.png"))
+
+    def previous_page(self):
+        self.title = "Previous Page"
+        self.make_button.SetLabel(self.title)
+        self.image.SetBitmap(self.load_image("resources/arrow_left.png"))
 
     # load file bitmap and return it as a bitmap object
     # for use with the "image" object

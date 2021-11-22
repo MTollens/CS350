@@ -26,7 +26,9 @@ class Frame(wx.Frame):
         self.__ContentScroller.Bind(wx.EVT_SIZE, self.__ContentScroller.resize_main)
 
         # list of panels that should show the ContentScroller
-        self.secondary = [0,4]
+        self.secondary = [0, 4]
+
+        self.first_sign_in = True
 
 
         # used to manage the back button, as well as to know what panel we should be on
@@ -83,9 +85,13 @@ class Frame(wx.Frame):
 
 
     # this allows the reuse of the search function that the search page uses, so the homepage code isnt unique
-    def anon_search(self, keyword):
+    def anon_search(self, keyword, tags=None):
         self.user.search(keyword)
         self.setSearch()
+
+    # can be called from anywhere, just pass the name of the recipe, will automatically redirect to the proper page
+    def open_recipe(self, name):
+        self.setExecution()
 
     # performs the function of a back button
     def setPrevious(self, event=None):
@@ -98,6 +104,7 @@ class Frame(wx.Frame):
     # for setting a specific panel, mostly to simplify use from within a panel
     # to avoid needing to send arguments, and to simplify the process for developing
     def setHomepage(self, event=None):
+        self.first_sign_in = False
         panel = 0
         self.__setPanel_visible(panel)
 
@@ -105,6 +112,9 @@ class Frame(wx.Frame):
         panel = 2
         if self.user.signed_in:
             panel = 1
+        if self.first_sign_in:
+            panel = 0
+            self.first_sign_in = False
         self.__setPanel_visible(panel)
 
     def setSignin(self, event=None):
