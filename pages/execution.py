@@ -18,9 +18,9 @@ class Execution(wx.Panel):
         self.ingredients_req = wx.StaticText(parent=self, label="Ingredients Required:", pos=(80, 180))
         #the following fields will be filled with user data
         self.recipe_name = wx.StaticText(parent=self, label="TEST Simple Poutine TEST", pos=(60, 70))
-        self.appliances = wx.TextCtrl() #not sure if this is the correct
-        self.ingredients = wx.TextCtrl()
-        # load in user dataManagement
+        self.appliances = wx.TextCtrl() #USE TEXTCTRL SET TO READ ONLY, PANTRY IS A GOOD EX
+        self.ingredients = wx.TextCtrl() #APPLIANCES/INGREDIENTS CAN HAVE NEW LINE AFTER EACH
+        # load in user dataManagement    #IN GENERAL, PANTRY IS BEST EXAMPLE, TIMER AND METRIC BUTTONS ARE NEW
         self.update_user()
 
     # one of the most important UI functions, this is where the window resize gets handled
