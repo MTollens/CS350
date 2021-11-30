@@ -28,10 +28,6 @@ class Homepage(wx.Panel):
         # set the font as the search font
         self.Searchbar.SetFont(font_searchtext)
 
-        #more button declarations
-        # self.Settings = wx.Button(parent=self, label="Settings", pos=(255, 0), size=(70, 50))
-        # self.Settings.Bind(wx.EVT_BUTTON, parent.setSettings)
-
         self.Account = wx.Button(parent=self, label="Account", pos=(350, 0), size=(80, 50))
         self.Account.Bind(wx.EVT_BUTTON, parent.setAccount)
 
@@ -44,7 +40,7 @@ class Homepage(wx.Panel):
         # self.Test = wx.Button(parent=self, label="Test", pos=(0, 200), size=(50, 50))
         # self.Test.Bind(wx.EVT_BUTTON, parent.setTest)
 
-        txt_style = wx.VSCROLL | wx.HSCROLL | wx.BORDER_SIMPLE
+        # txt_style = wx.VSCROLL | wx.HSCROLL | wx.BORDER_SIMPLE
         # self.Recipe_main = wx.html.HtmlWindow(self, -1,
         #                                size=(400, 200),
         #                                style=txt_style,

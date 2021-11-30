@@ -6,7 +6,7 @@ class Recipe():
         # a string or int that is a key to a specific user in the users table of the DB
         self.owner = owner
         # refer to the ingredients class
-        self.ingredients = 0#ings.Ingredients()
+        self.ingredients = ings.Ingredients()
         # "money shot" of the dish storage format TBD
         self.image = ""
         # an identifier for the recipe

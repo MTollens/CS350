@@ -28,10 +28,13 @@ class ContentScroller(wx.lib.scrolledpanel.ScrolledPanel):
             temp.Bind(wx.EVT_SIZE, temp.OnResize)
             if x == (icons_per_page -1):
                 temp.next_page()
+                temp.Bind(wx.EVT_BUTTON, self.parent.cs_next_page)
             elif x == (icons_per_page -2):
                 temp.previous_page()
+                temp.Bind(wx.EVT_BUTTON, self.parent.cs_previous_page)
             else:
                 temp.dummy()
+                temp.Bind(wx.EVT_BUTTON, self.parent.cs_previous_page)
             self.bSizer.Add(temp, x, wx.ALL, 5)
             cur_col += 1
             if cur_col > columns:

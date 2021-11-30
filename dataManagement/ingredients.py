@@ -56,7 +56,7 @@ class Ingredients:
         return self.__tostring()
 
     # takes a string, and returns the new object
-    def fromstring(self, string):
+    def from_string(self, string):
         self.__unit = "metric"
         self.__origin = "string"
         return self

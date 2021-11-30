@@ -20,6 +20,13 @@ class User():
 
         # working variables, these do not need to be saved
         self.current_search = ""
+        self.open_recipe = ""
+
+        # timers stored here
+        # reference to a thread
+        # not implemented yet
+        # TODO timers
+        self.timers = 0
 
 
     # this is purely for demo purposes, it is not intended for Production in any way, nor is it representative of any final product
@@ -34,6 +41,7 @@ class User():
         self.metric = True
         self.public = True
 
+    # this one can probably go?
     def example_guest(self):
         self.signed_in = False
         self.username = "Guest"
@@ -45,6 +53,13 @@ class User():
         self.metric = True
         self.public = False
     # the above two functions should be removed as soon as the proper login stuff is ready
+
+
+    # create timer, pass an integer for the number of minutes
+    # might need to pass the UI element to update it from within the thread
+    # TODO timers
+    def create_timer(self, time):
+        pass
 
 
     # here are the getters and setters for all the specific requests that need to be done at any point

@@ -28,6 +28,8 @@ class Frame(wx.Frame):
         # list of panels that should show the ContentScroller
         self.secondary = [0, 4]
 
+        # defaults to True, will be changed to false as soon as the first sign in page is exited
+        # alters behaviour concerning the account page, but only on the first interaction
         self.first_sign_in = True
 
 
@@ -78,11 +80,9 @@ class Frame(wx.Frame):
             self.__ContentScroller.Hide()
         self.Layout()
 
-
     # used to resize the content window on panels that utilize it
     def resize_secondary(self, size, position):
         self.__ContentScroller.resize_main(None, size, position)
-
 
     # this allows the reuse of the search function that the search page uses, so the homepage code isnt unique
     def anon_search(self, keyword, tags=None):
@@ -92,6 +92,14 @@ class Frame(wx.Frame):
     # can be called from anywhere, just pass the name of the recipe, will automatically redirect to the proper page
     def open_recipe(self, name):
         self.setExecution()
+
+    # updates the content_scroller to use the next page of results
+    def cs_next_page(self):
+        pass
+
+    # updates the content_scroller to go to the previous page of results
+    def cs_previous_page(self):
+        pass
 
     # performs the function of a back button
     def setPrevious(self, event=None):
@@ -109,9 +117,13 @@ class Frame(wx.Frame):
         self.__setPanel_visible(panel)
 
     def setAccount(self, event=None):
+        # by default redirect to the sign in page, as the user should not be able to view the account witout being signed in
         panel = 2
+        # if the user has signed in then they can redirect to the proper page
         if self.user.signed_in:
             panel = 1
+        # if the user has just signed in for the fist time this session then they should actually be redirected to the
+        # homepage
         if self.first_sign_in:
             panel = 0
             self.first_sign_in = False
