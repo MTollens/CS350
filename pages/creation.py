@@ -33,6 +33,10 @@ class Creation(wx.Panel):
 
         self.Ingredient_type_selector = wx.ComboBox(parent=self, pos=(50, 200), size=(200,40))
         self.Ingredient_type_selector.SetHint("select type")
+        self.Ingredient_type_selector.SetItems(["Protein", "Dairy", "Spices", "Fruit", "Vegetable",
+                                                "Other"])
+        self.Ingredient_type_selector.Bind(wx.EVT_KEY_DOWN, self.type_selector_autofill)
+
         self.Ingredient_selector = wx.ComboBox(parent=self, pos=(50, 250), size=(200,40))
         self.Ingredient_selector.SetHint("select ingredient")
         self.Ingredient_list = wx.StaticText(parent=self, pos=(50, 360), label="ingredients:")
@@ -70,15 +74,18 @@ class Creation(wx.Panel):
         defDir, defFile = '', ''
         if filename is not None:
             defDir, defFile = os.path.split(filename)
-
+        acceptable_file_types = "BMP and GIF files (*.bmp;*.gif)|*.bmp;*.gif"+\
+                                "|PNG files (*.png)|*.png"+\
+                                "|Jpeg files (*.jpg;*.jpeg)|*.jpg;*.jpeg"
         dlg = wx.FileDialog(self,
                             'Open File',
                             defDir, defFile,
-                            'rfmon files (*.rfmon)|*.rfmon',
+                            acceptable_file_types,
                             wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
         if dlg.ShowModal() == wx.ID_CANCEL:
             return
 
+        # check if the image exists in the system
         if os.path.exists(dlg.GetPath()):
             self.image.SetBitmap(self.load_image(dlg.GetPath(), self.image.GetSize()))
             self.image_path = dlg.GetPath()
@@ -106,3 +113,28 @@ class Creation(wx.Panel):
         image = image.Scale(width, height, wx.IMAGE_QUALITY_HIGH)
         result = wx.Bitmap(image)
         return result
+
+    # this is where changes are commited, data that was entered on the page is put into a recipe class
+    # and the class is passed to the storage handler
+    def finish_recipe(self, event=None):
+        # image path
+        # ingredients
+        # instructions
+        # tags
+        # title
+        # serving
+        # etc...
+        # see recipe class
+        pass
+
+    def type_selector_autofill(self, event=None):
+        print(self.Ingredient_type_selector.GetLabel())
+        for x in self.Ingredient_type_selector.GetItems():
+            if self.Ingredient_type_selector.GetLabel() in x:
+                self.Ingredient_type_selector.SetHint(x)
+                print("setting hint: {}".format(x))
+                break
+        if event.GetKeyCode() == 13:
+            self.Ingredient_type_selector.SetLabel(self.Ingredient_type_selector.GetHint())
+        else:
+            event.Skip()

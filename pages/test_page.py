@@ -23,19 +23,19 @@ class Test(wx.Panel):
         # self.list_increment = 50
         # self.list_count = 0
         # self.list_x_start = 100
-        self.test = cw.RecipeBox(self, (100,100))
+        # self.test = cw.RecipeBox(self, (100,100))
         # self.test.dummy()
 
 
 
         # load in user dataManagement
-        self.update_user()
+        # self.update_user()
 
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
         # gets the size of the current window, so we can scale everything to it
         size = self.GetSize()
-        self.test.reposition((150,150))
+        # self.test.reposition((150,150))
 
     # gets called when a panel is reloaded, not required to do anything but must be here
     # this is where user information should be loaded in
