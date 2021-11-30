@@ -122,4 +122,4 @@ class RecipeBox(wx.Window):
         return result
 
     def pressed(self, event=None):
-        self.parent.selected(self.title)
+        self.parent.open_recipe(self.title)

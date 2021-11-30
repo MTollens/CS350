@@ -93,14 +93,6 @@ class Frame(wx.Frame):
     def open_recipe(self, name):
         self.setExecution()
 
-    # updates the content_scroller to use the next page of results
-    def cs_next_page(self):
-        pass
-
-    # updates the content_scroller to go to the previous page of results
-    def cs_previous_page(self):
-        pass
-
     # performs the function of a back button
     def setPrevious(self, event=None):
         panel = self.previous_panel
