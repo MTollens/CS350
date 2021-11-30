@@ -7,12 +7,12 @@ class Recipe():
         self.owner = owner
         # refer to the ingredients class
         self.ingredients = ings.Ingredients()
-        # "money shot" of the dish storage format TBD
+        # "money shot" of the dish, should be a string referring to the stored location of the image
         self.image = ""
         # an identifier for the recipe
         self.title = "" # name
-        # a list of strings, in the special string format that is TBD
-        self.instructions = ""
+        # a list of strings
+        self.instructions = []
 
         # a list of strings?
         self.tags = ""
@@ -36,13 +36,4 @@ class Recipe():
         pass
 
     def delete(self):
-        pass
-
-    # this function is for viewing the recipe as a tile in searches
-    # it extends
-    def UI(self, parent):
-        #picture
-        #name
-        #rating
-        #view
         pass

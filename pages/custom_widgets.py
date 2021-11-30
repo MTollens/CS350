@@ -18,9 +18,8 @@ class RecipeBox(wx.Window):
         self.title = "None"
         self.reposition(self.position)
 
-        #both of the buttons do the same thing, but they dont have to
-        self.make_button.Bind(wx.EVT_BUTTON, self.pressed)
-        self.image.Bind(wx.EVT_BUTTON, self.pressed)
+        # bind the buttons
+        self.rebind()
 
     def reposition(self, root_position):
         assert isinstance(self.image, wx.BitmapButton)
@@ -36,6 +35,11 @@ class RecipeBox(wx.Window):
 
         self.make_button.SetPosition((self.position[0], self.position[1]+self.size[1]-50))
         self.make_button.SetSize((self.size[0], 50))
+
+    def rebind(self):
+        #both of the buttons do the same thing, but they dont have to
+        self.make_button.Bind(wx.EVT_BUTTON, self.pressed)
+        self.image.Bind(wx.EVT_BUTTON, self.pressed)
 
     # load from a recipe class
     def fill(self, recipe):
@@ -122,4 +126,5 @@ class RecipeBox(wx.Window):
         return result
 
     def pressed(self, event=None):
-        self.parent.open_recipe(self.title)
+        print("debug : {}".format(self.title))
+        self.parent.selected(self.title)

@@ -8,7 +8,7 @@ class ContentScroller(wx.Panel):
         wx.Panel.__init__(self, parent=parent, size=size, pos=pos)#,
                                                     # style=wx.SIMPLE_BORDER)
 
-        # to prevent lag, the loading will be done with a thread
+        self.render_status = 0
 
         self.parent = parent
 
@@ -26,6 +26,8 @@ class ContentScroller(wx.Panel):
 
         # main list of items
         self.items = [RecipeBox(self, position=(10, 10))]
+
+        self.Bind(wx.EVT_IDLE, self.__on_idle)
 
     # takes into consideration the page, and how many tiles are on screen
     def reload_recipes(self):
@@ -63,61 +65,59 @@ class ContentScroller(wx.Panel):
 
     # called externally to resize the page when the window resizes, shouldnt need to call this
     def resize_main(self, event=None, size_external=None, position_external=None):
+        self.render_status = 0
         if size_external:
             self.SetSize(size_external)
 
         if position_external:
             self.SetPosition(position_external)
             self.page = 0
+            self.Hide()
+            self.Show()
 
-        # self.Layout()
-        # gets the size of the current window, so we can scale everything to it
-        # size = self.GetSize()
-        self.Hide()
-        self.update_widgets()
-        self.Show()
+        # self.update_widgets()
 
-    def update_widgets(self):
-        size = self.GetSize()
-        # calculate the number of rows and columns that we can fit
-        # 210 and 270 are the default size of the widget, with 10 for spacing on every side
-        self.columns = int((size[0]-10)/210)
-        self.rows = int((size[1]-10)/270)
-
-        # we must always have at least one object
-        # so we correct for somehow getting a negative or 0
-        if self.columns <= 0:
-            self.columns = 1
-        if self.rows <= 0:
-            self.columns = 1
-
-        # if we can fit more items than we currently have, then add more until it is correct
-        if len(self.items) < (self.columns * self.rows):
-            while len(self.items) < (self.columns * self.rows):
-                self.items.append(RecipeBox(self, position=(0, 0)))
-
-        # alternatively remove items until we dont have too many
-        elif len(self.items) > (self.columns * self.rows):
-            while len(self.items) > (self.columns * self.rows):
-                del self.items[-1]
-
-
-        # for each column
-        for x in range(0, self.columns):
-            # for each row
-            for y in range(0, self.rows):
-                # reposition every widget
-                self.items[x*self.rows+y].reposition((x*210 + 10, y*270+10))
-
-        # print("expected items: {}".format(self.columns * self.rows))
-        # print("actual items: {}".format(len(self.items)))
-        # print(size)
-
-        # now that the layout has (possibly) changed, we need to fix the stuff on the tiles
-        # for x in self.items:
-        #     x.dummy()
-        self.reload_recipes()
-
+    # def update_widgets(self):
+    #     size = self.GetSize()
+    #     # calculate the number of rows and columns that we can fit
+    #     # 210 and 270 are the default size of the widget, with 10 for spacing on every side
+    #     self.columns = int((size[0]-10)/210)
+    #     self.rows = int((size[1]-10)/270)
+    #
+    #     # we must always have at least one object
+    #     # so we correct for somehow getting a negative or 0
+    #     if self.columns <= 0:
+    #         self.columns = 1
+    #     if self.rows <= 0:
+    #         self.columns = 1
+    #
+    #     # if we can fit more items than we currently have, then add more until it is correct
+    #     if len(self.items) < (self.columns * self.rows):
+    #         while len(self.items) < (self.columns * self.rows):
+    #             self.items.append(RecipeBox(self, position=(0, 0)))
+    #
+    #     # alternatively remove items until we dont have too many
+    #     elif len(self.items) > (self.columns * self.rows):
+    #         while len(self.items) > (self.columns * self.rows):
+    #             del self.items[-1]
+    #
+    #
+    #     # for each column
+    #     for x in range(0, self.columns):
+    #         # for each row
+    #         for y in range(0, self.rows):
+    #             # reposition every widget
+    #             self.items[x*self.rows+y].reposition((x*210 + 10, y*270+10))
+    #
+    #     # print("expected items: {}".format(self.columns * self.rows))
+    #     # print("actual items: {}".format(len(self.items)))
+    #     # print(size)
+    #
+    #     # now that the layout has (possibly) changed, we need to fix the stuff on the tiles
+    #     # for x in self.items:
+    #     #     x.dummy()
+    #     self.reload_recipes()
+    #
 
     # buttons call this when a recipe has been selected
     def selected(self, title):
@@ -127,10 +127,12 @@ class ContentScroller(wx.Panel):
         if title == "Next Page":
             self.page += 1
             self.reload_recipes()
+            self.render_status = 1
         elif title == "Previous Page":
             if self.page > 0:
                 self.page += -1
                 self.reload_recipes()
+            self.render_status = 1
         elif title == "End of Results":
             return 0
         else:
@@ -144,4 +146,61 @@ class ContentScroller(wx.Panel):
         # send the following number to the database handler so it knows which result of its search we are on
         position = self.page * self.rows * self.columns + item
         pass
+
+    def __on_idle(self, event=None):
+        # if we are not visible then we are not going to waste background processing
+        if not self.IsShown():
+            return 0
+
+        size = self.GetSize()
+
+        # reload all the widgets
+        if self.render_status == -1:
+            self.items = [RecipeBox(self, position=(10,10))]
+            self.render_status = 0
+
+        # regenerate metadata
+        elif self.render_status == 0:
+            # calculate the number of rows and columns that we can fit
+            # 210 and 270 are the default size of the widget, with 10 for spacing on every side
+            self.columns = int((size[0] - 10) / 210)
+            self.rows = int((size[1] - 10) / 270)
+
+            # we must always have at least one object
+            # so we correct for somehow getting a negative or 0
+            if self.columns <= 0:
+                self.columns = 1
+            if self.rows <= 0:
+                self.columns = 1
+            self.render_status = 1
+
+        # add new ones
+        elif self.render_status == 1:
+            # if we can fit more items than we currently have, then add more until it is correct
+            if len(self.items) < (self.columns * self.rows):
+                while len(self.items) < (self.columns * self.rows):
+                    self.items.append(RecipeBox(self, position=(0, 0)))
+            self.render_status = 2
+
+        # delete extras
+        elif self.render_status == 2:
+            # alternatively remove items until we dont have too many
+            if len(self.items) > (self.columns * self.rows):
+                while len(self.items) > (self.columns * self.rows):
+                    del self.items[-1]
+            self.render_status = 3
+
+        # move each piece
+        elif self.render_status == 3:
+            # for each column
+            for x in range(0, self.columns):
+                # for each row
+                for y in range(0, self.rows):
+                    # reposition every widget
+                    self.items[x * self.rows + y].reposition((x * 210 + 10, y * 270 + 10))
+            self.render_status = 4
+
+        elif self.render_status == 4:
+            self.reload_recipes()
+            self.render_status = 5
 

@@ -17,6 +17,7 @@ class Ingredients:
         self.__unit = "metric"
 
         # useful for debugging, might not end up being needed
+        # does not need to be stored in the DB
         self.__origin = "empty"
 
     # example with dummy dataManagement
