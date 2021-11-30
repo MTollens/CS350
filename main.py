@@ -3,7 +3,7 @@ import wx
 import wx.lib.scrolledpanel
 # the panels from the pages sub directory
 from pages import sign_in as sn, search as sh, pantry as pn, homepage as hp, execution as ex, \
-    creation as cr, account as ac, test_page as tt, help as hl, content_scroll_sub as cs
+    creation as cr, account as ac, test_page as tt, help as hl, content_sub as cs
 
 # the user class that handles interactions between the dataManagement and the UI
 from dataManagement import user as user
