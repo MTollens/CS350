@@ -12,7 +12,7 @@ class RecipeBox(wx.Window):
         self.box = wx.StaticBox(parent=parent)
         self.make_button = wx.Button(parent=parent)
         # self.image = wx.BitmapButton()
-        self.no_image = self.load_image("resources/nofile.png")
+        self.no_image = self.load_image("resources\\nofile.png")
         self.no_image.SetSize(self.size)
         self.image = wx.BitmapButton(parent=parent, bitmap=self.no_image)
         self.title = "None"
@@ -74,7 +74,7 @@ class RecipeBox(wx.Window):
         rating = rating + " " + star*4 + unfilled
         temp = self.title[:int(self.size[0]/2)] + "\n" + rating
         self.make_button.SetLabel(temp)
-        self.image.SetBitmap(self.load_image("resources/fishandchips.jpg"))
+        self.image.SetBitmap(self.load_image("resources\\fishandchips.jpg"))
 
     # fills the boxes with information so that the status is clear when there are no results
     def empty(self):
@@ -85,7 +85,7 @@ class RecipeBox(wx.Window):
         rating = rating + " " + unfilled*5
         temp = self.title[:int(self.size[0]/2)] + "\n" + rating
         self.make_button.SetLabel(temp)
-        # self.image.SetBitmap(self.load_image("resources/fishandchips.jpg"))
+        # self.image.SetBitmap(self.load_image("resources\\fishandchips.jpg"))
 
     # this is to give some visual feedback if there is some problem with the layout such as:
     # "window too small" <- in the case where only one tile can fit on screen, which will be hard to navigate
@@ -98,14 +98,14 @@ class RecipeBox(wx.Window):
         if status:
             self.title = "Next Page"
             self.make_button.SetLabel(self.title)
-            self.image.SetBitmap(self.load_image("resources/arrow_right.png"))
+            self.image.SetBitmap(self.load_image("resources\\arrow_right.png"))
         else:
             self.empty()
 
     def previous_page(self):
         self.title = "Previous Page"
         self.make_button.SetLabel(self.title)
-        self.image.SetBitmap(self.load_image("resources/arrow_left.png"))
+        self.image.SetBitmap(self.load_image("resources\\arrow_left.png"))
 
     # load file bitmap and return it as a bitmap object
     # for use with the "image" object
@@ -114,7 +114,7 @@ class RecipeBox(wx.Window):
         try:
             temp = wx.Bitmap(filename, wx.BITMAP_TYPE_ANY)
         except:
-            temp = wx.Bitmap("resources/fishandchips.jpg", wx.BITMAP_TYPE_ANY)
+            temp = wx.Bitmap("resources\\fishandchips.jpg", wx.BITMAP_TYPE_ANY)
 
         return self.scale_bitmap(temp, self.size[0], self.size[1] - 50)
 
