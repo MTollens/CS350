@@ -178,17 +178,17 @@ class ContentScroller(wx.Panel):
         elif self.render_status == 1:
             # if we can fit more items than we currently have, then add more until it is correct
             if len(self.items) < (self.columns * self.rows):
-                while len(self.items) < (self.columns * self.rows):
                     self.items.append(RecipeBox(self, position=(0, 0)))
-            self.render_status = 2
+            else:
+                self.render_status = 2
 
         # delete extras
         elif self.render_status == 2:
             # alternatively remove items until we dont have too many
             if len(self.items) > (self.columns * self.rows):
-                while len(self.items) > (self.columns * self.rows):
                     del self.items[-1]
-            self.render_status = 3
+            else:
+                self.render_status = 3
 
         # move each piece
         elif self.render_status == 3:
