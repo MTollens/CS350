@@ -1,4 +1,5 @@
 import wx
+import os
 
 
 # not yet implemented in any way
@@ -17,7 +18,7 @@ class Creation(wx.Panel):
         self.Back_Button = wx.Button(parent=self, label="Back", pos=(0, 0), size=(50, 50))
         self.Back_Button.Bind(wx.EVT_BUTTON, parent.setPrevious)
 
-        self.page_name = wx.StaticText(parent=self, label="New Recipe", pos=(120, 20))
+        self.page_name = wx.StaticText(parent=self, label="Recipe Editor", pos=(120, 20))
 
 
         # UI implementation here:
@@ -38,12 +39,9 @@ class Creation(wx.Panel):
 
         self.Add_ingredient = wx.Button(parent=self, pos=(50, 300), label="Add Ingredient")
 
-        # self.Image = wx.Image("resources/fishandchips.jpg", type=wx.BITMAP_TYPE_ANY)
-        # self.Image.Set
-        self.Image_box = wx.StaticBox(parent=self, pos=(300,50), size=(150, 150))
-        self.image_text = wx.StaticText(parent=self, pos=(340, 120), label="Add Image")
-        # self.Image.LoadFile("resources/fishandchips.jpg")
-        # TODO finish this
+        self.image = wx.Button(self, pos=(300,50), size=(150, 150), label="add image")
+        self.image.Bind(wx.EVT_BUTTON, self.image_select)
+        self.image_path = ""
 
         self.Instructions_list = wx.TextCtrl(parent=self, pos=(300, 220), size=(260, 220), style=wx.TE_MULTILINE)
         self.Add_timer = wx.Button(parent=self, label="add Timer", pos=(150, 360))
@@ -64,3 +62,47 @@ class Creation(wx.Panel):
     # this is where user information should be loaded in
     def update_user(self):
         pass
+
+    def image_select(self, event=None):
+        # code referenced from https://www.programcreek.com/python/example/3163/wx.FileDialog
+        filename = "/home/matt/PycharmProjects/CS350/resources/fishandchips.jpg"
+        # TODO clean this up, i dont understand it and it doesnt perfom completly correct
+        defDir, defFile = '', ''
+        if filename is not None:
+            defDir, defFile = os.path.split(filename)
+
+        dlg = wx.FileDialog(self,
+                            'Open File',
+                            defDir, defFile,
+                            'rfmon files (*.rfmon)|*.rfmon',
+                            wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
+        if dlg.ShowModal() == wx.ID_CANCEL:
+            return
+
+        if os.path.exists(dlg.GetPath()):
+            self.image.SetBitmap(self.load_image(dlg.GetPath(), self.image.GetSize()))
+            self.image_path = dlg.GetPath()
+            self.image.SetLabel("")
+        else:
+            self.image.SetLabel("Image couldnt\nbe loaded")
+
+    # load file bitmap and return it as a bitmap object
+    # for use with the "image" object
+    def load_image(self, filename, size):
+        # TODO add file extension checking
+        temp = 0
+        try:
+            temp = wx.Bitmap(filename, wx.BITMAP_TYPE_ANY)
+            temp = self.scale_bitmap(temp, size[0], size[1])
+        except:
+            temp = wx.Bitmap("resources/nofile.png", wx.BITMAP_TYPE_ANY)
+            temp = self.scale_bitmap(temp, size[0], size[1])
+
+        return temp
+
+    # scales bitmap, shouldnt need to be touched at all
+    def scale_bitmap(self, bitmap, width, height):
+        image = wx.Bitmap.ConvertToImage(bitmap)
+        image = image.Scale(width, height, wx.IMAGE_QUALITY_HIGH)
+        result = wx.Bitmap(image)
+        return result

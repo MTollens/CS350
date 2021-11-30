@@ -51,7 +51,7 @@ class ContentScroller(wx.Panel):
             for x in self.items:
                 # the x-1 here is to account for the previous button
                 # remember to check if the page we are on enable the previous button or not
-                # self.items[x].fill(self.__request(x-1))
+                # self.items[x].fill(self.__request(x))
                 # self.items[0].dummy()
                 x.dummy()
             if self.page > 0:
@@ -109,8 +109,8 @@ class ContentScroller(wx.Panel):
                 # reposition every widget
                 self.items[x*self.rows+y].reposition((x*210 + 10, y*270+10))
 
-        print("expected items: {}".format(self.columns * self.rows))
-        print("actual items: {}".format(len(self.items)))
+        # print("expected items: {}".format(self.columns * self.rows))
+        # print("actual items: {}".format(len(self.items)))
         # print(size)
 
         # now that the layout has (possibly) changed, we need to fix the stuff on the tiles
