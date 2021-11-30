@@ -13,8 +13,13 @@ class Execution(wx.Panel):
         self.Back_Button.Bind(wx.EVT_BUTTON, parent.setPrevious)
 
         # UI implementation here:
-
-
+        self.page_name = wx.StaticText(parent=self, label="Make a Recipe", pos=(120, 20))
+        self.appliances_req = wx.StaticText(parent=self, label="Appliances Required:", pos=(80, 100))
+        self.ingredients_req = wx.StaticText(parent=self, label="Ingredients Required:", pos=(80, 180))
+        #the following fields will be filled with user data
+        self.recipe_name = wx.StaticText(parent=self, label="TEST Simple Poutine TEST", pos=(60, 70))
+        self.appliances = wx.TextCtrl() #not sure if this is the correct
+        self.ingredients = wx.TextCtrl()
         # load in user dataManagement
         self.update_user()
 
