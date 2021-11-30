@@ -19,6 +19,7 @@ class Recipe():
 
         # not sure if should be string, or float
         self.average_rating = ""
+        self.number_of_ratings = 0
 
 
     def save(self):
