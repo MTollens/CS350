@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: recipebuddy
 -- ------------------------------------------------------
--- Server version	8.0.22
+-- Server version	8.0.27
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -37,6 +37,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
+INSERT INTO `account` VALUES ('DerickFrito','1357',1,'Metric'),('horickmj','2468',0,'Imperial'),('Matty','54321',0,'Metric'),('maxcolt','12345',1,'Imperial');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,6 +83,7 @@ CREATE TABLE `ingredient` (
 
 LOCK TABLES `ingredient` WRITE;
 /*!40000 ALTER TABLE `ingredient` DISABLE KEYS */;
+INSERT INTO `ingredient` VALUES ('Basil','leaf(s)'),('Beef','gram(s)'),('Bell Pepper','pepper(s)'),('Black Pepper','ml(s)'),('Broccoli','crown(s)'),('Butter','gram(s)'),('Carrot','carrot(s)'),('Cheese','ml(s)'),('Chicken','gram(s)'),('Egg','egg(s)'),('Flour','ml(s)'),('Garlic','clove(s)'),('Lemon','lemon(s)'),('Milk','ml(s)'),('Noodles','gram(s)'),('Onion','onion(s)'),('Rice','ml(s)'),('Salt','ml(s)'),('Sugar','ml(s)'),('Tomato','tomato(es)');
 /*!40000 ALTER TABLE `ingredient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -179,4 +181,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-18 16:19:45
+-- Dump completed on 2021-11-30 16:17:08
