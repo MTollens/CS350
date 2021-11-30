@@ -1,11 +1,6 @@
 import wx
 import wx.lib.scrolledpanel
-import threading
 from pages.custom_widgets import RecipeBox as RecipeBox
-
-# just simplifies slightly the thread process, so i can assume it is always a valid thread
-def null():
-    return 0
 
 
 class ContentScroller(wx.Panel):
@@ -14,14 +9,8 @@ class ContentScroller(wx.Panel):
                                                     # style=wx.SIMPLE_BORDER)
 
         # to prevent lag, the loading will be done with a thread
-        self.renderthread = threading.Thread(target=null)
-        self.renderthread.start()
 
         self.parent = parent
-
-        # to handle the window getting smaller than it was
-        self.previous_size = size
-        self.regen = False
 
         # a neutral light gray
         self.SetBackgroundColour((120, 120, 120))
@@ -72,29 +61,10 @@ class ContentScroller(wx.Panel):
             print(len(self.items))
 
 
-    # starts the process of updating the contents
-    def update_start(self):
-        # try to collect the thread so we dont overrite it
-        self.__thread_collect()
-        # create and run the thread
-        self.renderthread = threading.Thread(target=self.__thread_itemize())
-        self.renderthread.start()
-
-    # mostly for debugging purposes, but ensures a uniform handling of the thread
-    def __thread_collect(self):
-        # if the thread is still alive when it comes time to collect it, then we print as such
-        if self.renderthread.is_alive():
-            print("had to wait for thread")
-        self.renderthread.join()
-
-
     # called externally to resize the page when the window resizes, shouldnt need to call this
     def resize_main(self, event=None, size_external=None, position_external=None):
         if size_external:
             self.SetSize(size_external)
-            # if the window got smaller then we need to regenerate the tiles
-            if self.previous_size[0] * self.previous_size[1] < size_external[0] * size_external[1]:
-                self.regen = True
 
         if position_external:
             self.SetPosition(position_external)
@@ -103,15 +73,11 @@ class ContentScroller(wx.Panel):
         # self.Layout()
         # gets the size of the current window, so we can scale everything to it
         # size = self.GetSize()
+        self.Hide()
+        self.update_widgets()
+        self.Show()
 
-        self.update_start()
-        self.__thread_collect()
-
-
-    def __thread_itemize(self):
-        if self.regen:
-            self.items = [RecipeBox(self, position=(0,0))]
-
+    def update_widgets(self):
         size = self.GetSize()
         # calculate the number of rows and columns that we can fit
         # 210 and 270 are the default size of the widget, with 10 for spacing on every side
@@ -125,8 +91,6 @@ class ContentScroller(wx.Panel):
         if self.rows <= 0:
             self.columns = 1
 
-        self.__thread_collect()
-
         # if we can fit more items than we currently have, then add more until it is correct
         if len(self.items) < (self.columns * self.rows):
             while len(self.items) < (self.columns * self.rows):
@@ -135,7 +99,7 @@ class ContentScroller(wx.Panel):
         # alternatively remove items until we dont have too many
         elif len(self.items) > (self.columns * self.rows):
             while len(self.items) > (self.columns * self.rows):
-                del self.items[0]
+                del self.items[-1]
 
 
         # for each column
@@ -145,8 +109,8 @@ class ContentScroller(wx.Panel):
                 # reposition every widget
                 self.items[x*self.rows+y].reposition((x*210 + 10, y*270+10))
 
-        # print("expected items: {}".format(self.columns * self.rows))
-        # print("actual items: {}".format(len(self.items)))
+        print("expected items: {}".format(self.columns * self.rows))
+        print("actual items: {}".format(len(self.items)))
         # print(size)
 
         # now that the layout has (possibly) changed, we need to fix the stuff on the tiles
