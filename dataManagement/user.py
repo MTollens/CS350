@@ -1,4 +1,4 @@
-from dataManagement import database as database
+from dataManagement import database, recipe
 
 class User():
     # initial constructor, this is what runs when it is initialized inside of main.py
@@ -28,7 +28,7 @@ class User():
 
         # working variables, these do not need to be saved
         self.current_search = ""
-        self.open_recipe = ""
+        self.open_recipe = recipe.Recipe()
 
         # timers stored here
         # reference to a thread
