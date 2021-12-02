@@ -1,5 +1,4 @@
 import wx
-import wx.lib.scrolledpanel
 from pages.custom_widgets import RecipeBox as RecipeBox
 
 
@@ -25,7 +24,7 @@ class ContentScroller(wx.Panel):
         self.rows = 2
 
         # main list of items
-        self.items = [RecipeBox(self, position=(10, 10))]
+        self.items = [RecipeBox(self, position=(10, 10)), RecipeBox(self, position=(260, 10))]
 
         self.Bind(wx.EVT_IDLE, self.__on_idle)
 
@@ -54,7 +53,7 @@ class ContentScroller(wx.Panel):
                 # the x-1 here is to account for the previous button
                 # remember to check if the page we are on enable the previous button or not
                 # self.items[x].fill(self.__request(x))
-                # self.items[0].dummy()
+                self.items[0].dummy()
                 x.dummy()
             if self.page > 0:
                 self.items[0].previous_page()
@@ -176,11 +175,12 @@ class ContentScroller(wx.Panel):
 
         # add new ones
         elif self.render_status == 1:
+            self.render_status = 2
             # if we can fit more items than we currently have, then add more until it is correct
-            if len(self.items) < (self.columns * self.rows):
-                    self.items.append(RecipeBox(self, position=(0, 0)))
-            else:
-                self.render_status = 2
+            # if len(self.items) < (self.columns * self.rows):
+            #         self.items.append(RecipeBox(self, position=(10, 10)))
+            # else:
+            #     self.render_status = 2
 
         # delete extras
         elif self.render_status == 2:
@@ -192,15 +192,24 @@ class ContentScroller(wx.Panel):
 
         # move each piece
         elif self.render_status == 3:
+            counter = 0
             # for each column
             for x in range(0, self.columns):
                 # for each row
                 for y in range(0, self.rows):
                     # reposition every widget
-                    self.items[x * self.rows + y].reposition((x * 210 + 10, y * 270 + 10))
+
+                    # self.items[x * self.rows + y].reposition((x * 210 + 10, y * 270 + 10))
+                    self.items[counter].reposition((x * 210 + 10, y * 270 + 10))
+                    counter += 1
+                    if counter == 2:
+                        self.render_status = 4
+                        return 0
             self.render_status = 4
 
         elif self.render_status == 4:
             self.reload_recipes()
             self.render_status = 5
+
+        # print(len(self.items))
 

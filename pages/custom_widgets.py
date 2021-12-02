@@ -9,32 +9,49 @@ class RecipeBox(wx.Window):
         wx.Window.__init__(self, parent=parent, pos=position, size=self.size)
         self.parent = parent
         self.position = position
+
+        self.no_image = wx.StaticBitmap(self.parent, -1, self.scale_bitmap(wx.Image("resources/nofile.png", wx.BITMAP_TYPE_ANY).ConvertToBitmap(), 200,200), self.position)
+        # self.image_file = "resources/nofile.png"
+        # self.no_image = self.load_image("resources/nofile.png")
+        # self.no_image.SetSize(self.size)
         self.box = wx.StaticBox(parent=parent)
-        self.make_button = wx.Button(parent=parent)
+        self.make_button = wx.Button(parent=parent, pos=(10, 260), size=(200,50))
+        self.make_button.SetLabel("<>")
         # self.image = wx.BitmapButton()
-        self.no_image = self.load_image("resources/nofile.png")
-        self.no_image.SetSize(self.size)
-        self.image = wx.BitmapButton(parent=parent, bitmap=self.no_image)
+
+        self.image = wx.Button(self.parent, -1, size=(50,50), pos=self.position)
         self.title = "None"
         self.reposition(self.position)
 
         # bind the buttons
         self.rebind()
+        self.image.Hide()
+        self.make_button.Hide()
+
+        self.image.Show()
+        self.make_button.Show()
+
 
     def reposition(self, root_position):
-        assert isinstance(self.image, wx.BitmapButton)
-
+        # assert isinstance(self.image, wx.BitmapButton)
+        self.Hide()
         self.SetPosition(root_position)
         self.position = root_position
 
         self.box.SetPosition(self.position)
         self.box.SetSize(self.size)
 
+        self.image.Hide()
         self.image.SetPosition(self.position)
         self.image.SetSize((self.size[0], self.size[1]-50))
 
+        self.make_button.Hide()
         self.make_button.SetPosition((self.position[0], self.position[1]+self.size[1]-50))
         self.make_button.SetSize((self.size[0], 50))
+
+        self.Show()
+        self.image.Show()
+        self.make_button.Show()
 
     def rebind(self):
         #both of the buttons do the same thing, but they dont have to
@@ -58,6 +75,8 @@ class RecipeBox(wx.Window):
         # the string should be [some number of characters that will fit on the button] +newline+ rating # + stars
         temp = self.title[:int(self.size[0]/2)] + "\n" + rating
         self.make_button.SetLabel(temp)
+
+        # self.image_file = recipe.image
         try:
             self.image.SetBitmap(self.load_image(recipe.image))
         except:
@@ -74,6 +93,7 @@ class RecipeBox(wx.Window):
         rating = rating + " " + star*4 + unfilled
         temp = self.title[:int(self.size[0]/2)] + "\n" + rating
         self.make_button.SetLabel(temp)
+        # self.image_file = "resources/fishandchips.jpg"
         self.image.SetBitmap(self.load_image("resources/fishandchips.jpg"))
 
     # fills the boxes with information so that the status is clear when there are no results
@@ -85,11 +105,13 @@ class RecipeBox(wx.Window):
         rating = rating + " " + unfilled*5
         temp = self.title[:int(self.size[0]/2)] + "\n" + rating
         self.make_button.SetLabel(temp)
+        # self.image_file = "resources/nofile.png"
         # self.image.SetBitmap(self.load_image("resources/fishandchips.jpg"))
 
     # this is to give some visual feedback if there is some problem with the layout such as:
     # "window too small" <- in the case where only one tile can fit on screen, which will be hard to navigate
     def error(self, warning):
+        self.empty()
         self.make_button.SetLabel(warning)
 
     # here the false argument means that we have actually reached the end of the results, and we should
@@ -99,6 +121,7 @@ class RecipeBox(wx.Window):
             self.title = "Next Page"
             self.make_button.SetLabel(self.title)
             self.image.SetBitmap(self.load_image("resources/arrow_right.png"))
+            # self.image_file = "resources/arrow_right.png"
         else:
             self.empty()
 
@@ -106,6 +129,7 @@ class RecipeBox(wx.Window):
         self.title = "Previous Page"
         self.make_button.SetLabel(self.title)
         self.image.SetBitmap(self.load_image("resources/arrow_left.png"))
+        # self.image_file = "resources/arrow_left.png"
 
     # load file bitmap and return it as a bitmap object
     # for use with the "image" object

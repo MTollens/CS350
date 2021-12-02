@@ -3,7 +3,7 @@ import wx
 import wx.lib.scrolledpanel
 # the panels from the pages sub directory
 from pages import sign_in as sn, search as sh, pantry as pn, homepage as hp, execution as ex, \
-    creation as cr, account as ac, test_page as tt, help as hl, content_sub as cs
+    creation as cr, account as ac, test_page as tt, help as hl, content_reworked as cs
 
 # the user class that handles interactions between the dataManagement and the UI
 from dataManagement import user as user
@@ -13,7 +13,7 @@ from dataManagement import user as user
 class Frame(wx.Frame):
     def __init__(self):
         # creates window using system API
-        wx.Frame.__init__(self, None, wx.ID_ANY, "RecipeBuddy", size=(600, 500))
+        wx.Frame.__init__(self, None, wx.ID_ANY, "RecipeBuddy", size=(1000, 800))
         # the user is instantiated inside the main because all the other panels need to reference it, and main is the parent
         self.user = user.User()
 
