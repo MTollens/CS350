@@ -1,6 +1,7 @@
 import wx
 import os
 from resources import lists
+from dataManagement import ingredients
 from pages import custom_widgets as cw
 
 
@@ -18,7 +19,9 @@ class Creation(wx.Panel):
         self.Back_Button = wx.Button(parent=self, label="Back", pos=(0, 0), size=(50, 50))
         self.Back_Button.Bind(wx.EVT_BUTTON, parent.setPrevious)
 
-        self.page_name = wx.StaticText(parent=self, label="Recipe Editor", pos=(70, 50))
+        self.controls_box = wx.StaticBox(self, pos=(50,50), size=(220,510))
+
+        self.page_name = wx.StaticText(parent=self, label="Recipe Editor", pos=(70, 60))
 
         self.image = wx.Button(self, pos=(60,80), size=(150, 150), label="add image")
         self.image.Bind(wx.EVT_BUTTON, self.image_select)
@@ -35,20 +38,74 @@ class Creation(wx.Panel):
         self.Preptime.SetHint("How long to prepare?")
 
         self.ingredients_sub = wx.Button(self, pos=(60, 370), size=(150,40), label="Edit Ingredients")
+        self.ingredients_sub.Bind(wx.EVT_BUTTON, self.edit_ingredients)
         self.instructions_sub = wx.Button(self, pos=(60, 420), size=(150, 40), label="Edit Instructions")
+        self.instructions_sub.Bind(wx.EVT_BUTTON, self.edit_instructions)
         self.tags_sub = wx.Button(self, pos=(60, 470), size=(150, 40), label="Edit Tags")
+        self.tags_sub.Bind(wx.EVT_BUTTON, self.edit_tags)
+
+        self.error_message = wx.StaticText(self, pos=(60, 520), label="")
+        self.error_message.Hide()
 
         # end of STATIC UI elements
+
+        # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        # ingredients
+        self.ingredients_list = ingredients.Ingredients()
+        self.ingredients_title = wx.StaticText(self, pos=(300, 60), label="Ingredients")
 
         self.ingredients_category_selector = cw.PromptingComboBox(self, choices=list(lists.all.keys()))
         self.ingredients_category_selector.SetPosition((300, 80))
         self.ingredients_category_selector.SetSize((150, 40))
-        self.ingredients_category_selector.SetHint("Category")
+        self.ingredients_category_selector.SetHint("Refine by Category")
+        self.ingredients_category_selector.Master = True
 
         self.ingredients_item_selector = cw.PromptingComboBox(self, choices=[])
-        self.ingredients_item_selector.SetPosition((500, 80))
+        self.ingredients_item_selector.SetPosition((460, 80))
         self.ingredients_item_selector.SetSize((150, 40))
         self.ingredients_item_selector.SetHint("Ingredient")
+
+        self.ingredients_amount = wx.TextCtrl(self, pos=(620, 80), size=(75, 40))
+        self.ingredients_amount.SetHint("amount")
+
+        self.ingredients_add = wx.Button(self, pos=(705, 80), size=(100, 40), label="add ingredient")
+        self.ingredients_add.Bind(wx.EVT_BUTTON, self.ingredients_submit)
+
+        self.ingredients_clear = wx.Button(self, pos=(705, 130), size=(100, 40), label="Reset")
+        self.ingredients_clear.Bind(wx.EVT_BUTTON, self.ingredients_reset)
+
+        self.ingredients_delete = wx.Button(self, pos=(705, 180), size=(100, 40), label="Delete Last")
+        self.ingredients_delete.Bind(wx.EVT_BUTTON, self.ingredients_remove)
+
+        self.ingredients_display = wx.TextCtrl(self, pos=(300, 130), size=(395,200), style=wx.TE_MULTILINE|wx.TE_READONLY)
+
+        # YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+        # instructions
+        self.instructions_title = wx.StaticText(self, pos=(300, 60), label="Instructions")
+
+        self.instructions_display = wx.TextCtrl(self, pos=(300, 100), size=(450, 200),
+                                               style=wx.TE_MULTILINE | wx.TE_PROCESS_ENTER, value="- ")
+        self.instructions_display.Bind(wx.EVT_TEXT_ENTER, self.instructions_enter)
+
+        self.instructions_timer = wx.Button(self, pos=(300, 400), size=(100,40), label="add Timer")
+        self.instructions_timer.Bind(wx.EVT_BUTTON, self.add_timer)
+
+        # ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+        # tags
+        self.tags_title = wx.StaticText(self, pos=(300, 60), label="Tags")
+
+        self.tags_entry = wx.TextCtrl(self, pos=(300, 100), size=(200, 50),
+                                               style=wx.TE_MULTILINE | wx.TE_PROCESS_ENTER, value="")
+        self.tags_entry.SetHint("Enter tags here")
+        self.tags_entry.Bind(wx.EVT_TEXT_ENTER, self.tags_enter)
+
+        self.tags_entered = wx.StaticText(self, pos=(300, 160), size=(200, 50),
+                                               style=wx.TE_MULTILINE, label="")
+        self.tags_list = []
+        self.tags_remove_last = wx.Button(self, pos=(510, 100), size=(100,30), label="Remove last")
+        self.tags_remove_last.Bind(wx.EVT_BUTTON, self.tags_remove_one)
+        self.tags_remove_all = wx.Button(self, pos=(510, 140), size=(100, 30), label="Remove all")
+        self.tags_remove_all.Bind(wx.EVT_BUTTON, self.tags_remove_every)
 
 
         # self.ingredients_current_clear = wx.Button(self, pos=(300, 80), size=(75, 40), label="clear")
@@ -74,21 +131,78 @@ class Creation(wx.Panel):
         # self.Tags.SetHint(hint="add as many or as few tags as you like \n seperate tags with a comma!")
 
         # load in user dataManagement
+        self.update_subs()
         self.update_user()
 
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
         size = self.GetSize()
+        self.ingredients_display.SetSize((395, size[1] - 200))
+        self.instructions_display.SetSize((450, size[1] - 200))
+        self.instructions_timer.SetPosition((300, size[1] - 90))
 
     # for updating the subcontents views
     def update_subs(self):
-        if self.sub == 0:
-            pass
+        # start by setting all the selector buttons to the default size
+        default_size = (150, 40)
+        selected_size = (200, 40)
+        self.instructions_sub.SetSize(default_size)
+        self.ingredients_sub.SetSize(default_size)
+        self.tags_sub.SetSize(default_size)
+
+        # then we will hide all the things that can be selected between
+        self.ingredients_title.Hide()
+        self.ingredients_category_selector.Hide()
+        self.ingredients_item_selector.Hide()
+        self.ingredients_amount.Hide()
+        self.ingredients_add.Hide()
+        self.ingredients_clear.Hide()
+        self.ingredients_display.Hide()
+        self.ingredients_delete.Hide()
+
+        self.instructions_title.Hide()
+        self.instructions_display.Hide()
+        self.instructions_timer.Hide()
+
+        self.tags_title.Hide()
+        self.tags_entry.Hide()
+        self.tags_entered.Hide()
+        self.tags_remove_all.Hide()
+        self.tags_remove_last.Hide()
+
+        # finally we will update the sizes of the buttons, and show the content
+        if self.sub == 1:
+            self.ingredients_sub.SetSize(selected_size)
+            self.ingredients_title.Show()
+            self.ingredients_category_selector.Show()
+            self.ingredients_item_selector.Show()
+            self.ingredients_amount.Show()
+            self.ingredients_add.Show()
+            self.ingredients_clear.Show()
+            self.ingredients_display.Show()
+            self.ingredients_delete.Show()
+        elif self.sub == 2:
+            self.instructions_sub.SetSize(selected_size)
+            self.instructions_title.Show()
+            self.instructions_display.Show()
+            self.instructions_timer.Show()
+        elif self.sub == 3:
+            self.tags_sub.SetSize(selected_size)
+            self.tags_title.Show()
+            self.tags_entry.Show()
+            self.tags_entered.Show()
+            self.tags_remove_all.Show()
+            self.tags_remove_last.Show()
 
     # gets called when a panel is reloaded, not required to do anything but must be here
     # this is where user information should be loaded in
     def update_user(self):
-        pass
+        self.sub = 0
+
+    def display_error(self, message):
+        self.error_message.Show()
+        self.error_message.SetLabel(message)
+
 
     def image_select(self, event=None):
         # code referenced from https://www.programcreek.com/python/example/3163/wx.FileDialog
@@ -165,18 +279,100 @@ class Creation(wx.Panel):
         pass
 
     def edit_tags(self, event=None):
-        pass
+        self.sub = 3
+        self.update_subs()
 
     def edit_ingredients(self, event=None):
-        pass
+        self.sub = 1
+        self.update_subs()
 
     def edit_instructions(self, event=None):
-        pass
+        self.sub = 2
+        self.update_subs()
 
     def ingredients_category_chosen(self):
         val = self.ingredients_category_selector.GetValue()
-        # if val in list(lists.all.keys()):
+        self.ingredients_amount.SetHint("<UNIT>")
         self.ingredients_item_selector.SetItems(lists.all[val])
-        # else:
-        #     # self.ingredients_item_selector.SetValue("")
-        #     self.ingredients_item_selector.SetItems([])
+
+    def ingredients_reset(self, event=None):
+        self.ingredients_amount.SetLabel("")
+        self.ingredients_category_selector.SetLabel("")
+        self.ingredients_item_selector.SetLabel("")
+        self.error_message.Hide()
+
+    def ingredients_submit(self, event=None):
+        first = self.ingredients_item_selector.GetValue()
+        second = self.ingredients_amount.GetValue()
+        third = self.ingredients_amount.GetHint()
+        if first not in lists.ingredients:
+            self.display_error("Unknown ingredient")
+            return 0
+
+        try:
+            int(second)
+        except:
+            self.display_error("Enter a number for \ningredient amounts")
+            return 0
+
+        self.ingredients_list.add_item([first, second, third])
+        self.ingredients_display.SetValue(self.ingredients_list.pretty())
+        self.ingredients_reset()
+
+    def ingredients_remove(self, event=None):
+        self.ingredients_list.remove_item(-1)
+
+    def instructions_enter(self, event=None):
+        temp = self.instructions_display.GetValue() + "\n- "
+        self.instructions_display.SetValue(temp)
+        self.instructions_display.SetInsertionPointEnd()
+
+    def add_timer(self, event=None):
+        temp = self.instructions_display.GetValue() + " [TIMER:5min] "
+        self.instructions_display.SetValue(temp)
+        self.instructions_display.SetInsertionPointEnd()
+
+    def tags_enter(self, event=None):
+        temp = self.tags_entry.GetValue().lower()
+        if temp[-1] is " ":
+            temp = temp[:-1]
+        self.tags_entry.SetValue("")
+        self.tags_list.append(temp)
+        temp = ""
+        for x in self.tags_list:
+            temp += x + ", "
+        temp = wordwrap(temp, 30)
+        self.tags_entered.SetLabel(temp)
+
+    def tags_remove_every(self, event=None):
+        self.tags_list = []
+        self.tags_entered.SetLabel("")
+
+    def tags_remove_one(self, event=None):
+        if len(self.tags_list) > 0:
+            del self.tags_list[-1]
+        temp = ""
+        for x in self.tags_list:
+            temp += x + ", "
+        temp = wordwrap(temp, 30)
+        self.tags_entered.SetLabel(temp)
+
+
+# when passed a string, will wrap the text after the given number of characters
+# used for text boxes that dont wrap for if you need it.
+# takes in [string] >> the text to be wrapped
+# takes in [int] >> the number of characters per line before it starts trying to wrap
+# returns [string] >> formatted
+# looks for a space and inserts a \n when the character limit is reached
+def wordwrap(text, chars):
+    assert isinstance(text, str), "you must pass a string"
+    counter = 0
+    new = ""
+    for x in range(0, len(text)):
+        if (counter > chars) and (text[x] == " "):
+            new = new + '\n '
+            counter = 0
+        else:
+            new = new + text[x]
+            counter += 1
+    return new

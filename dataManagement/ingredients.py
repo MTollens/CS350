@@ -8,7 +8,8 @@ class Ingredients:
         2     salt        3         pinch
         3     water       2         cups
         etc....
-        """ # instance using :    object = ingredients.Ingredients().example() # to get this exact setup for testing
+        """
+        # instance using :    object = ingredients.Ingredients().example() # to get this exact setup for testing
         self.__items = []
 
         # always defaults to metric
@@ -62,6 +63,13 @@ class Ingredients:
         self.__origin = "string"
         return self
         pass
+
+    # returns a nicely formatted string for display where applicable
+    def pretty(self):
+        temp = ""
+        for x in self.__items:
+            temp = temp + "- {}, {} {} \n".format(x[0], x[1], x[2])
+        return temp
 
     # returns the origin, a string
     def get_origin(self):

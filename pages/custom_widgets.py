@@ -13,8 +13,12 @@ class PromptingComboBox(wx.ComboBox):
         self.Bind(wx.EVT_COMBOBOX, self.EvtCombobox)
         self.ignoreEvtText = False
 
+
+        self.Master = False
+
     def EvtCombobox(self, event):
-        # self.parent.ingredients_category_chosen()
+        if self.Master:
+            self.parent.ingredients_category_chosen()
         self.ignoreEvtText = True
         event.Skip()
 

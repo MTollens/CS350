@@ -8,6 +8,8 @@ Vegetable = ["carrot", "celery", "cucumber", "lettuce"]
 Other = ["water", "flour", "yeast", "honey"]
 # sweeteners?
 
+ingredients = Proteins + Dairy + Spices + Fruit + Vegetable + Other
+
 #dictionary of terms lists
 all = {"Proteins":Proteins,
        "Dairy": Dairy,
