@@ -1,6 +1,14 @@
+from dataManagement import database as database
+
 class User():
     # initial constructor, this is what runs when it is initialized inside of main.py
     def __init__(self, key=None):
+        #Establish database connection
+        self.database = database.Database()
+
+        #TESTING DATABASE
+        # self.database.verifyLogin("maxcolt", "12345")
+
         # is the user signed in?
         self.signed_in = False
 
@@ -74,8 +82,31 @@ class User():
     def logout(self):
         pass
 
-    def login(self):
+    def login(self, username, password):
+        attempt = self.database.verifyLogin(username, password)
+        # Loads all information from DB here
+        if attempt:
+            self.username = username
+            self.signed_in = True
+            # Returns tuple with (private, measurement_system)
+            user_info = self.database.getAccountInfo(username)
+            # Flipped in database
+            self.public = not user_info[0]
+            if user_info[1] == "Metric":
+                self.metric = True
+            else:
+                self.metric = False
+            return True
+        else:
+            return False
+
+    # Tell database to change based on current username
+    def change_public(self):
         pass
+    # Tell database to change based on current username
+    def change_units(self):
+        pass
+
 
     # should only be called from main.py, handled by the anon_search for panels to interact with it
     def search(self, keyword, keywords=None):

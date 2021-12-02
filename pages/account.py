@@ -18,10 +18,10 @@ class Account(wx.Panel):
 
         self.box = wx.StaticBox(parent=self, pos=(50, 50), size=(250, 200))
 
-        self.Units = wx.Button(parent=self, label="Metric", pos=(70, 140), size=(100, 50))
+        self.Units = wx.Button(parent=self, label=self.get_unit_label(), pos=(70, 140), size=(100, 50))
         self.Units.Bind(wx.EVT_BUTTON, self.change_units)
 
-        self.Public = wx.Button(parent=self, label="Public", pos=(180, 140), size=(100, 50))
+        self.Public = wx.Button(parent=self, label=self.get_private_label(), pos=(180, 140), size=(100, 50))
         self.Public.Bind(wx.EVT_BUTTON, self.change_public)
 
         self.recipe_list = wx.TextCtrl(parent=self, pos=(60, 60), size=(200, 100), style=wx.TE_READONLY | wx.TE_MULTILINE)
@@ -86,9 +86,11 @@ class Account(wx.Panel):
         self.ingredients_list.SetValue(self.parent.user.pantry)
         self.recipe_list.SetValue(self.parent.user.recipes)
 
+
     # called on button press
     def change_units(self, event=None):
         self.parent.user.metric = not(self.parent.user.metric)
+        self.parent.user.change_units()
         self.update_units()
 
     # changes the units in the GUI
@@ -99,9 +101,19 @@ class Account(wx.Panel):
             self.Units.SetLabel("Imperial")
         #TODO some code here to send the units update to the server, using the user class
 
+    # Sets default button value
+    def get_unit_label(self):
+        print(self.parent.user.metric)
+        if self.parent.user.metric:
+
+            return "Metric"
+        else:
+            return "Imperial"
+
     # similar function as metric but for setting public/private account
     def change_public(self, event=None):
         self.parent.user.public = not(self.parent.user.public)
+        self.parent.user.change_public()
         self.update_public()
 
     def update_public(self):
@@ -110,6 +122,13 @@ class Account(wx.Panel):
         else:
             self.Public.SetLabel("Private")
         #TODO some code here to send the update to the server, using the user class
+
+    # Sets default button value
+    def get_private_label(self):
+        if self.parent.user.public:
+            return "Public"
+        else:
+            return "Private"
 
     # to be replaced by real function, this is for demo purposes only
     def Sign_in_example(self, event):

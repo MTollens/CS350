@@ -1,5 +1,6 @@
 import wx
 
+
 # a very simple sign in page
 class Sign(wx.Panel):
     def __init__(self, parent):
@@ -28,7 +29,7 @@ class Sign(wx.Panel):
 
         # if submit is chosen then we will send some dataManagement to the user class to validate the login
         self.Confirm = wx.Button(parent=self, label="Login", pos=(320, 210), size=(100, 50))
-        self.Confirm.Bind(wx.EVT_BUTTON, self.example)
+        self.Confirm.Bind(wx.EVT_BUTTON, self.submit_credentials)
 
         self.Create_account = wx.Button(parent=self, label="Create account", pos=(500, 60), size=(160, 50))
         self.Create_account.Bind(wx.EVT_BUTTON, self.account_create)
@@ -46,12 +47,16 @@ class Sign(wx.Panel):
 
     # runs the example, which loads the dummy user demo dataManagement
     # we also need to remember to switch panels as well as send the dataManagement
-    def example(self, event=None):
-        self.parent.user.example_login()
-        self.parent.setAccount()
 
-    def submit_credentials(self):
-        pass
+    def submit_credentials(self, event=None):
+        print("Login attempt")
+        if self.parent.user.login(self.Username.GetValue(), self.Password.GetValue()):
+            self.parent.setAccount()
+            self.error.SetLabel("")
+        # CHANGE THIS TO HANDLE FAILED LOGIN
+        else:
+            self.error.SetLabel("Username or password incorrect!")
+
 
     def update_user(self):
         pass
@@ -65,26 +70,28 @@ class Sign(wx.Panel):
         self.Create_account.Hide()
 
     def submit(self, event=None):
+        pass
+        # DEPRECATED CODE LIKELY NOT TO BE USED
         # passwords match
-        if self.Password.GetValue() != self.Confirm_Password.GetValue():
-            print(self.Password.GetValue())
-            print(self.Confirm_Password.GetValue())
-            self.error.SetLabel("Passwords do not match")
-            return 0
-
-        # password long enough
-        if len(self.Password.GetValue()) < 4:
-            self.error.SetLabel("Passwords must exceed\n four characters")
-            return 0
-
-        # other password requirements
-
-        if self.Password.GetValue() in empty:
-            self.error.SetLabel("Username Invalid")
-            return 0
-
-        # if username taken
-        self.return_to_default()
+        # if self.Password.GetValue() != self.Confirm_Password.GetValue():
+        #     print(self.Password.GetValue())
+        #     print(self.Confirm_Password.GetValue())
+        #     self.error.SetLabel("Passwords do not match")
+        #     return 0
+        #
+        # # password long enough
+        # if len(self.Password.GetValue()) < 4:
+        #     self.error.SetLabel("Passwords must exceed\n four characters")
+        #     return 0
+        #
+        # # other password requirements
+        #
+        # if self.Password.GetValue() in empty:
+        #     self.error.SetLabel("Username Invalid")
+        #     return 0
+        #
+        # # if username taken
+        # self.return_to_default()
 
     def return_to_default(self):
         self.Confirm.Show()
