@@ -13,17 +13,22 @@ class Creation(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
+        font_Title = wx.Font(18, family=wx.FONTFAMILY_MODERN, style=0, weight=100,
+                       underline=False, faceName="", encoding=wx.FONTENCODING_DEFAULT)
+        font_Sub = wx.Font(14, family=wx.FONTFAMILY_MODERN, style=0, weight=100,
+                       underline=False, faceName="", encoding=wx.FONTENCODING_DEFAULT)
 
         self.sub = 0
 
         self.Back_Button = wx.Button(parent=self, label="Back", pos=(0, 0), size=(50, 50))
         self.Back_Button.Bind(wx.EVT_BUTTON, parent.setPrevious)
 
-        self.controls_box = wx.StaticBox(self, pos=(50,50), size=(220,510))
+        self.controls_box = wx.StaticBox(self, pos=(50,50), size=(220,525))
 
-        self.page_name = wx.StaticText(parent=self, label="Recipe Editor", pos=(70, 60))
+        self.page_name = wx.StaticText(parent=self, label="Recipe Editor", pos=(70, 10), size=(200,50))
+        self.page_name.SetFont(font_Title)
 
-        self.image = wx.Button(self, pos=(60,80), size=(150, 150), label="add image")
+        self.image = wx.Button(self, pos=(60,70), size=(160, 160), label="add image")
         self.image.Bind(wx.EVT_BUTTON, self.image_select)
         self.image_path = ""
 
@@ -37,31 +42,36 @@ class Creation(wx.Panel):
         self.Preptime = wx.TextCtrl(parent=self, pos=(60, 320), size=(200,30))
         self.Preptime.SetHint("How long to prepare?")
 
-        self.ingredients_sub = wx.Button(self, pos=(60, 370), size=(150,40), label="Edit Ingredients")
+        self.ingredients_sub = wx.Button(self, pos=(60, 370), size=(150,40), label="Edit Ingredients", style=wx.BU_LEFT)
         self.ingredients_sub.Bind(wx.EVT_BUTTON, self.edit_ingredients)
-        self.instructions_sub = wx.Button(self, pos=(60, 420), size=(150, 40), label="Edit Instructions")
+        self.instructions_sub = wx.Button(self, pos=(60, 420), size=(150, 40), label="Edit Instructions", style=wx.BU_LEFT)
         self.instructions_sub.Bind(wx.EVT_BUTTON, self.edit_instructions)
-        self.tags_sub = wx.Button(self, pos=(60, 470), size=(150, 40), label="Edit Tags")
+        self.tags_sub = wx.Button(self, pos=(60, 470), size=(150, 40), label="Edit Tags", style=wx.BU_LEFT)
         self.tags_sub.Bind(wx.EVT_BUTTON, self.edit_tags)
+        self.tools_sub = wx.Button(self, pos=(60, 520), size=(150, 40), label="Edit Tools", style=wx.BU_LEFT)
+        self.tools_sub.Bind(wx.EVT_BUTTON, self.edit_tools)
 
-        self.error_message = wx.StaticText(self, pos=(60, 520), label="")
+        self.error_message = wx.StaticText(self, pos=(500, 15), label="", style=wx.TE_RICH)
         self.error_message.Hide()
+        self.error_message.SetForegroundColour(wx.RED)
 
-        self.preview = wx.Button(self, pos=(60, 570), label="Preview", size=(150, 40))
-        self.finish = wx.Button(self, pos=(60, 620), label="Finish", size=(150, 40))
+        self.preview = wx.Button(self, pos=(60, 590), label="Preview", size=(150, 40))
+        self.finish = wx.Button(self, pos=(60, 640), label="Finish", size=(150, 40))
 
         # end of STATIC UI elements
 
         # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         # ingredients
         self.ingredients_list = ingredients.Ingredients()
-        self.ingredients_title = wx.StaticText(self, pos=(300, 60), label="Ingredients")
+        self.ingredients_title = wx.StaticText(self, pos=(300, 14), label="Ingredients", size=(150,50))
+        self.ingredients_title.SetFont(font_Sub)
 
         self.ingredients_category_selector = cw.PromptingComboBox(self, choices=list(lists.all.keys()))
         self.ingredients_category_selector.SetPosition((300, 80))
         self.ingredients_category_selector.SetSize((150, 40))
         self.ingredients_category_selector.SetHint("Refine by Category")
         self.ingredients_category_selector.Master = True
+
 
         self.ingredients_item_selector = cw.PromptingComboBox(self, choices=[])
         self.ingredients_item_selector.SetPosition((460, 80))
@@ -84,7 +94,8 @@ class Creation(wx.Panel):
 
         # YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
         # instructions
-        self.instructions_title = wx.StaticText(self, pos=(300, 60), label="Instructions")
+        self.instructions_title = wx.StaticText(self, pos=(300, 14), label="Instructions", size=(150,50))
+        self.instructions_title.SetFont(font_Sub)
 
         self.instructions_display = wx.TextCtrl(self, pos=(300, 100), size=(450, 200),
                                                style=wx.TE_MULTILINE | wx.TE_PROCESS_ENTER, value="- ")
@@ -95,14 +106,15 @@ class Creation(wx.Panel):
 
         # ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
         # tags
-        self.tags_title = wx.StaticText(self, pos=(300, 60), label="Tags")
+        self.tags_title = wx.StaticText(self, pos=(300, 14), label="Tags",size=(150,50))
+        self.tags_title.SetFont(font_Sub)
 
-        self.tags_entry = wx.TextCtrl(self, pos=(300, 100), size=(200, 50),
+        self.tags_entry = wx.TextCtrl(self, pos=(300, 100), size=(200, 70),
                                                style=wx.TE_MULTILINE | wx.TE_PROCESS_ENTER, value="")
         self.tags_entry.SetHint("Enter tags here")
         self.tags_entry.Bind(wx.EVT_TEXT_ENTER, self.tags_enter)
 
-        self.tags_entered = wx.StaticText(self, pos=(300, 160), size=(200, 50),
+        self.tags_entered = wx.StaticText(self, pos=(300, 170), size=(200, 50),
                                                style=wx.TE_MULTILINE, label="")
         self.tags_list = []
         self.tags_remove_last = wx.Button(self, pos=(510, 100), size=(100,30), label="Remove last")
@@ -110,28 +122,35 @@ class Creation(wx.Panel):
         self.tags_remove_all = wx.Button(self, pos=(510, 140), size=(100, 30), label="Remove all")
         self.tags_remove_all.Bind(wx.EVT_BUTTON, self.tags_remove_every)
 
+        #WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+        #tools
+        self.tools_title = wx.StaticText(self, pos=(300, 14), label="Tools", size=(150, 50))
+        self.tools_title.SetFont(font_Sub)
 
-        # self.ingredients_current_clear = wx.Button(self, pos=(300, 80), size=(75, 40), label="clear")
+        self.tools_list = []
 
-        # self.Ingredient_type_selector = wx.ComboBox(parent=self, pos=(50, 200), size=(200,40))
-        # self.Ingredient_type_selector.SetHint("select type")
-        # self.Ingredient_type_selector.SetItems(list(lists.all.keys()))
-        # self.Ingredient_type_selector.Bind(wx.EVT_COMBOBOX_CLOSEUP, self.type_selector_autofill)
+        self.tools_category_selector = cw.PromptingComboBox2(self, choices=list(lists.all_tools.keys()))
+        self.tools_category_selector.SetPosition((300, 80))
+        self.tools_category_selector.SetSize((150, 40))
+        self.tools_category_selector.SetHint("Refine by Category")
+        self.tools_category_selector.Master = True
 
-        # self.Ingredient_selector = wx.ComboBox(parent=self, pos=(50, 250), size=(200,40))
-        # self.Ingredient_selector.SetHint("select ingredient")
-        # self.Ingredient_selector.SetItems([""])
+        self.tools_item_selector = cw.PromptingComboBox2(self, choices=[])
+        self.tools_item_selector.SetPosition((460, 80))
+        self.tools_item_selector.SetSize((150, 40))
+        self.tools_item_selector.SetHint("Tool")
 
-        # self.Ingredient_list = wx.StaticText(parent=self, pos=(50, 360), label="ingredients:")
-        #
-        # self.Add_ingredient = wx.Button(parent=self, pos=(50, 300), label="Add Ingredient")
+        self.tools_add = wx.Button(self, pos=(705, 80), size=(100, 40), label="add Tool")
+        self.tools_add.Bind(wx.EVT_BUTTON, self.tools_submit)
 
+        self.tools_clear = wx.Button(self, pos=(705, 130), size=(100, 40), label="Reset")
+        self.tools_clear.Bind(wx.EVT_BUTTON, self.tools_reset)
 
-        # self.Instructions_list = wx.TextCtrl(parent=self, pos=(300, 220), size=(260, 220), style=wx.TE_MULTILINE)
-        # self.Add_timer = wx.Button(parent=self, label="add Timer", pos=(150, 360))
+        self.tools_delete = wx.Button(self, pos=(705, 180), size=(100, 40), label="Delete Last")
+        self.tools_delete.Bind(wx.EVT_BUTTON, self.tools_remove)
 
-        # self.Tags = wx.TextCtrl(parent=self, pos=(50, 350))
-        # self.Tags.SetHint(hint="add as many or as few tags as you like \n seperate tags with a comma!")
+        self.tools_display = wx.TextCtrl(self, pos=(300, 130), size=(395, 200),
+                                         style=wx.TE_MULTILINE | wx.TE_READONLY)
 
         # load in user dataManagement
         self.update_subs()
@@ -152,6 +171,7 @@ class Creation(wx.Panel):
         self.instructions_sub.SetSize(default_size)
         self.ingredients_sub.SetSize(default_size)
         self.tags_sub.SetSize(default_size)
+        self.tools_sub.SetSize(default_size)
 
         # then we will hide all the things that can be selected between
         self.ingredients_title.Hide()
@@ -172,6 +192,14 @@ class Creation(wx.Panel):
         self.tags_entered.Hide()
         self.tags_remove_all.Hide()
         self.tags_remove_last.Hide()
+
+        self.tools_title.Hide()
+        self.tools_category_selector.Hide()
+        self.tools_item_selector.Hide()
+        self.tools_add.Hide()
+        self.tools_clear.Hide()
+        self.tools_delete.Hide()
+        self.tools_display.Hide()
 
         # finally we will update the sizes of the buttons, and show the content
         if self.sub == 1:
@@ -196,6 +224,15 @@ class Creation(wx.Panel):
             self.tags_entered.Show()
             self.tags_remove_all.Show()
             self.tags_remove_last.Show()
+        elif self.sub == 4:
+            self.tools_sub.SetSize(selected_size)
+            self.tools_title.Show()
+            self.tools_category_selector.Show()
+            self.tools_item_selector.Show()
+            self.tools_add.Show()
+            self.tools_clear.Show()
+            self.tools_delete.Show()
+            self.tools_display.Show()
 
     # gets called when a panel is reloaded, not required to do anything but must be here
     # this is where user information should be loaded in
@@ -207,7 +244,6 @@ class Creation(wx.Panel):
     def display_error(self, message):
         self.error_message.Show()
         self.error_message.SetLabel(message)
-
 
     def image_select(self, event=None):
         # code referenced from https://www.programcreek.com/python/example/3163/wx.FileDialog
@@ -295,15 +331,19 @@ class Creation(wx.Panel):
         self.sub = 2
         self.update_subs()
 
+    def edit_tools(self, event=None):
+        self.sub = 4
+        self.update_subs()
+
     def ingredients_category_chosen(self):
         val = self.ingredients_category_selector.GetValue()
         self.ingredients_amount.SetHint("<UNIT>")
         self.ingredients_item_selector.SetItems(lists.all[val])
 
     def ingredients_reset(self, event=None):
-        self.ingredients_amount.SetLabel("")
-        self.ingredients_category_selector.SetLabel("")
-        self.ingredients_item_selector.SetLabel("")
+        self.ingredients_amount.SetValue("")
+        self.ingredients_category_selector.SetValue("")
+        self.ingredients_item_selector.SetValue("")
         self.error_message.Hide()
 
     def ingredients_submit(self, event=None):
@@ -315,9 +355,9 @@ class Creation(wx.Panel):
             return 0
 
         try:
-            int(second)
+            float(second)
         except:
-            self.display_error("Enter a number for \ningredient amounts")
+            self.display_error("Enter a number for ingredient amounts")
             return 0
 
         self.ingredients_list.add_item([first, second, third])
@@ -326,6 +366,7 @@ class Creation(wx.Panel):
 
     def ingredients_remove(self, event=None):
         self.ingredients_list.remove_item(-1)
+        self.ingredients_display.SetValue(self.ingredients_list.pretty())
 
     def instructions_enter(self, event=None):
         temp = self.instructions_display.GetValue() + "\n- "
@@ -339,15 +380,22 @@ class Creation(wx.Panel):
 
     def tags_enter(self, event=None):
         temp = self.tags_entry.GetValue().lower()
-        if temp[-1] is " ":
+        if temp[-1] == " ":
             temp = temp[:-1]
+
         self.tags_entry.SetValue("")
+
+        if temp in self.tags_list:
+            self.display_error("Tag already entered!")
+            return 0
+
         self.tags_list.append(temp)
         temp = ""
         for x in self.tags_list:
             temp += x + ", "
         temp = wordwrap(temp, 30)
         self.tags_entered.SetLabel(temp)
+        self.error_message.Hide()
 
     def tags_remove_every(self, event=None):
         self.tags_list = []
@@ -362,6 +410,35 @@ class Creation(wx.Panel):
         temp = wordwrap(temp, 30)
         self.tags_entered.SetLabel(temp)
 
+    def tools_submit(self, event=None):
+        first = self.tools_item_selector.GetValue()
+        if first not in lists.tools:
+            self.display_error("Unknown tool")
+            return 0
+
+        self.tools_list.append(first)
+        temp = ""
+        for x in self.tools_list:
+            temp += x +"\n"
+        self.tools_display.SetValue(temp)
+        self.tools_reset()
+    
+    def tools_reset(self, event=None):
+        self.tools_category_selector.SetValue("")
+        self.tools_item_selector.SetValue("")
+        self.error_message.Hide()
+    
+    def tools_remove(self, event=None):
+        if len(self.tools_list) > 0:
+            del self.tools_list[-1]
+        temp = ""
+        for x in self.tools_list:
+            temp += x +"\n"
+        self.tools_display.SetValue(temp)
+
+    def tools_category_chosen(self, event=None):
+        val = self.tools_category_selector.GetValue()
+        self.tools_item_selector.SetItems(lists.all_tools[val])
 
 # when passed a string, will wrap the text after the given number of characters
 # used for text boxes that dont wrap for if you need it.

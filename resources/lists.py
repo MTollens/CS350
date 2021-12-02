@@ -19,5 +19,15 @@ all = {"Proteins":Proteins,
        "Other": Other
        }
 
+Mixer = ["stand mixer", "blender"]
+Utensil = ["fork", "knife", "spoon", "ladle"]
+Dish = ["bowl", "plate", "pot", "pan"]
+Other = ["cutting board", "hot mitt"]
+
+all_tools = {"Mixer":Mixer, "Utensil":Utensil, "Dish":Dish, "Other":Other}
+tools = Mixer + Utensil + Dish + Other
+
+
+
 
 units = "fill this in later"
