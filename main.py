@@ -91,6 +91,8 @@ class Frame(wx.Frame):
 
     # can be called from anywhere, just pass the name of the recipe, will automatically redirect to the proper page
     def open_recipe(self, name):
+        # get the recipe here
+        # apply it to self.user.open_recipe()
         self.setExecution()
 
     # performs the function of a back button

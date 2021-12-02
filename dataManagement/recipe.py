@@ -22,7 +22,7 @@ class Recipe():
         # not sure if should be string, or float
         self.average_rating = ""
         self.number_of_ratings = 0
-        self.__origin = "empty"
+        self.origin = "empty"
 
     # return a string to be used in search results
     # size is the available space horizontally for text
@@ -40,7 +40,6 @@ class Recipe():
 
         # the string should be [some number of characters that will fit on the button] +newline+ rating # + stars
         return self.title[:int(size / 2)] + "\n" + rating
-
 
 
     def save(self):

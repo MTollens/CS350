@@ -3,7 +3,7 @@ import os
 from resources import lists
 from dataManagement import ingredients
 from pages import custom_widgets as cw
-
+from dataManagement import recipe as recipe
 
 # not yet implemented in any way
 # saving this one for someone else to do, so I dont do all the UI
@@ -56,6 +56,7 @@ class Creation(wx.Panel):
         self.error_message.SetForegroundColour(wx.RED)
 
         self.preview = wx.Button(self, pos=(60, 590), label="Preview", size=(150, 40))
+        self.preview.Bind(wx.EVT_BUTTON, self.preview_recipe)
         self.finish = wx.Button(self, pos=(60, 640), label="Finish", size=(150, 40))
 
         # end of STATIC UI elements
@@ -71,7 +72,6 @@ class Creation(wx.Panel):
         self.ingredients_category_selector.SetSize((150, 40))
         self.ingredients_category_selector.SetHint("Refine by Category")
         self.ingredients_category_selector.Master = True
-
 
         self.ingredients_item_selector = cw.PromptingComboBox(self, choices=[])
         self.ingredients_item_selector.SetPosition((460, 80))
@@ -439,6 +439,22 @@ class Creation(wx.Panel):
     def tools_category_chosen(self, event=None):
         val = self.tools_category_selector.GetValue()
         self.tools_item_selector.SetItems(lists.all_tools[val])
+
+    def make_recipe(self):
+        item = recipe.Recipe()
+        item.image = self.image_path
+        item.owner = self.parent.user.username
+        item.ingredients = self.ingredients_list
+        item.title = self.Title_box
+        item.tools = self.tools_list
+        item.tags = self.tags_list
+        item.origin = "creator"
+        return item
+
+    def preview_recipe(self, event=None):
+        item = self.make_recipe()
+        self.parent.user.open_recipe = item
+        self.parent.setExecution()
 
 # when passed a string, will wrap the text after the given number of characters
 # used for text boxes that dont wrap for if you need it.
