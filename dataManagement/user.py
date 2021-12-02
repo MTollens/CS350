@@ -1,3 +1,5 @@
+from dataManagement import recipe
+
 class User():
     # initial constructor, this is what runs when it is initialized inside of main.py
     def __init__(self, key=None):
@@ -20,7 +22,7 @@ class User():
 
         # working variables, these do not need to be saved
         self.current_search = ""
-        self.open_recipe = ""
+        self.open_recipe = recipe.Recipe()
 
         # timers stored here
         # reference to a thread
