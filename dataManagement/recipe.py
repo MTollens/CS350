@@ -13,6 +13,8 @@ class Recipe():
         self.title = "" # name
         # a list of strings
         self.instructions = []
+        # a list of strings
+        self.tools = []
 
         # a list of strings?
         self.tags = ""
