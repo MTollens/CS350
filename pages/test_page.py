@@ -1,5 +1,5 @@
 import wx
-from pages import custom_widgets as cw
+
 
 
 # this is a test page, just to try things out in a clean enviroment
