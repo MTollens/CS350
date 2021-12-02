@@ -2,7 +2,7 @@ import wx
 
 
 class PromptingComboBox(wx.ComboBox):
-    # code inspired from
+    # code derived from
     # https://wiki.wxpython.org/Combo%20Box%20that%20Suggests%20Options?action=raw
     def __init__(self, parent, choices=[], style=0, **par):
         self.parent = parent

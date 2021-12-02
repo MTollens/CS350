@@ -104,7 +104,6 @@ class Sign(wx.Panel):
         self.clear_inputs()
         self.parent.setPrevious()
 
-
     def guest(self, event=None):
         self.return_to_default()
         self.clear_inputs()

@@ -43,7 +43,6 @@ class Ingredients:
     def add_item(self, item):
         assert isinstance(item, list), "item must be a list"
         assert len(item) == 3, "must be a three item list"
-        #insert other validation steps after this
         self.__items.append(item)
         return self.validate()
 
@@ -84,8 +83,9 @@ class Ingredients:
             self.__unit = "metric"
 
     # checks contents of the ingredients array against allowed values, returns true on valid, false on invalid
+    #shouldnt end up needing this, since the inputs are prevalidated
     def validate(self):
-        pass
+        return True
 
     # makes it so that the <class Ingredients()> is able to be called as such:
     # Ingredients_instance[0] # returns the first instance of the list
@@ -93,3 +93,7 @@ class Ingredients:
     # Ingredients_instance[0][0] # returns the first ingredient string in the case of example "chicken"
     def __getitem__(self, item):
         return self.__items[item]
+
+
+    def metric(self):
+        return self.__unit == "metric"

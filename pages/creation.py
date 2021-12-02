@@ -198,6 +198,8 @@ class Creation(wx.Panel):
     # this is where user information should be loaded in
     def update_user(self):
         self.sub = 0
+        if self.parent.user.metric != self.ingredients_list.metric():
+            self.ingredients_list.convert_unit()
 
     def display_error(self, message):
         self.error_message.Show()
