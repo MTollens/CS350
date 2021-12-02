@@ -48,7 +48,7 @@ class Creation(wx.Panel):
         self.error_message.Hide()
 
         self.preview = wx.Button(self, pos=(60, 570), label="Preview", size=(150, 40))
-        self.finish = wx.Button(self, pos=(60, 620), label="Finish", size=(150,40))
+        self.finish = wx.Button(self, pos=(60, 620), label="Finish", size=(150, 40))
 
         # end of STATIC UI elements
 
