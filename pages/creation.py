@@ -47,6 +47,9 @@ class Creation(wx.Panel):
         self.error_message = wx.StaticText(self, pos=(60, 520), label="")
         self.error_message.Hide()
 
+        self.preview = wx.Button(self, pos=(60, 570), label="Preview", size=(150, 40))
+        self.finish = wx.Button(self, pos=(60, 620), label="Finish", size=(150,40))
+
         # end of STATIC UI elements
 
         # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -208,7 +211,7 @@ class Creation(wx.Panel):
 
     def image_select(self, event=None):
         # code referenced from https://www.programcreek.com/python/example/3163/wx.FileDialog
-        filename = "/home/matt/PycharmProjects/CS350/resources/fishandchips.jpg"
+        filename = ""
 
         # unsure about what this does, other than set the starting DIR for the selector
         defDir, defFile = '', ''
