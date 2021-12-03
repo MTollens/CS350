@@ -445,7 +445,7 @@ class Creation(wx.Panel):
         item.image = self.image_path
         item.owner = self.parent.user.username
         item.ingredients = self.ingredients_list
-        item.title = self.Title_box
+        item.title = self.Title_box.GetValue()
         item.tools = self.tools_list
         item.tags = self.tags_list
         item.origin = "creator"
