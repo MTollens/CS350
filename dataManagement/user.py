@@ -27,8 +27,12 @@ class User():
         self.pantry = "None"  # list of formatted strings (to include amount + unit)
 
         # working variables, these do not need to be saved
+        # string
         self.current_search = ""
-        self.open_recipe = recipe.Recipe()
+        # list of strings
+        self.current_search_tags = []
+        # recipe
+        self.open_recipe = recipe.Recipe('user_default')
 
         # timers stored here
         # reference to a thread

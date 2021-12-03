@@ -6,7 +6,6 @@ class ContentScroller(wx.Panel):
     def __init__(self, parent, size=(600, 355), pos=(0, 100)):
         wx.Panel.__init__(self, parent=parent, size=size, pos=pos)#,
                                                     # style=wx.SIMPLE_BORDER)
-
         self.render_status = 0
 
         self.parent = parent
@@ -17,107 +16,134 @@ class ContentScroller(wx.Panel):
         # what page of results are we on
         self.page = 0
 
-        self.sizer = wx.GridBagSizer()
+        self.sizer = wx.BoxSizer()
         self.image_size = (200, 200)
         self.info_size = (200, 50)
 
         # left
         self.left_image = wx.BitmapButton(self, size=self.image_size)
-        self.left_image.SetLabel("left_image")
+        # self.left_image.SetLabel("left_image")
         self.left_image.Bind(wx.EVT_BUTTON, self.left_pressed)
-        self.sizer.Add(self.left_image, pos=(0, 0), flag=wx.ALL, border=5)
+        self.sizer.Add(self.left_image, flag=wx.ALL, border=5)
 
         self.left_info = wx.Button(self, size=self.info_size)
         self.left_info.SetLabel("left_info")
         self.left_info.Bind(wx.EVT_BUTTON, self.left_pressed)
-        self.sizer.Add(self.left_info, pos=(1, 0), flag=wx.ALL, border=5)
-        self.left_recipe = recipe.Recipe()
+        self.sizer.Add(self.left_info, flag=wx.ALL, border=5)
+        self.left_recipe = recipe.Recipe("dummy")
 
         # mid
         self.mid_image = wx.BitmapButton(self, size=self.image_size)
-        self.mid_image.SetLabel("mid_image")
+        # self.mid_image.SetLabel("mid_image")
         self.mid_image.Bind(wx.EVT_BUTTON, self.mid_pressed)
-        self.sizer.Add(self.mid_image, pos=(0, 1), flag=wx.ALL, border=5)
+        self.sizer.Add(self.mid_image, flag=wx.ALL, border=5)
 
         self.mid_info = wx.Button(self, size=self.info_size)
         self.mid_info.SetLabel("mid_info")
         self.mid_info.Bind(wx.EVT_BUTTON, self.mid_pressed)
-        self.sizer.Add(self.mid_info, pos=(1, 1), flag=wx.ALL, border=5)
-        self.mid_recipe = recipe.Recipe()
+        self.sizer.Add(self.mid_info, flag=wx.ALL, border=5)
+        self.mid_recipe = recipe.Recipe("dummy")
 
         # right
         self.right_image = wx.BitmapButton(self, size=self.image_size)
-        self.right_image.SetLabel("right_image")
+        # self.right_image.SetLabel("right_image")
         self.right_image.Bind(wx.EVT_BUTTON, self.right_pressed)
-        self.sizer.Add(self.right_image, pos=(0, 2), flag=wx.ALL, border=5)
+        self.sizer.Add(self.right_image, flag=wx.ALL, border=5)
 
         self.right_info = wx.Button(self, size=self.info_size)
         self.right_info.SetLabel("right_info")
         self.right_info.Bind(wx.EVT_BUTTON, self.right_pressed)
-        self.sizer.Add(self.right_info, pos=(1, 2), flag=wx.ALL, border=5)
+        self.sizer.Add(self.right_info, flag=wx.ALL, border=5)
+        self.right_recipe = recipe.Recipe("dummy")
 
         # navigation
         self.previous = wx.Button(self, size=self.info_size)
-        self.previous.SetLabel("previous")
-        self.sizer.Add(self.previous, pos=(2, 0), flag=wx.ALL, border=5)
+        self.previous.SetLabel("<<<   Previous")
+        self.sizer.Add(self.previous, flag=wx.ALL, border=5)
         self.previous.Bind(wx.EVT_BUTTON, self.previous_pressed)
 
         self.next = wx.Button(self, size=self.info_size)
-        self.next.SetLabel("next")
-        self.sizer.Add(self.next, pos=(2, 2), flag=wx.ALL, border=5)
+        self.next.SetLabel("Next   >>>")
+        self.sizer.Add(self.next, flag=wx.ALL, border=5)
         self.next.Bind(wx.EVT_BUTTON, self.next_pressed)
 
-        self.SetSizerAndFit(self.sizer)
+        self.current_page = wx.StaticText(self, size=self.info_size, style=wx.ALIGN_CENTRE_HORIZONTAL)
+        self.current_page.SetLabel("Page 1")
+        self.sizer.Add(self.current_page, flag=wx.ALL, border=5)
 
-        # start hidden as the panels that rely on this will show it when they are called
-        self.Hide()
+        self.SetSizer(self.sizer)
 
-        # self.Bind(wx.EVT_IDLE, self.__on_idle)
+        self.reload_recipes()
 
     # takes into consideration the page, and how many tiles are on screen
     def reload_recipes(self):
-        pass
+        if self.page < 0:
+            self.page = 0
+
+        self.current_page.SetLabel("Page {}".format(self.page+1))
+        # left panel starts at 1
+        item1 = recipe.Recipe("dummy").invalid()
+        item2 = recipe.Recipe("dummy").invalid()
+        item3 = recipe.Recipe("dummy").invalid()
+
+        status, item1 = self.__request(self.page * 3 + 1)
+        self.left_image.SetBitmap(self.load_image(item1.image, self.left_image.GetSize()))
+        self.left_info.SetLabel(item1.generate_description(64))
+        self.left_recipe = item1
+
+        # if the first status check returned true, then we can request another
+        if status:
+            status, item2 = self.__request(self.page * 3 + 2)
+        # if the second status request returned true as well, then all three get real values
+        if status:
+            status, item3 = self.__request(self.page * 3 + 3)
 
 
-    # buttons call this when a recipe has been selected
-    def selected(self, title):
-        print("selection made:")
-        print(title)
+        self.mid_image.SetBitmap(self.load_image(item2.image, self.mid_image.GetSize()))
+        self.mid_info.SetLabel(item2.generate_description(64))
+        self.mid_recipe = item2
 
-        if title == "Next Page":
-            self.page += 1
-            self.reload_recipes()
-            self.render_status = 1
-        elif title == "Previous Page":
-            if self.page > 0:
-                self.page += -1
-                self.reload_recipes()
-            self.render_status = 1
-        elif title == "End of Results":
-            return 0
+        self.right_image.SetBitmap(self.load_image(item3.image, self.right_image.GetSize()))
+        self.right_info.SetLabel(item3.generate_description(64))
+        self.right_recipe = item3
+
+
+        # if all status checks returned true then we can show it
+        if status:
+            self.next.Show()
+        # if we recieved a false status at any point then we should not show the next button
         else:
-            pass
-            # this is where the selection will be handled
+            self.next.Hide()
+
+        # previous button should not show up unless we are on page > 0
+        if self.page == 0:
+            self.previous.Hide()
+        else:
+            self.previous.Show()
 
     # makes a request to the database and returns a recipe and a status report
     # status, recipe = self.__request(item_number)
+    # returns TRUE as the status report, if there remain some results to display
+    # returns FALSE if there are no more results, the returned recipe is tha last one available
     def __request(self, item):
         # # make a request here
         # # send the following number to the database handler so it knows which result of its search we are on
-        # position = self.page * self.rows * self.columns + item
-        pass
 
+        temp = recipe.Recipe("content_example")
+        # print("here")
+        # can return invalid if applicable
+        #return True, temp.invalid()
+        return True, temp.example()
 
     def resize_main(self, event=None, size_external=None, position_external=None):
-        self.render_status = 0
         if size_external:
             self.SetSize(size_external)
 
         if position_external:
             self.SetPosition(position_external)
             self.page = 0
-            self.Hide()
-            self.Show()
+            # self.Hide()
+            # self.Show()
 
         size = self.GetSize()
 
@@ -142,26 +168,57 @@ class ContentScroller(wx.Panel):
 
         self.previous.SetSize(self.info_size)
         self.previous.SetPosition((5, self.image_size[1]+self.info_size[1]+20))
+        self.current_page.SetSize(self.info_size)
+        self.current_page.SetPosition((self.image_size[0]+10, self.image_size[1]+self.info_size[1]+20))
         self.next.SetSize(self.info_size)
         self.next.SetPosition((2*(self.image_size[0]+10), self.image_size[1]+self.info_size[1]+20))
 
-
     # button for either of the left tile buttons
     def left_pressed(self, event=None):
-        pass
+        # print("left pressed")
+        self.open_recipe(self.left_recipe)
 
     def mid_pressed(self, event=None):
-        pass
+        # print("mid pressed")
+        self.open_recipe(self.mid_recipe)
 
     def right_pressed(self, event=None):
-        pass
+        # print("right pressed")
+        self.open_recipe(self.right_recipe)
 
     def previous_pressed(self, event=None):
         if self.page > 0:
             self.page -= 1
+        self.reload_recipes()
 
     def next_pressed(self, event=None):
         self.page += 1
+        self.reload_recipes()
 
+    def open_recipe(self, recipe):
+        # validation (if needed) should be performed in the main class at the function below
+        self.parent.open_recipe(recipe)
 
+    # load file bitmap and return it as a bitmap object
+    # for use with the "image" object
+    def load_image(self, filename, size):
+        # file extension checking not required, because a failure mode is prepared
+        temp = 0
+        try:
+            temp = wx.Bitmap(filename, wx.BITMAP_TYPE_ANY)
+            temp = self.scale_bitmap(temp, size[0], size[1])
+        except:
+            temp = wx.Bitmap("resources/nofile.png", wx.BITMAP_TYPE_ANY)
+            temp = self.scale_bitmap(temp, size[0], size[1])
+
+        return temp
+
+    # scales bitmap, shouldnt need to be touched at all
+    def scale_bitmap(self, bitmap, width, height):
+        image = wx.Bitmap.ConvertToImage(bitmap)
+        image = image.Scale(width, height, wx.IMAGE_QUALITY_HIGH)
+        result = wx.Bitmap(image)
+        return result
+
+empty = [" ","",None]
 

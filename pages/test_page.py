@@ -75,10 +75,11 @@ class Test(wx.Panel):
 
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
-        print("running")
+        # print("running")
         # gets the size of the current window, so we can scale everything to it
         size = self.GetSize()
         # self.test.reposition((150,150))
+
 
 
     # gets called when a panel is reloaded, not required to do anything but must be here

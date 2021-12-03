@@ -7,6 +7,7 @@ from pages import sign_in as sn, search as sh, pantry as pn, homepage as hp, exe
 
 # the user class that handles interactions between the dataManagement and the UI
 from dataManagement import user as user
+from dataManagement import recipe as RCP
 
 
 # main class, contains all the others
@@ -17,13 +18,16 @@ class Frame(wx.Frame):
         # the user is instantiated inside the main because all the other panels need to reference it, and main is the parent
         self.user = user.User()
 
+        # important that it is declared before self.__panels
+        # secondary panel that handles the content view, is rendered on top of specified panels
+        self.__ContentScroller = cs.ContentScroller(self)
+
         # panels list, do not change the order of this list, or all the panels will reference the wrong ones
         self.__panels = [hp.Homepage(self), ac.Account(self), sn.Sign(self), pn.Pantry(self), sh.Search(self),
                          cr.Creation(self), ex.Execution(self), tt.Test(self), hl.Help(self)]
 
-        # secondary panel that handles the content view, is rendered on top of specified panels
-        self.__ContentScroller = cs.ContentScroller(self)
-        self.__ContentScroller.Bind(wx.EVT_SIZE, self.__ContentScroller.resize_main)
+        self.__ContentScroller.Hide()
+        # self.__ContentScroller.Bind(wx.EVT_SIZE, self.__ContentScroller.resize_main)
 
         # list of panels that should show the ContentScroller
         self.secondary = [0, 4]
@@ -89,10 +93,10 @@ class Frame(wx.Frame):
         self.user.search(keyword)
         self.setSearch()
 
-    # can be called from anywhere, just pass the name of the recipe, will automatically redirect to the proper page
-    def open_recipe(self, name):
-        # get the recipe here
-        # apply it to self.user.open_recipe()
+    # can be called from anywhere, just pass the recipe, will automatically redirect to the proper page
+    def open_recipe(self, recipe):
+        assert isinstance(recipe, RCP.Recipe), "was not passed an instance of recipe class. was: {}".format(type(recipe))
+        self.user.open_recipe = recipe
         self.setExecution()
 
     # performs the function of a back button
@@ -142,10 +146,14 @@ class Frame(wx.Frame):
 
     def setCreation(self, event=None):
         panel = 5
+        if not self.user.signed_in:
+            panel = 2
         self.__setPanel_visible(panel)
 
     def setExecution(self, event=None):
         panel = 6
+        if not self.user.signed_in:
+            panel = 2
         self.__setPanel_visible(panel)
 
     def setTest(self, event=None):

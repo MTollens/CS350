@@ -1,6 +1,6 @@
 import wx
 
-
+# can only be used for the Recipe Creation page
 class PromptingComboBox(wx.ComboBox):
     # code derived from
     # https://wiki.wxpython.org/Combo%20Box%20that%20Suggests%20Options?action=raw
@@ -46,7 +46,7 @@ class PromptingComboBox(wx.ComboBox):
         else:
             self.parent.ingredients_category_chosen()
 
-
+# kind of lazy here, ill rework it if need be
 class PromptingComboBox2(wx.ComboBox):
     # code derived from
     # https://wiki.wxpython.org/Combo%20Box%20that%20Suggests%20Options?action=raw

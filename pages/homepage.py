@@ -40,14 +40,6 @@ class Homepage(wx.Panel):
         self.Test = wx.Button(parent=self, label="Test", pos=(0, 200), size=(50, 50))
         self.Test.Bind(wx.EVT_BUTTON, parent.setExecution)
 
-        # txt_style = wx.VSCROLL | wx.HSCROLL | wx.BORDER_SIMPLE
-        # self.Recipe_main = wx.html.HtmlWindow(self, -1,
-        #                                size=(400, 200),
-        #                                style=txt_style,
-        #                                        pos=(50,50))
-        #
-        # self.Recipe_main.LoadFile("resources/lorem.html")
-
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
         # get the new window size after the resize event

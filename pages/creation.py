@@ -449,10 +449,18 @@ class Creation(wx.Panel):
         item.tools = self.tools_list
         item.tags = self.tags_list
         item.origin = "creator"
+        item.prep_time = self.Preptime.GetValue()
+        try:
+            item.servings = float(self.MakesFor.GetValue())
+        except:
+            self.display_error("Servings should be a number")
+            return 0
         return item
 
     def preview_recipe(self, event=None):
         item = self.make_recipe()
+        if item == 0:
+            return
         self.parent.user.open_recipe = item
         self.parent.setExecution()
 
