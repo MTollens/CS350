@@ -12,15 +12,12 @@ class ContentScroller(wx.Panel):
         self.parent = parent
 
         # a neutral light gray
-        self.SetBackgroundColour((120, 120, 120))
+        # self.SetBackgroundColour((120, 120, 120))
 
         # what page of results are we on
         self.page = 0
 
-        # start hidden as the panels that rely on this will show it when they are called
-        self.Hide()
-
-        self.sizer = wx.GridBagSizer(0, 0)
+        self.sizer = wx.GridBagSizer()
         self.image_size = (200, 200)
         self.info_size = (200, 50)
 
@@ -72,7 +69,8 @@ class ContentScroller(wx.Panel):
 
         self.SetSizerAndFit(self.sizer)
 
-
+        # start hidden as the panels that rely on this will show it when they are called
+        self.Hide()
 
         # self.Bind(wx.EVT_IDLE, self.__on_idle)
 

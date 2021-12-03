@@ -14,7 +14,8 @@ class Sign(wx.Panel):
 
         self.Username = wx.TextCtrl(parent=self, pos=(175, 75), size=(200, 30))
         # the style = wx.TE_PASSWORD is what makes the password field be dots instead of characters
-        self.Password = wx.TextCtrl(parent=self, pos=(175, 115), size=(200, 30), style=wx.TE_PASSWORD)
+        self.Password = wx.TextCtrl(parent=self, pos=(175, 115), size=(200, 30), style=wx.TE_PASSWORD|wx.TE_PROCESS_ENTER)
+        self.Password.Bind(wx.EVT_TEXT_ENTER, self.entrybox_confirm)
         self.Confirm_Password = wx.TextCtrl(parent=self, pos=(175, 155), size=(200, 30), style=wx.TE_PASSWORD)
         self.Confirm_Password.Hide()
 
@@ -49,7 +50,7 @@ class Sign(wx.Panel):
     # we also need to remember to switch panels as well as send the dataManagement
 
     def submit_credentials(self, event=None):
-        print("Login attempt")
+        # print("Login attempt")
         if self.parent.user.login(self.Username.GetValue(), self.Password.GetValue()):
             self.parent.setAccount()
             self.error.SetLabel("")
@@ -115,6 +116,14 @@ class Sign(wx.Panel):
         self.return_to_default()
         self.clear_inputs()
         self.parent.setHomepage()
+
+    def entrybox_confirm(self, event):
+        #
+        # if event.GetKeyCode() == 13:
+        self.submit_credentials()
+        # else:
+        #     event.Skip()
+
 
 
 empty = [" ","",None]
