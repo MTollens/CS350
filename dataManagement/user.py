@@ -33,6 +33,8 @@ class User():
         self.current_search_tags = []
         # recipe
         self.open_recipe = recipe.Recipe('user_default')
+        # True if the recipe should be in view mode or in execute mode
+        self.view_recipe = True
 
         # timers stored here
         # reference to a thread
