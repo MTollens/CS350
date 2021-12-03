@@ -47,9 +47,6 @@ class Execution(wx.Panel):
             self.tools_temp += x + '\n'
         self.tools_list.SetValue(self.tools_temp)
 
-        self.ingredients_temp = ""
-        for x in self.recipe.ingredients:
-            self.ingredients_temp += x + '/n'
-        self.ingredients_list.SetValue(self.ingredients_temp)
+        self.ingredients_list.SetValue(self.recipe.ingredients.pretty())
 
         #self.image = (self.recipe.image)
