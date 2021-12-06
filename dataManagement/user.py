@@ -123,3 +123,15 @@ class User():
         self.current_search = keyword
         # TODO database stuff goes here
 
+
+    def start_timer(self, value, timer):
+        pass
+
+    def end_timer(self):
+        pass
+
+    def pause_timer(self):
+        pass
+
+    def __run_timer(self, value, timer):
+        pass
