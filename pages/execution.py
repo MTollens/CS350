@@ -1,5 +1,5 @@
 import sys
-
+import regex
 import wx
 
 # not yet implemented in any way
@@ -80,3 +80,26 @@ class Execution(wx.Panel):
             return "Metric"
         else:
             return "Imperial"
+
+    # you will need to rename the "button3" here
+    # def pause_timer(self, event=None):
+    #     if self.parent.user.timer_status():
+    #         self.parent.user.pause_timer()
+    #         self.button3.SetLabel("resume timer")
+    #     else:
+    #         self.button3.SetLabel("pause timer")
+    #         self.parent.user.timer_resume()
+
+    # here the button2 and button3 refer to (start/stop) and (pause/resume) respectively
+    # the 10 is the duration of the timer
+    # the self.timer_status should be a Statictext or TextCtrl object that will show the remaining time
+    # def start_timer(self, event=None):
+    #     if not self.parent.user.timer_status():
+    #         self.parent.user.start_timer(10, self.timer_status)
+    #         self.button2.SetLabel("Stop")
+    #         self.button3.Show()
+    #     else:
+    #         self.parent.user.end_timer()
+    #         self.button2.SetLabel("Start")
+    #         self.button3.Hide()
+

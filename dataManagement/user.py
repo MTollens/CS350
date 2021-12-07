@@ -1,4 +1,8 @@
 from dataManagement import database, recipe
+# for timers
+import threading
+import time
+import subprocess
 
 class User():
     # initial constructor, this is what runs when it is initialized inside of main.py
@@ -36,12 +40,19 @@ class User():
         # True if the recipe should be in view mode or in execute mode
         self.view_recipe = True
 
-        # timers stored here
-        # reference to a thread
-        # not implemented yet
-        # TODO timers
-        self.timers = 0
+        # TIMERS
+        # stored value for timer, not to be edited manually
+        self.__timer_value = 0
 
+        # timer control structure
+        self.__timer_control = "END"
+        # other values: "RUNNING" "STOP" "PAUSE" "RESUME"
+
+        # timer reference, used to update the display for the remaining time
+        self.__timer_reference = None
+
+        # timer thread(s)
+        self.timers = None
 
     # this is purely for demo purposes, it is not intended for Production in any way, nor is it representative of any final product
     def example_login(self):
@@ -67,14 +78,6 @@ class User():
         self.metric = True
         self.public = False
     # the above two functions should be removed as soon as the proper login stuff is ready
-
-
-    # create timer, pass an integer for the number of minutes
-    # might need to pass the UI element to update it from within the thread
-    # TODO timers
-    def create_timer(self, time):
-        pass
-
 
     # here are the getters and setters for all the specific requests that need to be done at any point
     # private functions have __ at the beginning, this means that they are for internal class use only
@@ -106,6 +109,7 @@ class User():
         else:
             return False
 
+    # might not be needed
     # Tell database to change based on current username
     def change_public(self):
         pass
@@ -124,14 +128,91 @@ class User():
         # TODO database stuff goes here
 
 
-    def start_timer(self, value, timer):
-        pass
+    # here the value should be an integer number of seconds
+    # here the timer is a reference to the StaticText that represents the remaining time
+    def start_timer(self, value, timer=None):
+        assert isinstance(value, int), "Must pass an integer to the start_timer method"
+        try:
+            self.timers.join()
+        except:
+            pass
+        self.timer_reference = timer
+        self.__timer_value = value
+        self.__timer_control = "RUNNING"
+        self.timers = threading.Thread(target=self.__run_timer)
+        self.timers.start()
 
+
+    # finish the timer and set the value back to 0
     def end_timer(self):
-        pass
+        self.__timer_control = "STOP"
 
+    # finish the timer but dont reset the value, keep it the same
     def pause_timer(self):
-        pass
+        self.__timer_control = "PAUSE"
 
-    def __run_timer(self, value, timer):
-        pass
+    # returns true if timer is running, returns false when timer is not running, or does not exist
+    def timer_status(self):
+        status = False
+        try:
+            status = self.timers.is_alive()
+        except:
+            status = False
+        if self.__timer_control == "PAUSE":
+            status = False
+        return status
+
+    def timer_resume(self):
+        self.__timer_control = "RESUME"
+
+    # to be used by a thread, not meant to be called
+    def __run_timer(self):
+        # print("started timer")
+        # main loop
+        while True:
+            # generate the output products
+            hours = int(self.__timer_value / 3600)
+            minutes = str(int(self.__timer_value / 60))
+            if len(minutes) == 1:
+                minutes = "0" + minutes
+            seconds = str(self.__timer_value % 60)
+            if len(seconds) == 1:
+                seconds = "0" + seconds
+            # if we were given a handler then we can update the display
+            if self.timer_reference:
+                self.timer_reference.SetLabel("{}:{}:{}".format(hours, minutes, seconds))
+            # sleep for one second
+            time.sleep(1)
+            #decrement the sleep counter
+            self.__timer_value -= 1
+            # print status for debug
+            # print(self.__timer_control)
+
+            #if time has reached zero, or commanded to stop, we full stop
+            if (self.__timer_value <= 0) or (self.__timer_control == "STOP"):
+                self.__timer_control = "END"
+                break
+            # if commanded to pause we enter a wait loop that doesnt count the seconds
+            elif self.__timer_control == "PAUSE":
+                # secondary wait loop for pause
+                while True:
+                    # timer here is to give the variable lock a chance to change tha value of the control variable
+                    time.sleep(1)
+                    # print(self.__timer_control)
+                    # if the status is changed to resume, we can break the secondary loop
+                    if self.__timer_control == "RESUME":
+                        self.__timer_control = "RUNNING"
+                        break
+                    # if the main thread (the main program) is dead, we can stop
+                    elif not threading.main_thread().is_alive():
+                        return 0
+
+            # if the main thread is dead we can stop
+            elif not threading.main_thread().is_alive():
+                return 0
+
+
+        # if we stopped because the time ran out then we can play the alert
+        if self.__timer_value <= 0:
+            subprocess.run(['python', 'pages/timer_done.py'])
+        return 0
