@@ -55,7 +55,7 @@ class Execution(wx.Panel):
         self.time_pause.Bind(wx.EVT_BUTTON, self.pause_timer)
         self.time_pause.Hide()
 
-        self.timer_status = wx.TextCtrl(parent=self, pos=(100,625))
+        self.timer_status = wx.TextCtrl(parent=self, pos=(100,625), style=wx.TE_READONLY)
         self.timer_secs = 0
 
         # load in user dataManagement
