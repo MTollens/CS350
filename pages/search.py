@@ -22,8 +22,13 @@ class Search(wx.Panel):
         self.Searchbar.Bind(wx.EVT_KEY_DOWN, self.searchbar_keypress)
         self.Searchbar.SetFont(font_searchtext)
 
-        self.tags_box = wx.TextCtrl(self, pos=(0, 51), size=(220,48))
+        self.tags_box = wx.TextCtrl(self, pos=(0, 51), size=(220, 48))
         self.tags_box.SetHint("Enter tags seperated by commas")
+
+        self.tags_validate = wx.StaticText(self, pos=(221, 51), size=(300, 48))
+
+        # I dont think this is necessary
+        # self.tags_clear = wx.Button(self, pos=(221, 51), size=(50, 48))
 
         self.Home = wx.Button(parent=self, label="Home", pos=(350, 0), size=(80, 50))
         self.Home.Bind(wx.EVT_BUTTON, parent.setHomepage)
@@ -31,6 +36,9 @@ class Search(wx.Panel):
         # IMPORTANT
         # the search panel does not implement the content scroll by itself, it uses the parent rendering another frame to do it
         # so dont expect to find it here
+
+
+        self.Bind(wx.EVT_IDLE, self.on_idle)
 
 
     # one of the most important UI functions, this is where the window resize gets handled
@@ -48,6 +56,7 @@ class Search(wx.Panel):
 
     # all pages must implement this, even if they dont use it
     def update_user(self):
+        self.tags_validate.SetLabel("")
         self.Searchbar.SetHint(self.parent.user.current_search)
 
     # handles all the keypresses of the searchbar
@@ -64,8 +73,24 @@ class Search(wx.Panel):
     def search(self, event=None):
         if self.Searchbar.GetValue() not in empty:
             #use the offical search channel
-            self.parent.anon_search(self.Searchbar.GetValue(), self.tags_box.GetValue().split(", "))
+            self.parent.anon_search(self.Searchbar.GetValue(), self.tags_box.GetValue().lower().split(", "))
             # clear the input so it is visible that something happened
             self.Searchbar.SetValue("")
+            self.tags_box.SetValue("")
+            # tags are intentionally not cleared
+            # self.tags_validate.SetLabel("")
         else:
             self.Searchbar.SetHint("Enter a search Here!")
+
+    #show all valid tags with a visual indication
+    def on_idle(self, event=None):
+        temp = self.tags_box.GetValue()
+        temp = temp.split(", ")
+        temp2 = ""
+        for x in temp:
+            temp2 += "[{}] ".format(x)
+        self.tags_validate.SetLabel(temp2)
+
+
+
+

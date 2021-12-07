@@ -161,17 +161,6 @@ class User():
         for item in recipes:
             print(item.title)
 
-
-    # should only be called from main.py, handled by the anon_search for panels to interact with it
-    def search(self, keyword, keywords=None):
-        # if there are no keywords then send an empty list
-        if keywords is None:
-            keywords = []
-        # this value is stored so that panels can show the current search in a textbox hint
-        self.current_search = keyword
-        # TODO database stuff goes here
-
-
     # here the value should be an integer number of seconds
     # here the timer is a reference to the StaticText that represents the remaining time
     def start_timer(self, value, timer=None):

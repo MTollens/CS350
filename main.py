@@ -91,7 +91,7 @@ class Frame(wx.Frame):
     # this allows the reuse of the search function that the search page uses, so the homepage code isnt unique
     def anon_search(self, keyword, tags=None):
         self.user.current_search_tags = tags
-        self.user.search(keyword)
+        self.user.current_search = keyword
         self.setSearch()
 
     # can be called from anywhere, just pass the recipe, will automatically redirect to the proper page
