@@ -60,7 +60,45 @@ class Database():
             print("Error fetching user account information")
             pass
 
+    # Ingredient Fetching
+    def getIngredients(self, category):
+        if category != "Other":
+            query = "SELECT name FROM ingredient WHERE category = %s"
+            input = (category,)
+            self.dbcursor.execute(query, input)
+        else:
+            query = "SELECT name FROM ingredient WHERE category IS NULL"
+            self.dbcursor.execute(query)
 
+        result = self.dbcursor.fetchall()
 
+        if result:
+            cleanList = []
+            for x in result:
+                cleanList.append(x[0])
+
+            return cleanList
+        else:
+            return
+
+    # Tool Fetching
+    def getTools(self, category):
+        if category != "Other":
+            query = "SELECT name FROM appliance WHERE category = %s"
+            input = (category,)
+            self.dbcursor.execute(query, input)
+        else:
+            query = "SELECT name FROM appliance WHERE category IS NULL"
+            self.dbcursor.execute(query)
+
+        result = self.dbcursor.fetchall()
+
+        if result:
+            cleanList = []
+            for x in result:
+                cleanList.append(x[0])
+            return cleanList
+        else:
+            return
 
 

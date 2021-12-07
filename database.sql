@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: recipebuddy
 -- ------------------------------------------------------
--- Server version	8.0.27
+-- Server version	8.0.22
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -50,6 +50,7 @@ DROP TABLE IF EXISTS `appliance`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `appliance` (
   `name` varchar(32) NOT NULL,
+  `category` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -60,6 +61,7 @@ CREATE TABLE `appliance` (
 
 LOCK TABLES `appliance` WRITE;
 /*!40000 ALTER TABLE `appliance` DISABLE KEYS */;
+INSERT INTO `appliance` VALUES ('Blender','Mixer'),('Bowl','Dish'),('Cutting Board',NULL),('Fork','Utensil'),('Hot Mitt',NULL),('Knife','Utensil'),('Ladle','Utensil'),('Pan','Dish'),('Plate','Dish'),('Pot','Dish'),('Spoon','Utensil'),('Stand Mixer','Mixer');
 /*!40000 ALTER TABLE `appliance` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -73,6 +75,7 @@ DROP TABLE IF EXISTS `ingredient`;
 CREATE TABLE `ingredient` (
   `name` varchar(32) NOT NULL,
   `unit` varchar(32) DEFAULT NULL,
+  `category` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -83,7 +86,7 @@ CREATE TABLE `ingredient` (
 
 LOCK TABLES `ingredient` WRITE;
 /*!40000 ALTER TABLE `ingredient` DISABLE KEYS */;
-INSERT INTO `ingredient` VALUES ('Basil','leaf(s)'),('Beef','gram(s)'),('Bell Pepper','pepper(s)'),('Black Pepper','ml(s)'),('Broccoli','crown(s)'),('Butter','gram(s)'),('Carrot','carrot(s)'),('Cheese','ml(s)'),('Chicken','gram(s)'),('Egg','egg(s)'),('Flour','ml(s)'),('Garlic','clove(s)'),('Lemon','lemon(s)'),('Milk','ml(s)'),('Noodles','gram(s)'),('Onion','onion(s)'),('Rice','ml(s)'),('Salt','ml(s)'),('Sugar','ml(s)'),('Tomato','tomato(es)');
+INSERT INTO `ingredient` VALUES ('Basil','leaf(s)',NULL),('Beef','gram(s)','Protein'),('Bell Pepper','pepper(s)','Vegetable'),('Black Pepper','ml(s)','Spice'),('Broccoli','crown(s)','Vegetable'),('Butter','gram(s)','Dairy'),('Carrot','carrot(s)','Vegetable'),('Cheese','ml(s)','Dairy'),('Chicken','gram(s)','Protein'),('Egg','egg(s)','Protein'),('Flour','ml(s)',NULL),('Garlic','clove(s)','Vegetable'),('Lemon','lemon(s)','Fruit'),('Milk','ml(s)','Dairy'),('Noodles','gram(s)',NULL),('Onion','onion(s)','Vegetable'),('Rice','ml(s)',NULL),('Salt','ml(s)','Spice'),('Sugar','ml(s)','Spice'),('Tomato','tomato(es)','Fruit');
 /*!40000 ALTER TABLE `ingredient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -181,4 +184,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-30 16:17:08
+-- Dump completed on 2021-12-07 11:55:36

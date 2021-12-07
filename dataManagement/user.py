@@ -109,6 +109,8 @@ class User():
         else:
             return False
 
+
+
     # might not be needed
     # Tell database to change based on current username
     def change_public(self):
