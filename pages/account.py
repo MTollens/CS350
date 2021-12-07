@@ -18,10 +18,10 @@ class Account(wx.Panel):
 
         self.box = wx.StaticBox(parent=self, pos=(50, 50), size=(250, 200))
 
-        self.Units = wx.Button(parent=self, label=self.get_unit_label(), pos=(70, 140), size=(100, 50))
+        self.Units = wx.Button(parent=self, label="NULL", pos=(70, 140), size=(100, 50))
         self.Units.Bind(wx.EVT_BUTTON, self.change_units)
 
-        self.Public = wx.Button(parent=self, label=self.get_private_label(), pos=(180, 140), size=(100, 50))
+        self.Public = wx.Button(parent=self, label="NULL", pos=(180, 140), size=(100, 50))
         self.Public.Bind(wx.EVT_BUTTON, self.change_public)
 
         self.recipe_list = wx.TextCtrl(parent=self, pos=(60, 60), size=(200, 100), style=wx.TE_READONLY | wx.TE_MULTILINE)
@@ -85,6 +85,8 @@ class Account(wx.Panel):
         self.tools_list.SetValue(self.parent.user.tools)
         self.ingredients_list.SetValue(self.parent.user.pantry)
         self.recipe_list.SetValue(self.parent.user.recipes)
+        self.get_unit_label()
+        self.get_private_label()
 
 
     # called on button press
@@ -103,12 +105,11 @@ class Account(wx.Panel):
 
     # Sets default button value
     def get_unit_label(self):
-        print(self.parent.user.metric)
         if self.parent.user.metric:
-
-            return "Metric"
+            self.Units.SetLabel("Metric")
         else:
-            return "Imperial"
+            self.Units.SetLabel("Imperial")
+
 
     # similar function as metric but for setting public/private account
     def change_public(self, event=None):
@@ -126,9 +127,9 @@ class Account(wx.Panel):
     # Sets default button value
     def get_private_label(self):
         if self.parent.user.public:
-            return "Public"
+            self.Public.SetLabel("Public")
         else:
-            return "Private"
+            self.Public.SetLabel("Private")
 
     # to be replaced by real function, this is for demo purposes only
     def Sign_in_example(self, event):
