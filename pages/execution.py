@@ -56,6 +56,7 @@ class Execution(wx.Panel):
         self.time_pause.Hide()
 
         self.timer_status = wx.TextCtrl(parent=self, pos=(100,625))
+        self.timer_secs = 0
 
         # load in user dataManagement
         self.update_user()
@@ -82,9 +83,19 @@ class Execution(wx.Panel):
 
         self.instructions_list.DeleteAllItems()
         for x in self.steps:
-            index = self.instructions_list.InsertItem(sys.maxsize, x[0])
+            index = self.instructions_list.InsertItem(99999, x[0])
             self.instructions_list.SetItem(index, 0, str(x[0]))
             self.instructions_list.SetItem(index, 1, x[1])
+
+        y = 0
+        while y < self.instructions_list.GetItemCount():
+            if "[" in self.instructions_list.GetItemText(y, col=1):
+                self.timer_secs, new_string = parse_timer(self.instructions_list.GetItemText(y, col=1))
+                self.instructions_list.SetItem(y, 1, new_string)
+                break
+            else:
+                y = y+1
+
         self.instructions_list.SetColumnWidth(col=1, width=wx.LIST_AUTOSIZE)
 
         self.current_step = self.instructions_list.GetTopItem()
@@ -131,12 +142,12 @@ class Execution(wx.Panel):
 
     def start_timer(self, event=None):
         if not self.parent.user.timer_status():
-             self.parent.user.start_timer(10, self.timer_status)
-             self.time_start.SetLabel("Stop")
+             self.parent.user.start_timer(self.timer_secs, self.timer_status)
+             self.time_start.SetLabel("Stop Timer")
              self.time_pause.Show()
         else:
              self.parent.user.end_timer()
-             self.time_start.SetLabel("Start")
+             self.time_start.SetLabel("Start Timer")
              self.time_pause.Hide()
 
 # takes in a string, and returns an integer of minutes that the string timer says, will return 0 if no timer found
@@ -144,14 +155,14 @@ class Execution(wx.Panel):
 def parse_timer(string):
     # this regex returns the string without the timer header
     # "press 'start timer'" can be replaced with anything
-    new = regex.sub("\[[a-zA-Z]+:[0-9]+[a-zA-Z]+\]", "press 'start timer'", string)
+    new = regex.sub("\[[a-zA-Z]+:[0-9]+[a-zA-Z]+\]", "  (Press 'Start Timer' to begin)", string)
     # returns a list of every instance of a number after a semicolon
     values = regex.findall(":[0-9]+", string)
     value = 0
     # timescale for the duration, might be 1 for minutes, or 60 for hours
     scale = 1
     if len(values) > 0:
-         value = int(values[0][1:])
+        value = int(values[0][1:])
 
     # is the number given in hours?
     # the ] is important because it is assumed the user will not use them in their instructions otherwise
@@ -162,15 +173,15 @@ def parse_timer(string):
     # for each of the total ways that either is spelled
     for each in minutes+hours:
         # if that spelling is in the string
-        if each in string:
+         if each in string:
             # check if it is from the minutes or hours category
             # and set the timescale appropriatly
-            if each in hours:
-                scale = 60
-            elif each in minutes:
+             if each in hours:
+                    scale = 60
+             elif each in minutes:
                 scale = 1
             # stop looking
-            break
+             break
 
     # multiply the timescale by the value found, so that the timer always receives it in units of seconds
     # always multiply by 60 for minutes as the minimum timescale
