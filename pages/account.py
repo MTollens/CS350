@@ -82,9 +82,9 @@ class Account(wx.Panel):
     def update_user(self):
         self.Account_name.SetLabel("Name: {}".format(self.parent.user.username))
         self.Account_age.SetLabel("Account age: {}".format(self.parent.user.account_age))
-        self.tools_list.SetValue(self.parent.user.tools)
-        self.ingredients_list.SetValue(self.parent.user.pantry)
-        self.recipe_list.SetValue(self.parent.user.recipes)
+        self.tools_list.SetValue(self.parent.user.get_tool_names())
+        self.ingredients_list.SetValue(self.parent.user.get_pantry_names())
+        self.recipe_list.SetValue(self.parent.user.get_recipe_names())
         self.get_unit_label()
         self.get_private_label()
 

@@ -10,7 +10,7 @@ class Ingredients:
         etc....
         """
         # instance using :    object = ingredients.Ingredients().example() # to get this exact setup for testing
-        self.__items = []
+        self.items = []
 
         # always defaults to metric
         # this does not denote how the dataManagement is stored in the list, but how the user requests it
@@ -25,7 +25,7 @@ class Ingredients:
     def example(self):
         self.__unit = "metric"
         self.__origin = "example"
-        self.__items = [
+        self.items = [
             ["chicken", 5, "lbs"],
             ["pepper", 2, "tbsp"],
             ["salt", 3, "pinch"],
@@ -34,8 +34,8 @@ class Ingredients:
         return self
 
     # will return a string of the ingredients array, may not need to be private, we shall see
-    def __tostring(self):
-        return self.__items.__repr__()
+    def tostring(self):
+        return self.items.__repr__()
 
     # appends an item to the array, will check the format and alert if problem
     # TODO implement rollback of ingredients list if added ingredient is invalid
@@ -43,13 +43,13 @@ class Ingredients:
     def add_item(self, item):
         assert isinstance(item, list), "item must be a list"
         assert len(item) == 3, "must be a three item list"
-        self.__items.append(item)
+        self.items.append(item)
         return self.validate()
 
     # removes the ingredient from the list at the given indice
     def remove_item(self, indice):
         # not tested! WARNING
-        del self.__items[indice]
+        del self.items[indice]
         return True
 
     # implementing a python builtin, not sure if needed at all
@@ -66,7 +66,7 @@ class Ingredients:
     # returns a nicely formatted string for display where applicable
     def pretty(self):
         temp = ""
-        for x in self.__items:
+        for x in self.items:
             temp = temp + "- {}, {} {} \n".format(x[0], x[1], x[2])
         return temp
 
@@ -92,7 +92,7 @@ class Ingredients:
     # also:
     # Ingredients_instance[0][0] # returns the first ingredient string in the case of example "chicken"
     def __getitem__(self, item):
-        return self.__items[item]
+        return self.items[item]
 
 
     def metric(self):

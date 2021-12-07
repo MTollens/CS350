@@ -74,5 +74,5 @@ class Pantry(wx.Panel):
 
 
     def update_user(self):
-        self.ingredients_list.SetValue(self.parent.user.pantry)
-        self.tools_list.SetValue(self.parent.user.tools)
+        self.ingredients_list.SetValue(self.parent.user.get_pantry_names())
+        self.tools_list.SetValue(self.parent.user.get_tool_names())

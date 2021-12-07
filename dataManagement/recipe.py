@@ -18,10 +18,12 @@ class Recipe():
         self.instructions = []
         # a list of strings
         self.tools = []
-        # number of portions; a float
-        self.servings = 0.0
+        # number of portions; an int
+        self.servings = 0
         # a string eg: '2 hours' or '30 min'
         self.prep_time = ""
+        # Number of times the recipe has been done
+        self.times_exec = 0
 
         # a list of strings?
         self.tags = []
@@ -66,7 +68,7 @@ class Recipe():
         # a list of strings?
         self.tags = ["English", "Seafood", "Lunch", "Fried", "Eggs"]
 
-        self.servings = 6.5
+        self.servings = 6
         self.prep_time = "30 Min"
 
         # not sure if should be string, or float

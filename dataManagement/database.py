@@ -1,4 +1,6 @@
 import mysql.connector
+import json
+from dataManagement import recipe
 
 class Database():
     # If an error occurs here bc of bad password make sure the following are true
@@ -14,7 +16,6 @@ class Database():
             password=password
         )
         pfile.close()
-        print(self.db)
 
         # dbcursor is where mySQL commands are executed and results are returned
         self.dbcursor = self.db.cursor()
@@ -99,6 +100,92 @@ class Database():
             return cleanList
         else:
             return
+
+    def saveRecipe(self, recipe):
+        query = "INSERT INTO recipe VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+
+        # TODO All parsing here needs to be "deparsed"
+        # Parse ingredients to be put into database properly
+        ingredientList = json.dumps(recipe.ingredients.items)
+
+        # Parse tools
+        toolList = json.dumps(recipe.tools)
+
+        # Parse tags
+        tagList = json.dumps(recipe.tags)
+
+        instructionList = json.dumps(recipe.instructions)
+
+        input = (recipe.title, recipe.owner, ingredientList, toolList, instructionList, recipe.servings, recipe.prep_time, tagList, recipe.times_exec, recipe.image, )
+        self.dbcursor.execute(query, input)
+
+        self.db.commit()
+
+    def loadRecipeByOwner(self, owner):
+        recipeList = []
+
+        # Individual queries for each param (almost certainly a better way to do this but meh)
+        nameQuery = "SELECT name FROM recipe WHERE creator = %s"
+        creatorQuery = "SELECT creator FROM recipe WHERE creator = %s"
+        ingredientsQuery = "SELECT ingredients FROM recipe WHERE creator = %s"
+        appliancesQuery = "SELECT appliances FROM recipe WHERE creator = %s"
+        instructionsQuery = "SELECT instructions FROM recipe WHERE creator = %s"
+        serving_sizeQuery = "SELECT serving_size FROM recipe WHERE creator = %s"
+        prep_timeQuery = "SELECT prep_time FROM recipe WHERE creator = %s"
+        tagsQuery = "SELECT tags FROM recipe WHERE creator = %s"
+        times_executedQuery = "SELECT times_executed FROM recipe WHERE creator = %s"
+        imageQuery = "SELECT image FROM recipe WHERE creator = %s"
+
+        input = (owner, )
+
+        self.dbcursor.execute(nameQuery, input)
+        nameRows = self.dbcursor.fetchall()
+
+        if nameRows:
+
+            self.dbcursor.execute(creatorQuery, input)
+            creatorRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(ingredientsQuery, input)
+            ingredientsRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(appliancesQuery, input)
+            appliancesRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(instructionsQuery, input)
+            instructionsRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(serving_sizeQuery, input)
+            serving_sizeRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(prep_timeQuery, input)
+            prep_timeRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(tagsQuery, input)
+            tagsRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(times_executedQuery, input)
+            times_executedRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(imageQuery, input)
+            imageRows = self.dbcursor.fetchall()
+
+            for x in range(len(nameRows)):
+                tempRecipe = recipe.Recipe(owner=owner)
+                tempRecipe.title = nameRows[x][0]
+                tempRecipe.ingredients = json.loads(ingredientsRows[x][0])
+                tempRecipe.tools = json.loads(appliancesRows[x][0])
+                tempRecipe.instructions = json.loads(instructionsRows[x][0])
+                tempRecipe.servings = serving_sizeRows[x][0]
+                tempRecipe.prep_time = prep_timeRows[x][0]
+                tempRecipe.tags = json.loads(tagsRows[x][0])
+                tempRecipe.times_exec = times_executedRows[x][0]
+                tempRecipe.image = imageRows[x][0]
+                recipeList.append(tempRecipe)
+
+            return recipeList
+        else:
+            return []
 
     # Tool Fetching
     def getTools(self, category):

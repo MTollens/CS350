@@ -26,9 +26,9 @@ class User():
         self.account_age = "0"  # should probably be an int in the future, but str for example purpose
 
         #these may not be required, we shall see, it depends on where and how they are implemented
-        self.recipes = "None"  # list of keys to recipes in the DB
-        self.tools = "None"  # list of strings
-        self.pantry = "None"  # list of formatted strings (to include amount + unit)
+        self.recipes = []  # List of recipe objs
+        self.tools = []  # list of tools
+        self.pantry = ""  # list of formatted strings (to include amount + unit)
 
         # working variables, these do not need to be saved
         # string
@@ -53,6 +53,21 @@ class User():
 
         # timer thread(s)
         self.timers = None
+
+        # TODO TESTING SAVE RECIPE... DELETE ME
+        # testRecipe = recipe.Recipe(owner="maxcolt")
+        # testRecipe.ingredients.items = [["Chicken", 10, "gram(s)"], ["Cheese", 15, "ml(s)"], ["Noodles", 20, "gram(s)"]]
+        # testRecipe.image = "resources/cheese_pasta.jpg"
+        # testRecipe.title = "Cheese & Chicken Pasta"
+        # testRecipe.instructions = ["- Cook chicken on stove with pan", "- Boil pasta in water to cook it", "- Drain pasta", "- Mix pasta with cheese stirring until melted", "- Combine with chicken and serve"]
+        # testRecipe.tools = ["Pan", "Pot", "Fork"]
+        # testRecipe.servings = 2
+        # testRecipe.prep_time = "20 Minutes"
+        # testRecipe.times_exec = 3
+        # testRecipe.tags = ["Easy", "Fast", "Cheap"]
+        # self.save_recipe(testRecipe)
+
+        # TODO TESTING LOAD RECIPE... DELETE ME
 
     # this is purely for demo purposes, it is not intended for Production in any way, nor is it representative of any final product
     def example_login(self):
@@ -81,11 +96,6 @@ class User():
 
     # here are the getters and setters for all the specific requests that need to be done at any point
     # private functions have __ at the beginning, this means that they are for internal class use only
-    def __load_from_db(self):
-        pass
-
-    def __save_to_db(self):
-        pass
 
     # these are the function that are acessable publicly
     def logout(self):
@@ -105,11 +115,12 @@ class User():
                 self.metric = True
             else:
                 self.metric = False
+            # TODO Load recipes here
+            self.load_users_recipes()
+
             return True
         else:
             return False
-
-
 
     # might not be needed
     # Tell database to change based on current username
@@ -120,6 +131,35 @@ class User():
     def change_units(self):
         self.database.switchUnits(self.username, self.metric)
         self.metric = not self.metric
+
+    # Get names to be displayed on account page and such
+    def get_recipe_names(self):
+        recipe_names = ""
+        for x in self.recipes:
+            recipe_names += x.title +'\n'
+        return recipe_names
+
+    def get_tool_names(self):
+        tool_names = ""
+        for x in self.tools:
+            tool_names += x + '\n'
+        return tool_names
+
+    # TODO Something similar needed here eventually
+    def get_pantry_names(self):
+        return self.pantry
+
+
+    def save_recipe(self, recipe):
+        self.database.saveRecipe(recipe)
+        self.recipes.append(recipe)
+
+    # Gets a list of recipe objs created by this user
+    def load_users_recipes(self):
+        recipes = self.database.loadRecipeByOwner(self.username)
+        print("LOGGED IN USER'S RECIPES: ")
+        for item in recipes:
+            print(item.title)
 
 
     # should only be called from main.py, handled by the anon_search for panels to interact with it
