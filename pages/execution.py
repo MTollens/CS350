@@ -103,3 +103,40 @@ class Execution(wx.Panel):
     #         self.button2.SetLabel("Start")
     #         self.button3.Hide()
 
+# takes in a string, and returns an integer of minutes that the string timer says, will return 0 if no timer found
+# as well as return the string with the timer removed
+def parse_timer(string):
+    # this regex returns the string without the timer header
+    # press 'start timer' can be replaced with anything
+    new = regex.sub("\[[a-zA-Z]+:[0-9]+[a-zA-Z]+\]", "press 'start timer'", string)
+    # returns a list of every instance of a number after a semicolon
+    values = regex.findall(":[0-9]+", string)
+    value = 0
+    # timescale for the duration, might be 1 for minutes, or 60 for hours
+    scale = 1
+    if len(values) > 0:
+         value = int(values[0][1:])
+
+    # is the number given in hours?
+    # the ] is important because it is assumed the user will not use them in their instructions otherwise
+    # list of common ways that minutes might be written
+    minutes = ["min]", "m]","minutes]", "mins]"]
+    # list of common ways that hours might be written
+    hours = ["hour]", "hours]", "h]", "hs]", "hr]", "hrs]"]
+    # for each of the total ways that either is spelled
+    for each in minutes+hours:
+        # if that spelling is in the string
+        if each in string:
+            # check if it is from the minutes or hours category
+            # and set the timescale appropriatly
+            if each in hours:
+                scale = 60
+            elif each in minutes:
+                scale = 1
+            # stop looking
+            break
+
+    # multiply the timescale by the value found, so that the timer always receives it in units of seconds
+    # always multiply by 60 for minutes as the minimum timescale
+    return int(value*scale*60), new
+
