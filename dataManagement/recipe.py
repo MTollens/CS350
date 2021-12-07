@@ -55,9 +55,9 @@ class Recipe():
         self.ingredients.example()
         self.image = "resources/fishandchips.jpg"
         self.title = "Classic Fish and Chips" # name
-        self.instructions = ["Fillet the fish",
-                             "Prepare the oil [TIMER:5min]",
-                             "Batter the fish in egg and creadcrumbs"]
+        self.instructions = ["- Fillet the fish",
+                             "- Prepare the oil [TIMER:5min]",
+                             "- Batter the fish in egg and creadcrumbs"]
         # a list of strings
         self.tools = ["pot",
                       "bowl",
