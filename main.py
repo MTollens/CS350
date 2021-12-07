@@ -90,6 +90,7 @@ class Frame(wx.Frame):
 
     # this allows the reuse of the search function that the search page uses, so the homepage code isnt unique
     def anon_search(self, keyword, tags=None):
+        self.user.current_search_tags = tags
         self.user.search(keyword)
         self.setSearch()
 
@@ -112,6 +113,8 @@ class Frame(wx.Frame):
     def setHomepage(self, event=None):
         self.first_sign_in = False
         panel = 0
+        self.user.current_search = ""
+        self.user.current_search_tags = []
         self.__setPanel_visible(panel)
 
     def setAccount(self, event=None):

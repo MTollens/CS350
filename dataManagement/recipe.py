@@ -52,14 +52,15 @@ class Recipe():
 
     # should be removed as soon as real data is available
     def example(self):
-        self.owner = "Matty"
+        self.owner = "DEFAULT"
         self.ingredients = ings.Ingredients()
         self.ingredients.example()
         self.image = "resources/fishandchips.jpg"
         self.title = "Classic Fish and Chips" # name
         self.instructions = ["- Fillet the fish",
                              "- Prepare the oil [TIMER:5min]",
-                             "- Batter the fish in egg and breadcrumbs"]
+                             "- Batter the fish in egg and breadcrumbs",
+                             "- This is an example Recipe, you should not see this recipe!"]
         # a list of strings
         self.tools = ["pot",
                       "bowl",

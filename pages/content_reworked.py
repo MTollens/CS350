@@ -130,9 +130,7 @@ class ContentScroller(wx.Panel):
         # # send the following number to the database handler so it knows which result of its search we are on
 
         temp = recipe.Recipe("content_example")
-        # print("here")
         # can return invalid if applicable
-        #return True, temp.invalid()
         return True, temp.example()
 
     def resize_main(self, event=None, size_external=None, position_external=None):

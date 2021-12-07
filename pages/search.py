@@ -22,9 +22,8 @@ class Search(wx.Panel):
         self.Searchbar.Bind(wx.EVT_KEY_DOWN, self.searchbar_keypress)
         self.Searchbar.SetFont(font_searchtext)
 
-        #more button declarations
-        # self.Settings = wx.Button(parent=self, label="Settings", pos=(255, 0), size=(70, 50))
-        # self.Settings.Bind(wx.EVT_BUTTON, parent.setSettings)
+        self.tags_box = wx.TextCtrl(self, pos=(0, 51), size=(220,48))
+        self.tags_box.SetHint("Enter tags seperated by commas")
 
         self.Home = wx.Button(parent=self, label="Home", pos=(350, 0), size=(80, 50))
         self.Home.Bind(wx.EVT_BUTTON, parent.setHomepage)
@@ -65,7 +64,7 @@ class Search(wx.Panel):
     def search(self, event=None):
         if self.Searchbar.GetValue() not in empty:
             #use the offical search channel
-            self.parent.anon_search(self.Searchbar.GetValue())
+            self.parent.anon_search(self.Searchbar.GetValue(), self.tags_box.GetValue().split(", "))
             # clear the input so it is visible that something happened
             self.Searchbar.SetValue("")
         else:
