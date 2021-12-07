@@ -107,7 +107,7 @@ class Execution(wx.Panel):
 # as well as return the string with the timer removed
 def parse_timer(string):
     # this regex returns the string without the timer header
-    # press 'start timer' can be replaced with anything
+    # "press 'start timer'" can be replaced with anything
     new = regex.sub("\[[a-zA-Z]+:[0-9]+[a-zA-Z]+\]", "press 'start timer'", string)
     # returns a list of every instance of a number after a semicolon
     values = regex.findall(":[0-9]+", string)
