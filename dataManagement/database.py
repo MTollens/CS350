@@ -54,11 +54,30 @@ class Database():
         result = self.dbcursor.fetchone()
 
         if result:
-            print(result)
             return result
         else:
             print("Error fetching user account information")
             pass
+
+    def switchPrivacy(self, username, private):
+        if private:
+            query = "UPDATE account SET private = 1 where username = %s"
+        else:
+            query = "UPDATE account SET private = 0 where username = %s"
+        input = (username, )
+        self.dbcursor.execute(query, input)
+        self.db.commit()
+        print(self.dbcursor.rowcount, "record(s) affected")
+
+    def switchUnits(self, username, metric):
+        if metric:
+            query = "UPDATE account SET measurement_system = 'Imperial' where username = %s"
+        else:
+            query = "UPDATE account SET measurement_system = 'Metric' where username = %s"
+        input = (username, )
+        self.dbcursor.execute(query, input)
+        self.db.commit()
+        print(self.dbcursor.rowcount, "record(s) affected")
 
     # Ingredient Fetching
     def getIngredients(self, category):

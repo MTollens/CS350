@@ -88,12 +88,30 @@ class Account(wx.Panel):
         self.get_unit_label()
         self.get_private_label()
 
+    # Sets default button value
+    def get_unit_label(self):
+        if self.parent.user.metric:
+            self.Units.SetLabel("Metric")
+        else:
+            self.Units.SetLabel("Imperial")
+
+    # Sets default button value
+    def get_private_label(self):
+        if self.parent.user.public:
+            self.Public.SetLabel("Public")
+        else:
+            self.Public.SetLabel("Private")
 
     # called on button press
     def change_units(self, event=None):
-        self.parent.user.metric = not(self.parent.user.metric)
         self.parent.user.change_units()
-        self.update_units()
+        self.get_unit_label()
+
+    def change_public(self, event=None):
+        self.parent.user.change_public()
+        self.get_private_label()
+
+    #BELOW MAY BE USELESS!
 
     # changes the units in the GUI
     def update_units(self):
@@ -103,20 +121,8 @@ class Account(wx.Panel):
             self.Units.SetLabel("Imperial")
         #TODO some code here to send the units update to the server, using the user class
 
-    # Sets default button value
-    def get_unit_label(self):
-        if self.parent.user.metric:
-            self.Units.SetLabel("Metric")
-        else:
-            self.Units.SetLabel("Imperial")
-
 
     # similar function as metric but for setting public/private account
-    def change_public(self, event=None):
-        self.parent.user.public = not(self.parent.user.public)
-        self.parent.user.change_public()
-        self.update_public()
-
     def update_public(self):
         if self.parent.user.public:
             self.Public.SetLabel("Public")
@@ -124,12 +130,7 @@ class Account(wx.Panel):
             self.Public.SetLabel("Private")
         #TODO some code here to send the update to the server, using the user class
 
-    # Sets default button value
-    def get_private_label(self):
-        if self.parent.user.public:
-            self.Public.SetLabel("Public")
-        else:
-            self.Public.SetLabel("Private")
+
 
     # to be replaced by real function, this is for demo purposes only
     def Sign_in_example(self, event):

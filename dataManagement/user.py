@@ -114,10 +114,12 @@ class User():
     # might not be needed
     # Tell database to change based on current username
     def change_public(self):
-        pass
+        self.database.switchPrivacy(self.username, self.public)
+        self.public = not self.public
     # Tell database to change based on current username
     def change_units(self):
-        pass
+        self.database.switchUnits(self.username, self.metric)
+        self.metric = not self.metric
 
 
     # should only be called from main.py, handled by the anon_search for panels to interact with it
