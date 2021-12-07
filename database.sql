@@ -37,7 +37,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES ('DerickFrito','1357',1,'Metric'),('horickmj','2468',0,'Imperial'),('Matty','54321',0,'Metric'),('maxcolt','12345',1,'Imperial');
+INSERT INTO `account` VALUES ('DerickFrito','1357',1,'Metric'),('horickmj','2468',0,'Imperial'),('Matty','54321',0,'Metric'),('maxcolt','12345',0,'Imperial');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -129,9 +129,10 @@ CREATE TABLE `recipe` (
   `appliances` varchar(3200) NOT NULL,
   `instructions` varchar(3200) NOT NULL,
   `serving_size` int NOT NULL,
-  `prep_time` time NOT NULL,
+  `prep_time` varchar(32) DEFAULT NULL,
   `tags` varchar(3200) DEFAULT NULL,
   `times_executed` int NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`name`,`creator`),
   KEY `creator` (`creator`),
   CONSTRAINT `recipe_ibfk_1` FOREIGN KEY (`creator`) REFERENCES `account` (`username`)
@@ -144,6 +145,7 @@ CREATE TABLE `recipe` (
 
 LOCK TABLES `recipe` WRITE;
 /*!40000 ALTER TABLE `recipe` DISABLE KEYS */;
+INSERT INTO `recipe` VALUES ('Cheese & Chicken Pasta','maxcolt','[[\"Chicken\", 10, \"gram(s)\"], [\"Cheese\", 15, \"ml(s)\"], [\"Noodles\", 20, \"gram(s)\"]]','[\"Pan\", \"Pot\", \"Fork\"]','[\"- Cook chicken on stove with pan\", \"- Boil pasta in water to cook it\", \"- Drain pasta\", \"- Mix pasta with cheese stirring until melted\", \"- Combine with chicken and serve\"]',2,'20 Minutes','[\"Easy\", \"Fast\", \"Cheap\"]',3,'resources/cheese_pasta.jpg');
 /*!40000 ALTER TABLE `recipe` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -184,4 +186,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-07 11:55:36
+-- Dump completed on 2021-12-07 17:18:05
