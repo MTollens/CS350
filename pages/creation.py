@@ -4,6 +4,7 @@ from resources import lists
 from dataManagement import ingredients
 from pages import custom_widgets as cw
 from dataManagement import recipe as recipe
+import warnings
 
 # not yet implemented in any way
 # saving this one for someone else to do, so I dont do all the UI
@@ -25,7 +26,7 @@ class Creation(wx.Panel):
 
         self.controls_box = wx.StaticBox(self, pos=(50,50), size=(220,525))
 
-        self.page_name = wx.StaticText(parent=self, label="Recipe Editor", pos=(70, 10), size=(200,50))
+        self.page_name = wx.StaticText(parent=self, label="Recipe Editor", pos=(70, 10), size=(200,30))
         self.page_name.SetFont(font_Title)
 
         self.image = wx.Button(self, pos=(60,70), size=(160, 160), label="add image")
@@ -316,8 +317,42 @@ class Creation(wx.Panel):
         pass
 
     # load the recipe from a recipe class for editing purposes
-    def load_recipe(self, recipe):
-        pass
+    def load_recipe(self):
+        new = self.parent.user.open_recipe
+        assert isinstance(new, recipe.Recipe)
+        if new.owner != self.parent.user.username:
+            warnings.warn("user trying to edit recipe they dont own")
+            return 0
+
+        self.Title_box.SetValue(new.title)
+        self.ingredients_list = new.ingredients
+        self.ingredients_display.SetValue(self.ingredients_list.pretty())
+        self.image_path = new.image
+        self.image.SetBitmap(self.load_image(self.image_path, (160,160)))
+        temp = ""
+        for x in new.instructions:
+            # print(x)
+            temp += x + "\n"
+        # print("here:")
+        # print(new.instructions)
+        # print(temp)
+        self.instructions_display.SetValue(temp)
+        self.instructions_display.SetInsertionPointEnd()
+        self.tools_list = new.tools
+        temp = ""
+        for x in self.tools_list:
+            temp += x + "\n"
+        self.tools_display.SetValue(temp)
+        self.MakesFor.SetLabel(str(new.servings))
+        self.Preptime.SetLabel(new.prep_time)
+        self.tags_list = new.tags
+        temp = ""
+        for x in self.tags_list:
+            temp += x + ", "
+        self.tags_entered.SetLabel(temp)
+
+        self.update_subs()
+
 
     def edit_tags(self, event=None):
         self.sub = 3
@@ -450,6 +485,7 @@ class Creation(wx.Panel):
         item.tags = self.tags_list
         item.origin = "creator"
         item.prep_time = self.Preptime.GetValue()
+        item.instructions = self.instructions_display.GetValue().split("\n")
         try:
             item.servings = float(self.MakesFor.GetValue())
         except:

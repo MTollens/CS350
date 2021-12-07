@@ -11,7 +11,7 @@ class Recipe():
         # refer to the ingredients class
         self.ingredients = ings.Ingredients()
         # "money shot" of the dish, should be a string referring to the stored location of the image
-        self.image = ""
+        self.image = "resources/nofile.png"
         # an identifier for the recipe
         self.title = "" # name
         # a list of strings
@@ -50,14 +50,14 @@ class Recipe():
 
     # should be removed as soon as real data is available
     def example(self):
-        self.owner = "EXAMPLE"
+        self.owner = "Matty"
         self.ingredients = ings.Ingredients()
         self.ingredients.example()
         self.image = "resources/fishandchips.jpg"
         self.title = "Classic Fish and Chips" # name
         self.instructions = ["- Fillet the fish",
                              "- Prepare the oil [TIMER:5min]",
-                             "- Batter the fish in egg and creadcrumbs"]
+                             "- Batter the fish in egg and breadcrumbs"]
         # a list of strings
         self.tools = ["pot",
                       "bowl",

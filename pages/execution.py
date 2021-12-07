@@ -14,6 +14,10 @@ class Execution(wx.Panel):
         self.Back_Button = wx.Button(parent=self, label="Back", pos=(0, 0), size=(50, 50))
         self.Back_Button.Bind(wx.EVT_BUTTON, parent.setPrevious)
 
+        self.Edit = wx.Button(parent=self, label="Edit", pos=(300, 0), size=(50, 50))
+        self.Edit.Hide()
+        self.Edit.Bind(wx.EVT_BUTTON, self.parent.setEdit)
+
         self.recipe = self.parent.user.open_recipe
 
         # UI implementation here:
@@ -31,8 +35,8 @@ class Execution(wx.Panel):
         self.ingredients_list = wx.TextCtrl(parent=self, pos=(10, 200), size=(200, 60), style=wx.TE_READONLY | wx.TE_MULTILINE)
         self.ingredients_list.Show()
 
-        #placeholder to get an idea for what kind of space we have to work with
-        self.image = wx.StaticBox(parent=self, pos=(600, 20), size=(200,200))
+        self.image = wx.StaticBitmap(parent=self, pos=(600, 20), size=(200,200))
+        self.image_box = wx.StaticBox(parent=self, pos=(600, 20), size=(200, 200))
 
         self.instructions_list = wx.ListCtrl(parent=self, pos=(10, 300), size=(700, 300), style=wx.LC_REPORT)
         self.instructions_list.InsertColumn(col=0, heading='Step')
@@ -64,6 +68,10 @@ class Execution(wx.Panel):
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
         size = self.GetSize()
+        if self.recipe.owner == self.parent.user.username:
+            self.Edit.Show()
+        else:
+            self.Edit.Hide()
 
     # gets called when a panel is reloaded, not required to do anything but must be here
     # this is where user information should be loaded in
@@ -101,6 +109,7 @@ class Execution(wx.Panel):
         self.current_step = self.instructions_list.GetTopItem()
         self.go_next_step()
         self.go_prev_step()
+        self.image.SetBitmap(self.load_image(self.recipe.image, self.image.GetSize()))
 
         #self.image = (self.recipe.image)
 
@@ -149,6 +158,28 @@ class Execution(wx.Panel):
              self.parent.user.end_timer()
              self.time_start.SetLabel("Start Timer")
              self.time_pause.Hide()
+
+    # load file bitmap and return it as a bitmap object
+    # for use with the "image" object
+    def load_image(self, filename, size):
+        # file extension checking not required, because a failure mode is prepared
+        temp = 0
+        try:
+            temp = wx.Bitmap(filename, wx.BITMAP_TYPE_ANY)
+            temp = self.scale_bitmap(temp, size[0], size[1])
+        except:
+            temp = wx.Bitmap("resources/nofile.png", wx.BITMAP_TYPE_ANY)
+            temp = self.scale_bitmap(temp, size[0], size[1])
+
+        return temp
+
+    # scales bitmap, shouldnt need to be touched at all
+    def scale_bitmap(self, bitmap, width, height):
+        image = wx.Bitmap.ConvertToImage(bitmap)
+        image = image.Scale(width, height, wx.IMAGE_QUALITY_HIGH)
+        result = wx.Bitmap(image)
+        return result
+
 
 # takes in a string, and returns an integer of minutes that the string timer says, will return 0 if no timer found
 # as well as return the string with the timer removed

@@ -164,6 +164,15 @@ class Frame(wx.Frame):
         panel = 8
         self.__setPanel_visible(panel)
 
+    def setEdit(self, event=None):
+        panel = 5
+        if not self.user.signed_in:
+            panel = 2
+        else:
+            self.__panels[panel].load_recipe()
+        self.__setPanel_visible(panel)
+
+
     #end of panel selectors
 
 
