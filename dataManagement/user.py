@@ -54,6 +54,7 @@ class User():
         # timer thread(s)
         self.timers = None
 
+
         # TODO TESTING SAVE RECIPE... DELETE ME
         # testRecipe = recipe.Recipe(owner="maxcolt")
         # testRecipe.ingredients.items = [["Chicken", 10, "gram(s)"], ["Cheese", 15, "ml(s)"], ["Noodles", 20, "gram(s)"]]
@@ -69,29 +70,29 @@ class User():
 
         # TODO TESTING LOAD RECIPE... DELETE ME
 
-    # this is purely for demo purposes, it is not intended for Production in any way, nor is it representative of any final product
-    def example_login(self):
-        self.signed_in = True
-        self.username = "Example123"
-        self.account_age = "10 months"  # should probably be an int in the future, but str for example purpose
-        self.recipes = "chicken and rice\ncorndog\nwaffles\nsloppy joe"  # list of keys to recipes in the DB
-        self.tools = "whisk\ncutting board\nblender\ngrill"  # list of strings
-        self.pantry = "chicken\nrice\nflour\nground beef"  # list of formatted strings (to include amount + unit)
-        # self.permissions = "View and Search for recipes \nCreate recipes\nExecute recipes"  # list of bools
-        self.metric = True
-        self.public = True
+    # # this is purely for demo purposes, it is not intended for Production in any way, nor is it representative of any final product
+    # def example_login(self):
+    #     self.signed_in = True
+    #     self.username = "Example123"
+    #     self.account_age = "10 months"  # should probably be an int in the future, but str for example purpose
+    #     self.recipes = "chicken and rice\ncorndog\nwaffles\nsloppy joe"  # list of keys to recipes in the DB
+    #     self.tools = "whisk\ncutting board\nblender\ngrill"  # list of strings
+    #     self.pantry = "chicken\nrice\nflour\nground beef"  # list of formatted strings (to include amount + unit)
+    #     # self.permissions = "View and Search for recipes \nCreate recipes\nExecute recipes"  # list of bools
+    #     self.metric = True
+    #     self.public = True
 
-    # this one can probably go?
-    def example_guest(self):
-        self.signed_in = False
-        self.username = "Guest"
-        self.account_age = "N/A"  # should probably be an int in the future, but str for example purpose
-        self.recipes = ""  # list of keys to recipes in the DB
-        self.tools = ""  # list of strings
-        self.pantry = ""  # list of formatted strings (to include amount + unit)
-        # self.permissions = "View and Search for recipes \nCreate recipes\nExecute recipes"  # list of bools
-        self.metric = True
-        self.public = False
+    # # this one can probably go?
+    # def example_guest(self):
+    #     self.signed_in = False
+    #     self.username = "Guest"
+    #     self.account_age = "N/A"  # should probably be an int in the future, but str for example purpose
+    #     self.recipes = ""  # list of keys to recipes in the DB
+    #     self.tools = ""  # list of strings
+    #     self.pantry = ""  # list of formatted strings (to include amount + unit)
+    #     # self.permissions = "View and Search for recipes \nCreate recipes\nExecute recipes"  # list of bools
+    #     self.metric = True
+    #     self.public = False
     # the above two functions should be removed as soon as the proper login stuff is ready
 
     # here are the getters and setters for all the specific requests that need to be done at any point

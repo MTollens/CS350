@@ -7,6 +7,11 @@ class Account(wx.Panel):
 
         self.parent = parent
 
+
+        self.pantry_ingredients = wx.StaticText(self, label="Pantry contents", pos=(50, 355))
+        self.pantry_tools = wx.StaticText(self, label="Pantry tools", pos=(50, 355))
+        self.recipes = wx.StaticText(self, label="Recipes", pos=(50, 355))
+
         self.Back_Button = wx.Button(parent=self, label="Back", pos=(0, 0), size=(50, 50))
         self.Back_Button.Bind(wx.EVT_BUTTON, parent.setPrevious)
 
@@ -25,7 +30,10 @@ class Account(wx.Panel):
         self.Public.Bind(wx.EVT_BUTTON, self.change_public)
 
         self.recipe_list = wx.TextCtrl(parent=self, pos=(60, 60), size=(200, 100), style=wx.TE_READONLY | wx.TE_MULTILINE)
-        # self.ingredients_list.Show()
+        self.recipe_edit = wx.Button(self, label="Edit")
+        self.recipe_input = wx.TextCtrl(self)
+        self.recipe_input.SetHint("Enter a number to modify that recipe")
+        self.recipe_delete = wx.Button(self, label="Delete")
 
         self.Account_name = wx.StaticText(parent=self, pos=(70, 70), size=(150, 20))
         self.Account_age = wx.StaticText(parent=self, pos=(70, 90), size=(150, 20))
@@ -63,13 +71,19 @@ class Account(wx.Panel):
         self.Home_button.SetPosition((size[0]-80, 0))
         self.Sign_in.SetPosition((size[0] - 160, 0))
 
-        self.ingredients_list.SetPosition((50, 260))
-        self.ingredients_list.SetSize(int(size[0]/2)-40, size[1]-330)
-        self.tools_list.SetPosition((int(size[0]/2)+20, 260))
-        self.tools_list.SetSize(int(size[0]/2)-40, size[1] - 330)
+        self.ingredients_list.SetPosition((50, 380))
+        self.ingredients_list.SetSize(int(size[0]/2)-40, size[1]-450)
+        self.tools_list.SetPosition((int(size[0]/2)+20, 380))
+        self.tools_list.SetSize(int(size[0]/2)-40, size[1] - 450)
 
         self.recipe_list.SetPosition((int(size[0] / 2) + 20, 60))
-        self.recipe_list.SetSize(int(size[0] / 2) - 40, 190)
+        self.recipe_list.SetSize(int(size[0] / 2) - 40, 220)
+        self.recipe_input.SetPosition((int(size[0] / 2) + 120, 60 + 225))
+        self.recipe_input.SetSize(int(size[0] / 2) - 195, 50)
+        self.recipe_edit.SetPosition((int(size[0] / 2) + 20, 60 + 225))
+        self.recipe_edit.SetSize((95, 50))
+        self.recipe_delete.SetPosition((size[0]-70, 60 + 225))
+        self.recipe_delete.SetSize(50,50)
 
         self.ingredient_add.SetPosition((int(size[0] * .25) - 70, size[1] - 60))
         self.ingredient_del.SetPosition((int(size[0] * .25) + 80, size[1] - 60))
@@ -77,6 +91,9 @@ class Account(wx.Panel):
         self.tool_del.SetPosition((int(size[0] * .70) + 80, size[1] - 60))
         self.ingredient_box.SetPosition((int(size[0] * .25) - 20, size[1] - 60))
         self.ingredient_box.SetSize(100, 50)
+
+        self.recipes.SetPosition((int(size[0]/2) + 20, 30))
+        self.pantry_tools.SetPosition((int(size[0]/2) + 20, 355))
 
     # updates the fields with user dataManagement if it is available
     def update_user(self):
@@ -87,6 +104,7 @@ class Account(wx.Panel):
         self.recipe_list.SetValue(self.parent.user.get_recipe_names())
         self.get_unit_label()
         self.get_private_label()
+        self.recipe_input.SetValue("")
 
     # Sets default button value
     def get_unit_label(self):
