@@ -161,6 +161,8 @@ class User():
         for item in recipes:
             print(item.title)
 
+        self.recipes = recipes
+
     # here the value should be an integer number of seconds
     # here the timer is a reference to the StaticText that represents the remaining time
     def start_timer(self, value, timer=None):
