@@ -48,7 +48,9 @@ class Recipe():
         #        rating of stars  ^             ^ enough stars to get it to 5
 
         # the string should be [some number of characters that will fit on the button] +newline+ rating # + stars
-        return self.title[:int(size / 2)] + "\n" + rating
+        return self.title[:int(size / 2)] + "\n" + \
+               "makes for {} | prep time {}".format(self.servings, self.prep_time)+ "\n" +\
+               rating
 
     # should be removed as soon as real data is available
     def example(self):

@@ -20,6 +20,8 @@ class Creation(wx.Panel):
                        underline=False, faceName="", encoding=wx.FONTENCODING_DEFAULT)
 
         self.sub = 0
+        # to give the user one more chance to change things before they submit
+        self.are_you_sure = False
 
         self.Back_Button = wx.Button(parent=self, label="Back", pos=(0, 0), size=(50, 50))
         self.Back_Button.Bind(wx.EVT_BUTTON, parent.setPrevious)
@@ -59,6 +61,7 @@ class Creation(wx.Panel):
         self.preview = wx.Button(self, pos=(60, 590), label="Preview", size=(150, 40))
         self.preview.Bind(wx.EVT_BUTTON, self.preview_recipe)
         self.finish = wx.Button(self, pos=(60, 640), label="Finish", size=(150, 40))
+        self.finish.Bind(wx.EVT_BUTTON, self.finish_recipe)
 
         # end of STATIC UI elements
 
@@ -244,6 +247,8 @@ class Creation(wx.Panel):
 
     def display_error(self, message):
         self.error_message.Show()
+        # not needed since the error was moved to the top
+        # self.error_message.SetLabel(wordwrap(message, 100))
         self.error_message.SetLabel(message)
 
     def image_select(self, event=None):
@@ -304,17 +309,19 @@ class Creation(wx.Panel):
     # this is where changes are commited, data that was entered on the page is put into a recipe class
     # and the class is passed to the storage handler
     def finish_recipe(self, event=None):
-        # image path
-        # ingredients
-        # instructions
-        # tags
-        # title
-        # serving
-        # etc...
-        # see recipe class
+        final = self.make_recipe()
+        if final == 0:
+            return 0
+        if not self.are_you_sure:
+            self.are_you_sure = True
+            self.display_error("Press final once more to confirm you are done")
+        else:
+            self.are_you_sure = False
 
-        # return recipe
-        pass
+        self.parent.user.save_recipe(final)
+        self.parent.user.open_recipe = recipe.Recipe("CREATOR")
+        self.parent.setAccount()
+        self.load_recipe()
 
     # load the recipe from a recipe class for editing purposes
     def load_recipe(self):
@@ -353,7 +360,7 @@ class Creation(wx.Panel):
 
         self.update_subs()
 
-
+    # edit buttons set the subpanel variable then update the panel
     def edit_tags(self, event=None):
         self.sub = 3
         self.update_subs()
@@ -370,6 +377,7 @@ class Creation(wx.Panel):
         self.sub = 4
         self.update_subs()
 
+    # specific subpanel action handlers, should be fairly obvious what they do from the names
     def ingredients_category_chosen(self):
         val = self.ingredients_category_selector.GetValue()
         self.ingredients_amount.SetHint("<UNIT>")
@@ -475,24 +483,49 @@ class Creation(wx.Panel):
         val = self.tools_category_selector.GetValue()
         self.tools_item_selector.SetItems(lists.all_tools[val])
 
+    # pulls data from all the fields on the page, and returns a recipe object
     def make_recipe(self):
         item = recipe.Recipe()
         item.image = self.image_path
+        if not os.path.exists(item.image):
+            self.display_error("Please choose a suitable image of your dish")
+            return 0
         item.owner = self.parent.user.username
         item.ingredients = self.ingredients_list
+        temp = item.ingredients.validate()
+        # ignore the warning here, because the previous function returns true if true, and a number if false
+        if not (temp == True):
+            # allows for a secondary validation of ingredients
+            self.display_error("ingredient number {} was incorrect".format(temp+1))
+            # some way to supply more info here
+            return 0
+
         item.title = self.Title_box.GetValue()
+        if item.title in empty:
+            self.display_error("Invalid title, give it a standout name!")
+            return 0
         item.tools = self.tools_list
+        if item.tools in empty:
+            self.display_error("Please enter all the tools require to make this dish")
+            return 0
         item.tags = self.tags_list
+        if item.tags in empty:
+            self.display_error("please enter at least one tag, it really helps out those who want to find this recipe")
+            return 0
         item.origin = "creator"
         item.prep_time = self.Preptime.GetValue()
+        if item.prep_time in empty:
+            self.display_error("please enter the time it takes to make this recipe")
+            return 0
         item.instructions = self.instructions_display.GetValue().split("\n")
         try:
             item.servings = float(self.MakesFor.GetValue())
         except:
-            self.display_error("Servings should be a number")
+            self.display_error("Servings should be a valid number")
             return 0
         return item
 
+    # opens the recipe in the execution screen
     def preview_recipe(self, event=None):
         item = self.make_recipe()
         if item == 0:
@@ -518,3 +551,5 @@ def wordwrap(text, chars):
             new = new + text[x]
             counter += 1
     return new
+
+empty = [" ","",None]

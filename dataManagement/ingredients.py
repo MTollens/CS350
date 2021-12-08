@@ -1,3 +1,5 @@
+import json
+
 class Ingredients:
     def __init__(self):
         # array of x height, and 3 depth:
@@ -54,7 +56,7 @@ class Ingredients:
 
     # implementing a python builtin, not sure if needed at all
     def __repr__(self):
-        return self.__tostring()
+        return str(json.dumps(self.items))
 
     # takes a string, and returns the new object
     def from_string(self, string):
@@ -85,6 +87,11 @@ class Ingredients:
     # checks contents of the ingredients array against allowed values, returns true on valid, false on invalid
     #shouldnt end up needing this, since the inputs are prevalidated
     def validate(self):
+        from resources import lists
+        # return the index of the variable that was wrong if false
+        for x in range(0, len(self.items)):
+            if self.items[0][x] not in lists.ingredients:
+                return x
         return True
 
     # makes it so that the <class Ingredients()> is able to be called as such:
