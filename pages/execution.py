@@ -2,11 +2,12 @@ import sys
 import regex
 import wx
 
+
 # not yet implemented in any way
 # saving this one for someone else to do, so I dont do all the UI
 
 class Execution(wx.Panel):
-    #init method, initial constructor, this is what is run when it is first called
+    # init method, initial constructor, this is what is run when it is first called
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
@@ -26,40 +27,42 @@ class Execution(wx.Panel):
         self.ingredients_req = wx.StaticText(parent=self, label="Ingredients Required:", pos=(10, 180))
         self.instructions_text = wx.StaticText(parent=self, label="Instructions:", pos=(10, 280))
 
-        #the following fields will be filled with user data
+        # the following fields will be filled with user data
         self.recipe_name = wx.StaticText(parent=self, pos=(20, 70))
 
-        self.tools_list = wx.TextCtrl(parent=self, pos=(10, 120), size=(200, 60), style=wx.TE_READONLY | wx.TE_MULTILINE)
+        self.tools_list = wx.TextCtrl(parent=self, pos=(10, 120), size=(200, 60),
+                                      style=wx.TE_READONLY | wx.TE_MULTILINE)
         self.tools_list.Show()
 
-        self.ingredients_list = wx.TextCtrl(parent=self, pos=(10, 200), size=(200, 60), style=wx.TE_READONLY | wx.TE_MULTILINE)
+        self.ingredients_list = wx.TextCtrl(parent=self, pos=(10, 200), size=(200, 60),
+                                            style=wx.TE_READONLY | wx.TE_MULTILINE)
         self.ingredients_list.Show()
 
-        self.image = wx.StaticBitmap(parent=self, pos=(600, 20), size=(200,200))
+        self.image = wx.StaticBitmap(parent=self, pos=(600, 20), size=(200, 200))
         self.image_box = wx.StaticBox(parent=self, pos=(600, 20), size=(200, 200))
 
         self.instructions_list = wx.ListCtrl(parent=self, pos=(10, 300), size=(700, 300), style=wx.LC_REPORT)
         self.instructions_list.InsertColumn(col=0, heading='Step')
         self.instructions_list.InsertColumn(col=1, heading='Instructions')
-        self.instructions_list.SetBackgroundColour(wx.Colour(175,175,175))
+        self.instructions_list.SetBackgroundColour(wx.Colour(175, 175, 175))
 
-        self.next_instruction = wx.Button(parent=self, label="Next Step", pos=(600, 220), size=(100,50))
+        self.next_instruction = wx.Button(parent=self, label="Next Step", pos=(600, 220), size=(100, 50))
         self.next_instruction.Bind(wx.EVT_BUTTON, self.go_next_step)
 
-        self.prev_instruction = wx.Button(parent=self, label="Prev Step", pos=(500, 220), size=(100,50))
+        self.prev_instruction = wx.Button(parent=self, label="Prev Step", pos=(500, 220), size=(100, 50))
         self.prev_instruction.Bind(wx.EVT_BUTTON, self.go_prev_step)
 
-        self.Units = wx.Button(parent=self, label=self.get_unit_label(), pos=(700, 220), size=(100,50))
+        self.Units = wx.Button(parent=self, label=self.get_unit_label(), pos=(700, 220), size=(100, 50))
         self.Units.Bind(wx.EVT_BUTTON, self.change_units)
 
-        self.time_start = wx.Button(parent=self, label="Start Timer", pos=(10,625))
+        self.time_start = wx.Button(parent=self, label="Start Timer", pos=(10, 625))
         self.time_start.Bind(wx.EVT_BUTTON, self.start_timer)
 
-        self.time_pause = wx.Button(parent=self, label="Pause Timer", pos=(220,625))
+        self.time_pause = wx.Button(parent=self, label="Pause Timer", pos=(220, 625))
         self.time_pause.Bind(wx.EVT_BUTTON, self.pause_timer)
         self.time_pause.Hide()
 
-        self.timer_status = wx.TextCtrl(parent=self, pos=(100,625), style=wx.TE_READONLY)
+        self.timer_status = wx.TextCtrl(parent=self, pos=(100, 625), style=wx.TE_READONLY)
         self.timer_secs = 0
 
         # load in user dataManagement
@@ -86,7 +89,7 @@ class Execution(wx.Panel):
 
         self.ingredients_list.SetValue(self.recipe.ingredients.pretty())
 
-        #timer functionality will have to be added
+        # timer functionality will have to be added
         self.steps = enumerate(self.recipe.instructions, start=1)
 
         self.instructions_list.DeleteAllItems()
@@ -102,7 +105,7 @@ class Execution(wx.Panel):
                 self.instructions_list.SetItem(y, 1, new_string)
                 break
             else:
-                y = y+1
+                y = y + 1
 
         self.instructions_list.SetColumnWidth(col=1, width=wx.LIST_AUTOSIZE)
 
@@ -111,30 +114,32 @@ class Execution(wx.Panel):
         self.go_prev_step()
         self.image.SetBitmap(self.load_image(self.recipe.image, self.image.GetSize()))
 
-        #self.image = (self.recipe.image)
+        # self.image = (self.recipe.image)
 
     def go_next_step(self, event=None):
-        if self.current_step == 0:
-            return 0
-        if(self.instructions_list.GetNextItem(self.current_step, wx.LIST_NEXT_BELOW)== -1):
+        # if self.current_step == 0:
+        #     self.current_step = -1
+        if (self.instructions_list.GetNextItem(self.current_step, wx.LIST_NEXT_BELOW) == -1):
             pass
         else:
             self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(175, 175, 175))
-            self.current_step = self.instructions_list.GetNextItem(item=self.current_step, geometry=wx.LIST_NEXT_BELOW, state=wx.LIST_STATE_DONTCARE)
+            self.current_step = self.instructions_list.GetNextItem(item=self.current_step, geometry=wx.LIST_NEXT_BELOW,
+                                                                   state=wx.LIST_STATE_DONTCARE)
             self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(255, 219, 41))
 
     def go_prev_step(self, event=None):
-        if self.current_step == 0:
-            return 0
-        if(self.instructions_list.GetNextItem(self.current_step, wx.LIST_NEXT_ABOVE) == -1):
+        # if self.current_step == 0:
+        #     self.current_step = -1
+        if (self.instructions_list.GetNextItem(self.current_step, wx.LIST_NEXT_ABOVE) == -1):
             pass
         else:
             self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(175, 175, 175))
-            self.current_step = self.instructions_list.GetNextItem(item=self.current_step, geometry=wx.LIST_NEXT_ABOVE, state=wx.LIST_STATE_DONTCARE)
+            self.current_step = self.instructions_list.GetNextItem(item=self.current_step, geometry=wx.LIST_NEXT_ABOVE,
+                                                                   state=wx.LIST_STATE_DONTCARE)
             self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(255, 219, 41))
 
     def change_units(self, event=None):
-        self.parent.user.metric = not(self.parent.user.metric)
+        self.parent.user.metric = not (self.parent.user.metric)
         self.parent.user.change_units()
         self.Units.SetLabel(self.get_unit_label())
         self.ingredients_list.SetValue(self.recipe.ingredients.pretty())
@@ -155,13 +160,13 @@ class Execution(wx.Panel):
 
     def start_timer(self, event=None):
         if not self.parent.user.timer_status():
-             self.parent.user.start_timer(self.timer_secs, self.timer_status)
-             self.time_start.SetLabel("Stop Timer")
-             self.time_pause.Show()
+            self.parent.user.start_timer(self.timer_secs, self.timer_status)
+            self.time_start.SetLabel("Stop Timer")
+            self.time_pause.Show()
         else:
-             self.parent.user.end_timer()
-             self.time_start.SetLabel("Start Timer")
-             self.time_pause.Hide()
+            self.parent.user.end_timer()
+            self.time_start.SetLabel("Start Timer")
+            self.time_pause.Hide()
 
     # load file bitmap and return it as a bitmap object
     # for use with the "image" object
@@ -202,23 +207,22 @@ def parse_timer(string):
     # is the number given in hours?
     # the ] is important because it is assumed the user will not use them in their instructions otherwise
     # list of common ways that minutes might be written
-    minutes = ["min]", "m]","minutes]", "mins]"]
+    minutes = ["min]", "m]", "minutes]", "mins]"]
     # list of common ways that hours might be written
     hours = ["hour]", "hours]", "h]", "hs]", "hr]", "hrs]"]
     # for each of the total ways that either is spelled
-    for each in minutes+hours:
+    for each in minutes + hours:
         # if that spelling is in the string
-         if each in string:
+        if each in string:
             # check if it is from the minutes or hours category
             # and set the timescale appropriatly
-             if each in hours:
-                    scale = 60
-             elif each in minutes:
+            if each in hours:
+                scale = 60
+            elif each in minutes:
                 scale = 1
             # stop looking
-             break
+            break
 
     # multiply the timescale by the value found, so that the timer always receives it in units of seconds
     # always multiply by 60 for minutes as the minimum timescale
-    return int(value*scale*60), new
-
+    return int(value * scale * 60), new
