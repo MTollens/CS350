@@ -114,7 +114,9 @@ class Execution(wx.Panel):
         #self.image = (self.recipe.image)
 
     def go_next_step(self, event=None):
-        if(self.instructions_list.GetNextItem(self.current_step, wx.LIST_NEXT_BELOW) == -1):
+        if self.current_step == 0:
+            return 0
+        if(self.instructions_list.GetNextItem(self.current_step, wx.LIST_NEXT_BELOW)== -1):
             pass
         else:
             self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(175, 175, 175))
@@ -122,6 +124,8 @@ class Execution(wx.Panel):
             self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(255, 219, 41))
 
     def go_prev_step(self, event=None):
+        if self.current_step == 0:
+            return 0
         if(self.instructions_list.GetNextItem(self.current_step, wx.LIST_NEXT_ABOVE) == -1):
             pass
         else:
