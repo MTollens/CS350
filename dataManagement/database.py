@@ -121,6 +121,19 @@ class Database():
 
         self.db.commit()
 
+        return self.dbcursor.rowcount
+
+    def deleteRecipe(self, recipe):
+        query = "DELETE FROM recipe WHERE name = %s"
+
+        input = (recipe.title, )
+        self.dbcursor.execute(query, input)
+
+        self.db.commit()
+
+        return self.dbcursor.rowcount
+
+
     def loadRecipeByOwner(self, owner):
         recipeList = []
 

@@ -34,6 +34,7 @@ class Account(wx.Panel):
         self.recipe_input = wx.TextCtrl(self)
         self.recipe_input.SetHint("Enter a number to modify that recipe")
         self.recipe_delete = wx.Button(self, label="Delete")
+        self.recipe_delete.Bind(wx.EVT_BUTTON, self.delete_recipe)
 
         self.Account_name = wx.StaticText(parent=self, pos=(70, 70), size=(150, 20))
         self.Account_age = wx.StaticText(parent=self, pos=(70, 90), size=(150, 20))
@@ -106,6 +107,12 @@ class Account(wx.Panel):
         self.get_private_label()
         self.recipe_input.SetValue("")
 
+    def delete_recipe(self, literallydontknowwhythisvariableneedstoexistbutdeletingdoesntworkwithoutit):
+        print(self.recipe_input.GetValue())
+        self.parent.user.delete_recipe(int(self.recipe_input.GetValue()) - 1)
+        self.recipe_list.SetValue(self.parent.user.get_recipe_names())
+
+
     # Sets default button value
     def get_unit_label(self):
         if self.parent.user.metric:
@@ -129,7 +136,7 @@ class Account(wx.Panel):
         self.parent.user.change_public()
         self.get_private_label()
 
-    #BELOW MAY BE USELESS!
+    # BELOW MAY BE USELESS!
 
     # changes the units in the GUI
     def update_units(self):

@@ -54,22 +54,6 @@ class User():
         # timer thread(s)
         self.timers = None
 
-
-        # TODO TESTING SAVE RECIPE... DELETE ME
-        # testRecipe = recipe.Recipe(owner="maxcolt")
-        # testRecipe.ingredients.items = [["Chicken", 10, "gram(s)"], ["Cheese", 15, "ml(s)"], ["Noodles", 20, "gram(s)"]]
-        # testRecipe.image = "resources/cheese_pasta.jpg"
-        # testRecipe.title = "Cheese & Chicken Pasta"
-        # testRecipe.instructions = ["- Cook chicken on stove with pan", "- Boil pasta in water to cook it", "- Drain pasta", "- Mix pasta with cheese stirring until melted", "- Combine with chicken and serve"]
-        # testRecipe.tools = ["Pan", "Pot", "Fork"]
-        # testRecipe.servings = 2
-        # testRecipe.prep_time = "20 Minutes"
-        # testRecipe.times_exec = 3
-        # testRecipe.tags = ["Easy", "Fast", "Cheap"]
-        # self.save_recipe(testRecipe)
-
-        # TODO TESTING LOAD RECIPE... DELETE ME
-
     # # this is purely for demo purposes, it is not intended for Production in any way, nor is it representative of any final product
     # def example_login(self):
     #     self.signed_in = True
@@ -136,8 +120,10 @@ class User():
     # Get names to be displayed on account page and such
     def get_recipe_names(self):
         recipe_names = ""
+        index = 1
         for x in self.recipes:
-            recipe_names += x.title +'\n'
+            recipe_names += str(index) + '. ' + x.title + '\n'
+            index += 1
         return recipe_names
 
     def get_tool_names(self):
@@ -154,6 +140,11 @@ class User():
     def save_recipe(self, recipe):
         self.database.saveRecipe(recipe)
         self.recipes.append(recipe)
+
+    def delete_recipe(self, recipe_index):
+        print("DELETING: ", self.recipes[recipe_index].title)
+        del self.recipes[recipe_index]
+        print(self.database.deleteRecipe(self.recipes[recipe_index]), " Row(s) deleted")
 
     # Gets a list of recipe objs created by this user
     def load_users_recipes(self):
