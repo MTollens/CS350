@@ -221,16 +221,16 @@ class Database():
         recipeList = []
 
         # Individual queries for each param (almost certainly a better way to do this but meh)
-        nameQuery = "SELECT name FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
-        creatorQuery = "SELECT creator FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
-        ingredientsQuery = "SELECT ingredients FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
-        appliancesQuery = "SELECT appliances FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
-        instructionsQuery = "SELECT instructions FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
-        serving_sizeQuery = "SELECT serving_size FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
-        prep_timeQuery = "SELECT prep_time FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
-        tagsQuery = "SELECT tags FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
-        times_executedQuery = "SELECT times_executed FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
-        imageQuery = "SELECT image FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
+        nameQuery = "SELECT name FROM recipe GROUP BY name ORDER BY COUNT(times_executed)"
+        creatorQuery = "SELECT creator FROM recipe GROUP BY name ORDER BY COUNT(times_executed)"
+        ingredientsQuery = "SELECT ingredients FROM recipe GROUP BY name ORDER BY COUNT(times_executed)"
+        appliancesQuery = "SELECT appliances FROM recipe GROUP BY name ORDER BY COUNT(times_executed)"
+        instructionsQuery = "SELECT instructions FROM recipe GROUP BY name ORDER BY COUNT(times_executed)"
+        serving_sizeQuery = "SELECT serving_size FROM recipe GROUP BY name ORDER BY COUNT(times_executed)"
+        prep_timeQuery = "SELECT prep_time FROM recipe GROUP BY name ORDER BY COUNT(times_executed)"
+        tagsQuery = "SELECT tags FROM recipe GROUP BY name ORDER BY COUNT(times_executed)"
+        times_executedQuery = "SELECT times_executed FROM recipe GROUP BY name ORDER BY COUNT(times_executed)"
+        imageQuery = "SELECT image FROM recipe GROUP BY name ORDER BY COUNT(times_executed)"
 
 
         self.dbcursor.execute(nameQuery)

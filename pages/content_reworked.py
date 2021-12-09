@@ -136,17 +136,19 @@ class ContentScroller(wx.Panel):
         # Handle homepage request. Currently based on highest executions
         if self.parent.user.current_search == "":
             results = self.parent.user.load_featured_recipes()
-            isLast = item != len(results)
+            isntLast = item != len(results)
+            print(isntLast, item , len(results))
+            print(results)
             if item <= len(results):
-                return isLast, results[item-1]
+                return isntLast, results[item-1]
             else:
                 # i forgot, you dont need to pass a recipe if you are returning false
-                return isLast, None
+                return isntLast, None
         # TODO Implement this properly to handle searching
         else:
             results = self.parent.user.load_featured_recipes()
-            isLast = item != len(results)
-            if item <= len(results):
+            isLast = item - 1 != len(results)
+            if item - 1 <= len(results):
                 return isLast, results[item - 1]
             else:
                 # i forgot, you dont need to pass a recipe if you are returning false
