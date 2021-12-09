@@ -81,6 +81,7 @@ class Creation(wx.Panel):
         self.ingredients_item_selector.SetPosition((460, 80))
         self.ingredients_item_selector.SetSize((150, 40))
         self.ingredients_item_selector.SetHint("Ingredient")
+        self.ingredients_item_selector.Bind(wx.EVT_COMBOBOX, self.set_ingredient_unit)
 
         self.ingredients_amount = wx.TextCtrl(self, pos=(620, 80), size=(75, 40))
         self.ingredients_amount.SetHint("amount")
@@ -159,6 +160,7 @@ class Creation(wx.Panel):
         # load in user dataManagement
         self.update_subs()
         self.update_user()
+
 
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
@@ -379,6 +381,12 @@ class Creation(wx.Panel):
         self.sub = 4
         self.update_subs()
 
+    def set_ingredient_unit(self, event=None):
+        if self.parent.user.database.getIngredientUnit(self.ingredients_item_selector.GetValue()):
+            self.ingredients_amount.SetHint(self.parent.user.database.getIngredientUnit(self.ingredients_item_selector.GetValue()))
+
+
+
     # specific subpanel action handlers, should be fairly obvious what they do from the names
     def ingredients_category_chosen(self):
         val = self.ingredients_category_selector.GetValue()
@@ -417,6 +425,7 @@ class Creation(wx.Panel):
         temp = self.instructions_display.GetValue() + "\n- "
         self.instructions_display.SetValue(temp)
         self.instructions_display.SetInsertionPointEnd()
+
 
     def add_timer(self, event=None):
         temp = self.instructions_display.GetValue() + " [TIMER:5min] "

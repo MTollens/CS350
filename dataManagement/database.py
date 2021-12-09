@@ -101,6 +101,19 @@ class Database():
         else:
             return
 
+    def getIngredientUnit(self, ingredient):
+        query = "SELECT unit FROM ingredient WHERE name = %s"
+        input = (ingredient, )
+
+        self.dbcursor.execute(query, input)
+
+        result = self.dbcursor.fetchone()
+
+        if result:
+            return result[0]
+        else:
+            return
+
     def saveRecipe(self, recipe):
         query = "INSERT INTO recipe VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
