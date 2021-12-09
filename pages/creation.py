@@ -5,6 +5,8 @@ from dataManagement import ingredients
 from pages import custom_widgets as cw
 from dataManagement import recipe as recipe
 import warnings
+import shutil
+from dataManagement import common_utils
 
 # not yet implemented in any way
 # saving this one for someone else to do, so I dont do all the UI
@@ -28,12 +30,16 @@ class Creation(wx.Panel):
 
         self.controls_box = wx.StaticBox(self, pos=(50,50), size=(220,525))
 
-        self.page_name = wx.StaticText(parent=self, label="Recipe Editor", pos=(70, 10), size=(200,30))
+        self.page_name = wx.StaticText(parent=self, label="Recipe Editor", pos=(60, 10), size=(200,30))
         self.page_name.SetFont(font_Title)
 
         self.image = wx.Button(self, pos=(60,70), size=(160, 160), label="add image")
         self.image.Bind(wx.EVT_BUTTON, self.image_select)
         self.image_path = ""
+
+        self.web_image = wx.Button(self, pos=(225, 195), label="🌐", size=(35, 35))
+        self.web_image.SetFont(font_Sub)
+        self.web_image.Bind(wx.EVT_BUTTON, self.find_web_image)
 
         # UI implementation here:
         self.Title_box = wx.TextCtrl(parent=self, pos=(60, 240), size=(200,30))
@@ -65,6 +71,13 @@ class Creation(wx.Panel):
 
         # end of STATIC UI elements
 
+        # web image box
+
+        self.web_image_box = wx.TextCtrl(self, pos=(280, 200), size=(300, 40), style=wx.TE_PROCESS_ENTER)
+        self.web_image_box.SetHint("Enter an Image URL here")
+        self.web_image_box.Hide()
+        self.web_image_box.Bind(wx.EVT_TEXT_ENTER, self.check_web_image)
+
         # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         # ingredients
         self.ingredients_list = ingredients.Ingredients()
@@ -81,6 +94,7 @@ class Creation(wx.Panel):
         self.ingredients_item_selector.SetPosition((460, 80))
         self.ingredients_item_selector.SetSize((150, 40))
         self.ingredients_item_selector.SetHint("Ingredient")
+        self.ingredients_item_selector.Bind(wx.EVT_COMBOBOX, self.set_ingredient_unit)
 
         self.ingredients_amount = wx.TextCtrl(self, pos=(620, 80), size=(75, 40))
         self.ingredients_amount.SetHint("amount")
@@ -160,6 +174,21 @@ class Creation(wx.Panel):
         self.update_subs()
         self.update_user()
 
+    def find_web_image(self, event=None):
+        self.sub = 0
+        self.update_subs()
+        self.web_image_box.Show()
+
+    def check_web_image(self, event=None):
+        self.web_image_box.Hide()
+        if self.web_image_box.GetValue() in empty:
+            return 0
+        self.image_path = self.web_image_box.GetValue()
+        self.image.SetBitmap(common_utils.web_image(self.image_path, self.image.GetSize()))
+        self.image.SetLabel("")
+
+        # common_utils.find_web_image("url")
+
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
         size = self.GetSize()
@@ -178,6 +207,8 @@ class Creation(wx.Panel):
         self.tools_sub.SetSize(default_size)
 
         # then we will hide all the things that can be selected between
+        self.web_image_box.Hide()
+
         self.ingredients_title.Hide()
         self.ingredients_category_selector.Hide()
         self.ingredients_item_selector.Hide()
@@ -242,8 +273,8 @@ class Creation(wx.Panel):
     # this is where user information should be loaded in
     def update_user(self):
         self.sub = 0
-        if self.parent.user.metric != self.ingredients_list.metric():
-            self.ingredients_list.convert_unit()
+        # if self.parent.user.metric != self.ingredients_list.metric():
+        #     self.ingredients_list.convert_unit()
 
     def display_error(self, message):
         self.error_message.Show()
@@ -279,32 +310,11 @@ class Creation(wx.Panel):
 
         # check if the image exists in the system
         if os.path.exists(dlg.GetPath()):
-            self.image.SetBitmap(self.load_image(dlg.GetPath(), self.image.GetSize()))
+            self.image.SetBitmap(common_utils.load_image(dlg.GetPath(), self.image.GetSize()))
             self.image_path = dlg.GetPath()
             self.image.SetLabel("")
         else:
             self.image.SetLabel("Image couldnt\nbe loaded")
-
-    # load file bitmap and return it as a bitmap object
-    # for use with the "image" object
-    def load_image(self, filename, size):
-        # file extension checking not required, because a failure mode is prepared
-        temp = 0
-        try:
-            temp = wx.Bitmap(filename, wx.BITMAP_TYPE_ANY)
-            temp = self.scale_bitmap(temp, size[0], size[1])
-        except:
-            temp = wx.Bitmap("resources/nofile.png", wx.BITMAP_TYPE_ANY)
-            temp = self.scale_bitmap(temp, size[0], size[1])
-
-        return temp
-
-    # scales bitmap, shouldnt need to be touched at all
-    def scale_bitmap(self, bitmap, width, height):
-        image = wx.Bitmap.ConvertToImage(bitmap)
-        image = image.Scale(width, height, wx.IMAGE_QUALITY_HIGH)
-        result = wx.Bitmap(image)
-        return result
 
     # this is where changes are commited, data that was entered on the page is put into a recipe class
     # and the class is passed to the storage handler
@@ -314,16 +324,31 @@ class Creation(wx.Panel):
             return 0
         if not self.are_you_sure:
             self.are_you_sure = True
-            self.display_error("Press final once more to confirm you are done")
+            self.display_error("Press [Finish] once more to confirm you are done")
             return 0
         else:
             self.are_you_sure = False
 
         self.display_error("")
+        # copy the image files to the images directory
+        source = final.image
+        destination = "images/{}".format(os.path.basename(source))
+        if not os.path.exists(destination):
+            shutil.copy(source, destination)
+            # set the new file location as the image location
+            final.image = destination
+            print(source)
+            print(destination)
         self.parent.user.save_recipe(final)
         self.parent.user.open_recipe = recipe.Recipe("CREATOR")
-        # self.parent.setAccount()
+        # self.parent.setHomepage()
         self.load_recipe()
+
+    def update_ingredients_display(self):
+        if self.parent.user.metric:
+            self.ingredients_display.SetValue(self.ingredients_list.pretty())
+        else:
+            self.ingredients_display.SetValue(self.ingredients_list.pretty_imperial())
 
     # load the recipe from a recipe class for editing purposes
     def load_recipe(self):
@@ -335,9 +360,10 @@ class Creation(wx.Panel):
 
         self.Title_box.SetValue(new.title)
         self.ingredients_list = new.ingredients
-        self.ingredients_display.SetValue(self.ingredients_list.pretty())
+        self.update_ingredients_display()
         self.image_path = new.image
-        self.image.SetBitmap(self.load_image(self.image_path, (160,160)))
+        self.image.SetBitmap(common_utils.load_image(self.image_path, (160,160)))
+        self.image.SetLabel("")
         temp = ""
         for x in new.instructions:
             # print(x)
@@ -379,6 +405,17 @@ class Creation(wx.Panel):
         self.sub = 4
         self.update_subs()
 
+    def set_ingredient_unit(self, event=None):
+        temp = self.parent.user.database.getIngredientUnit(self.ingredients_item_selector.GetValue())
+        print("temp: {}".format(temp))
+        if temp:
+            if self.parent.user.metric:
+                self.ingredients_amount.SetHint(temp)
+            else:
+                # the unused value key here is because the function always returns 2 items
+                temp, value = common_utils.convert_units_to_imperial(temp, 0)
+                self.ingredients_amount.SetHint(temp)
+
     # specific subpanel action handlers, should be fairly obvious what they do from the names
     def ingredients_category_chosen(self):
         val = self.ingredients_category_selector.GetValue()
@@ -406,12 +443,12 @@ class Creation(wx.Panel):
             return 0
 
         self.ingredients_list.add_item([first, second, third])
-        self.ingredients_display.SetValue(self.ingredients_list.pretty())
+        self.update_ingredients_display()
         self.ingredients_reset()
 
     def ingredients_remove(self, event=None):
         self.ingredients_list.remove_item(-1)
-        self.ingredients_display.SetValue(self.ingredients_list.pretty())
+        self.update_ingredients_display()
 
     def instructions_enter(self, event=None):
         temp = self.instructions_display.GetValue() + "\n- "

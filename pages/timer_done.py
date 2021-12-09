@@ -1,7 +1,6 @@
 import wx
 import wx.adv
 import os
-import sys
 
 # this one gets run when the file is run externally
 file = "resources/alert_chime.wav"

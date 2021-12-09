@@ -42,8 +42,26 @@ Utensil = database.getTools("Utensil")
 Dish = database.getTools("Dish")
 Other = database.getTools("Other")
 
-all_tools = {"Mixer":Mixer, "Utensil":Utensil, "Dish":Dish, "Other":Other}
+all_tools = {"Mixer": Mixer, "Utensil": Utensil, "Dish":Dish, "Other":Other}
 tools = Mixer + Utensil + Dish + Other
+
+
+#           unit name       metric * value in chart = imperial
+# value in chart = 1 means that the unit is in whole objects, not a measuring system
+# conversion = {
+#        "gram(s)": 0.002204623,      # lbs
+#        "ml(s)": 0.03519508,  # ounce oz
+#        "egg(s)":1,
+#        "lemon(s)":1,
+#        "tomato(es)":1,
+#        "pepper(s)":1,
+#        "crown(s)":1,
+#        "carrot(s)":1,
+#        "clove(s)":1,
+#        "onion(s)":1,
+#        "leaf(s)":1
+# }
+
 
 
 

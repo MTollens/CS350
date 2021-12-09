@@ -54,6 +54,9 @@ class Sign(wx.Panel):
         if self.parent.user.login(self.Username.GetValue(), self.Password.GetValue()):
             self.parent.setAccount()
             self.error.SetLabel("")
+            self.Username.SetLabel("")
+            self.Password.SetLabel("")
+            self.Confirm_Password.SetLabel("")
         # CHANGE THIS TO HANDLE FAILED LOGIN
         else:
             self.error.SetLabel("Username or password incorrect!")

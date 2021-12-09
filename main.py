@@ -1,6 +1,6 @@
 #the main UI library
 import wx
-import wx.lib.scrolledpanel
+
 # the panels from the pages sub directory
 from pages import sign_in as sn, search as sh, pantry as pn, homepage as hp, execution as ex, \
     creation as cr, account as ac, test_page as tt, help as hl, content_reworked as cs
@@ -148,6 +148,7 @@ class Frame(wx.Frame):
         panel = 4
         self.__setPanel_visible(panel)
 
+    # set creation and set edit are not the same
     def setCreation(self, event=None):
         panel = 5
         if not self.user.signed_in:
@@ -168,6 +169,7 @@ class Frame(wx.Frame):
         panel = 8
         self.__setPanel_visible(panel)
 
+    # set edit and set creation are not the same
     def setEdit(self, event=None):
         panel = 5
         if not self.user.signed_in:
@@ -212,6 +214,7 @@ def wordwrap(text, chars):
 
 # this is the python equivelant of "int main()"
 if __name__ == "__main__":
+    from dataManagement import setup_helper
     #create the app
     app = wx.App(False)
 

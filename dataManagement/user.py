@@ -88,7 +88,9 @@ class User():
 
     # these are the function that are acessable publicly
     def logout(self):
-        pass
+        self.signed_in = False
+        self.username = "Guest"
+        self.end_timer()
 
     def login(self, username, password):
         attempt = self.database.verifyLogin(username, password)
@@ -146,9 +148,12 @@ class User():
         self.recipes.append(recipe)
 
     def delete_recipe(self, recipe_index):
-        print("DELETING: ", self.recipes[recipe_index].title, " at ", recipe_index)
-        print(self.database.deleteRecipe(self.recipes[recipe_index]), " Row(s) deleted")
-        self.recipes.pop(recipe_index)
+        try:
+            print("DELETING: ", self.recipes[recipe_index].title, " at ", recipe_index)
+            print(self.database.deleteRecipe(self.recipes[recipe_index]), " Row(s) deleted")
+            self.recipes.pop(recipe_index)
+        except:
+            print("no recipes to be deleted")
 
     # Gets a list of recipe objs created by this user
     def load_users_recipes(self):
@@ -158,6 +163,10 @@ class User():
             print(item.title)
 
         self.recipes = recipes
+
+    def load_featured_recipes(self):
+        recipes = self.database.loadRecipeByFeatured()
+        return recipes
 
     # here the value should be an integer number of seconds
     # here the timer is a reference to the StaticText that represents the remaining time

@@ -1,5 +1,6 @@
 import wx
 from dataManagement import recipe
+from dataManagement import common_utils
 
 
 class ContentScroller(wx.Panel):
@@ -83,11 +84,11 @@ class ContentScroller(wx.Panel):
         self.current_page.SetLabel("Page {}".format(self.page+1))
         # left panel starts at 1
         item1 = recipe.Recipe("dummy").invalid()
-        item2 = recipe.Recipe("dummy").invalid()
-        item3 = recipe.Recipe("dummy").invalid()
+        item2 = recipe.Recipe("dummy").no_more_results()
+        item3 = recipe.Recipe("dummy").no_more_results()
 
         status, item1 = self.__request(self.page * 3 + 1)
-        self.left_image.SetBitmap(self.load_image(item1.image, self.left_image.GetSize()))
+        self.left_image.SetBitmap(common_utils.load_image(item1.image, self.left_image.GetSize()))
         self.left_info.SetLabel(item1.generate_description(64))
         self.left_recipe = item1
 
@@ -99,11 +100,11 @@ class ContentScroller(wx.Panel):
             status, item3 = self.__request(self.page * 3 + 3)
 
 
-        self.mid_image.SetBitmap(self.load_image(item2.image, self.mid_image.GetSize()))
+        self.mid_image.SetBitmap(common_utils.load_image(item2.image, self.mid_image.GetSize()))
         self.mid_info.SetLabel(item2.generate_description(64))
         self.mid_recipe = item2
 
-        self.right_image.SetBitmap(self.load_image(item3.image, self.right_image.GetSize()))
+        self.right_image.SetBitmap(common_utils.load_image(item3.image, self.right_image.GetSize()))
         self.right_info.SetLabel(item3.generate_description(64))
         self.right_recipe = item3
 
@@ -132,10 +133,26 @@ class ContentScroller(wx.Panel):
     def __request(self, item):
         # # make a request here
         # # send the following number to the database handler so it knows which result of its search we are on
+        # Handle homepage request. Currently based on highest executions
+        if self.parent.user.current_search == "":
+            results = self.parent.user.load_featured_recipes()
+            isLast = item != len(results)
+            if item <= len(results):
+                return isLast, results[item-1]
+            else:
+                # i forgot, you dont need to pass a recipe if you are returning false
+                return isLast, None
+        # TODO Implement this properly to handle searching
+        else:
+            results = self.parent.user.load_featured_recipes()
+            isLast = item != len(results)
+            if item <= len(results):
+                return isLast, results[item - 1]
+            else:
+                # i forgot, you dont need to pass a recipe if you are returning false
+                return isLast, None
 
-        temp = recipe.Recipe("content_example")
         # can return invalid if applicable
-        return True, temp.example()
 
     def resize_main(self, event=None, size_external=None, position_external=None):
         if size_external:
@@ -178,15 +195,18 @@ class ContentScroller(wx.Panel):
     # button for either of the left tile buttons
     def left_pressed(self, event=None):
         # print("left pressed")
-        self.open_recipe(self.left_recipe)
+        if self.left_recipe.title not in dont_open:
+            self.open_recipe(self.left_recipe)
 
     def mid_pressed(self, event=None):
         # print("mid pressed")
-        self.open_recipe(self.mid_recipe)
+        if self.mid_recipe.title not in dont_open:
+            self.open_recipe(self.mid_recipe)
 
     def right_pressed(self, event=None):
         # print("right pressed")
-        self.open_recipe(self.right_recipe)
+        if self.right_recipe.title not in dont_open:
+            self.open_recipe(self.right_recipe)
 
     def previous_pressed(self, event=None):
         if self.page > 0:
@@ -201,26 +221,8 @@ class ContentScroller(wx.Panel):
         # validation (if needed) should be performed in the main class at the function below
         self.parent.open_recipe(recipe)
 
-    # load file bitmap and return it as a bitmap object
-    # for use with the "image" object
-    def load_image(self, filename, size):
-        # file extension checking not required, because a failure mode is prepared
-        temp = 0
-        try:
-            temp = wx.Bitmap(filename, wx.BITMAP_TYPE_ANY)
-            temp = self.scale_bitmap(temp, size[0], size[1])
-        except:
-            temp = wx.Bitmap("resources/nofile.png", wx.BITMAP_TYPE_ANY)
-            temp = self.scale_bitmap(temp, size[0], size[1])
 
-        return temp
-
-    # scales bitmap, shouldnt need to be touched at all
-    def scale_bitmap(self, bitmap, width, height):
-        image = wx.Bitmap.ConvertToImage(bitmap)
-        image = image.Scale(width, height, wx.IMAGE_QUALITY_HIGH)
-        result = wx.Bitmap(image)
-        return result
 
 empty = [" ","",None]
+dont_open = ["INVALID", "", " ", "end of results", None]
 

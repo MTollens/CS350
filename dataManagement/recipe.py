@@ -36,21 +36,24 @@ class Recipe():
     # return a string to be used in search results
     # size is the available space horizontally for text
     def generate_description(self, size=32):
-        rating = "({})".format(self.number_of_ratings)
-        temp = int(self.average_rating)
+        if self.title == "end of results":
+            return self.title
+        else:
+            rating = "({})".format(self.number_of_ratings)
+            temp = int(self.average_rating)
 
-        assert temp <= 5, "incorrect rating value should be 0-5 got: {}".format(temp)
-        star = "★"
-        unfilled = "☆"
+            assert temp <= 5, "incorrect rating value should be 0-5 got: {}".format(temp)
+            star = "★"
+            unfilled = "☆"
 
-        # rating should be out of five stars
-        rating = rating + " " + temp * star + unfilled * (5 - temp)
-        #        rating of stars  ^             ^ enough stars to get it to 5
+            # rating should be out of five stars
+            rating = rating + " " + temp * star + unfilled * (5 - temp)
+            #        rating of stars  ^             ^ enough stars to get it to 5
 
-        # the string should be [some number of characters that will fit on the button] +newline+ rating # + stars
-        return self.title[:int(size / 2)] + "\n" + \
-               "makes for {} | prep time {}".format(self.servings, self.prep_time)+ "\n" +\
-               rating
+            # the string should be [some number of characters that will fit on the button] +newline+ rating # + stars
+            return self.title[:int(size / 2)] + "\n" + \
+                   "makes for {} | prep time {}".format(self.servings, self.prep_time)+ "\n" +\
+                   rating
 
     # should be removed as soon as real data is available
     def example(self):
@@ -86,7 +89,7 @@ class Recipe():
         self.ingredients = ings.Ingredients()
         self.ingredients.example()
         self.image = "resources/nofile.png"
-        self.title = "invalid" # name
+        self.title = "INVALID" # name
         self.instructions = []
         # a list of strings
         self.tools = []
@@ -100,6 +103,28 @@ class Recipe():
         self.average_rating = 0
         self.number_of_ratings = 0
         self.origin = "ERROR"
+        return self
+
+    # should be kept once real data is available
+    def no_more_results(self):
+        self.owner = "ENDOFRESULTS"
+        self.ingredients = ings.Ingredients()
+        self.ingredients.example()
+        self.image = "resources/forkandknife.jpg"
+        self.title = "end of results"  # name
+        self.instructions = []
+        # a list of strings
+        self.tools = []
+        # a list of strings?
+        self.tags = []
+
+        self.servings = 0
+        self.prep_time = ""
+
+        # not sure if should be string, or float
+        self.average_rating = 0
+        self.number_of_ratings = 0
+        self.origin = "END"
         return self
 
     def save(self):

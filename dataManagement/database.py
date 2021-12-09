@@ -1,6 +1,7 @@
 import mysql.connector
 import json
 from dataManagement import recipe
+from dataManagement import ingredients
 
 class Database():
     # If an error occurs here bc of bad password make sure the following are true
@@ -101,6 +102,19 @@ class Database():
         else:
             return
 
+    def getIngredientUnit(self, ingredient):
+        query = "SELECT unit FROM ingredient WHERE name = %s"
+        input = (ingredient, )
+
+        self.dbcursor.execute(query, input)
+
+        result = self.dbcursor.fetchone()
+
+        if result:
+            return result[0]
+        else:
+            return
+
     def saveRecipe(self, recipe):
         query = "INSERT INTO recipe VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
@@ -132,7 +146,6 @@ class Database():
         self.db.commit()
 
         return self.dbcursor.rowcount
-
 
     def loadRecipeByOwner(self, owner):
         recipeList = []
@@ -186,7 +199,78 @@ class Database():
             for x in range(len(nameRows)):
                 tempRecipe = recipe.Recipe(owner=owner)
                 tempRecipe.title = nameRows[x][0]
-                tempRecipe.ingredients = json.loads(ingredientsRows[x][0])
+                tempIngredients = ingredients.Ingredients()
+                tempIngredients.items = json.loads(ingredientsRows[x][0])
+                tempRecipe.ingredients = tempIngredients
+                tempRecipe.tools = json.loads(appliancesRows[x][0])
+                tempRecipe.instructions = json.loads(instructionsRows[x][0])
+                tempRecipe.servings = serving_sizeRows[x][0]
+                tempRecipe.prep_time = prep_timeRows[x][0]
+                tempRecipe.tags = json.loads(tagsRows[x][0])
+                tempRecipe.times_exec = times_executedRows[x][0]
+                tempRecipe.image = imageRows[x][0]
+                recipeList.append(tempRecipe)
+
+                print(type(tempRecipe.ingredients))
+
+            return recipeList
+        else:
+            return []
+
+    def loadRecipeByFeatured(self):
+        recipeList = []
+
+        # Individual queries for each param (almost certainly a better way to do this but meh)
+        nameQuery = "SELECT name FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
+        creatorQuery = "SELECT creator FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
+        ingredientsQuery = "SELECT ingredients FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
+        appliancesQuery = "SELECT appliances FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
+        instructionsQuery = "SELECT instructions FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
+        serving_sizeQuery = "SELECT serving_size FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
+        prep_timeQuery = "SELECT prep_time FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
+        tagsQuery = "SELECT tags FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
+        times_executedQuery = "SELECT times_executed FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
+        imageQuery = "SELECT image FROM recipe GROUP BY times_executed ORDER BY COUNT(times_executed)"
+
+
+        self.dbcursor.execute(nameQuery)
+        nameRows = self.dbcursor.fetchall()
+
+        if nameRows:
+
+            self.dbcursor.execute(creatorQuery)
+            creatorRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(ingredientsQuery)
+            ingredientsRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(appliancesQuery)
+            appliancesRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(instructionsQuery)
+            instructionsRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(serving_sizeQuery)
+            serving_sizeRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(prep_timeQuery)
+            prep_timeRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(tagsQuery)
+            tagsRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(times_executedQuery)
+            times_executedRows = self.dbcursor.fetchall()
+
+            self.dbcursor.execute(imageQuery)
+            imageRows = self.dbcursor.fetchall()
+
+            for x in range(len(nameRows)):
+                tempRecipe = recipe.Recipe(owner=creatorRows[x][0])
+                tempRecipe.title = nameRows[x][0]
+                tempIngredients = ingredients.Ingredients()
+                tempIngredients.items = json.loads(ingredientsRows[x][0])
+                tempRecipe.ingredients = tempIngredients
                 tempRecipe.tools = json.loads(appliancesRows[x][0])
                 tempRecipe.instructions = json.loads(instructionsRows[x][0])
                 tempRecipe.servings = serving_sizeRows[x][0]

@@ -1,12 +1,10 @@
 import wx
 
-
 class Account(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
 
         self.parent = parent
-
 
         self.pantry_ingredients = wx.StaticText(self, label="Pantry contents", pos=(50, 355))
         self.pantry_tools = wx.StaticText(self, label="Pantry tools", pos=(50, 355))
@@ -16,7 +14,7 @@ class Account(wx.Panel):
         self.Back_Button.Bind(wx.EVT_BUTTON, parent.setPrevious)
 
         self.Sign_in = wx.Button(parent=self, label="Sign out", pos=(350, 0), size=(80, 50))
-        self.Sign_in.Bind(wx.EVT_BUTTON, self.Sign_in_example)
+        self.Sign_in.Bind(wx.EVT_BUTTON, self.sign_out)
 
         self.Home_button = wx.Button(parent=self, label="Home", pos=(350, 0), size=(80, 50))
         self.Home_button.Bind(wx.EVT_BUTTON, parent.setHomepage)
@@ -30,11 +28,19 @@ class Account(wx.Panel):
         self.Public.Bind(wx.EVT_BUTTON, self.change_public)
 
         self.recipe_list = wx.TextCtrl(parent=self, pos=(60, 60), size=(200, 100), style=wx.TE_READONLY | wx.TE_MULTILINE)
+        self.recipe_open = wx.Button(self, label="Open")
+        self.recipe_open.Bind(wx.EVT_BUTTON, self.make_recipe)
         self.recipe_edit = wx.Button(self, label="Edit")
+        self.recipe_edit.Bind(wx.EVT_BUTTON, self.edit_recipe)
         self.recipe_input = wx.TextCtrl(self)
         self.recipe_input.SetHint("Enter a number to modify that recipe")
         self.recipe_delete = wx.Button(self, label="Delete")
         self.recipe_delete.Bind(wx.EVT_BUTTON, self.delete_recipe)
+
+        # must be true to delete a recipe
+        self.delete_confirm = False
+        # rememberd value for what the user wanted to delete
+        self.wants_to_delete = -1
 
         self.Account_name = wx.StaticText(parent=self, pos=(70, 70), size=(150, 20))
         self.Account_age = wx.StaticText(parent=self, pos=(70, 90), size=(150, 20))
@@ -65,7 +71,6 @@ class Account(wx.Panel):
         #
         # self.SetSizer(self.self_sizer)
 
-
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
         size = self.GetSize()
@@ -79,10 +84,12 @@ class Account(wx.Panel):
 
         self.recipe_list.SetPosition((int(size[0] / 2) + 20, 60))
         self.recipe_list.SetSize(int(size[0] / 2) - 40, 220)
-        self.recipe_input.SetPosition((int(size[0] / 2) + 120, 60 + 225))
-        self.recipe_input.SetSize(int(size[0] / 2) - 195, 50)
-        self.recipe_edit.SetPosition((int(size[0] / 2) + 20, 60 + 225))
-        self.recipe_edit.SetSize((95, 50))
+        self.recipe_input.SetPosition((int(size[0] / 2) + 180, 60 + 225))
+        self.recipe_input.SetSize(int(size[0] / 2) - 195-60, 50)
+        self.recipe_edit.SetPosition((int(size[0] / 2) + 100, 60 + 225))
+        self.recipe_edit.SetSize((75, 50))
+        self.recipe_open.SetPosition((int(size[0] / 2) + 20, 60 + 225))
+        self.recipe_open.SetSize((75, 50))
         self.recipe_delete.SetPosition((size[0]-70, 60 + 225))
         self.recipe_delete.SetSize(50,50)
 
@@ -107,10 +114,23 @@ class Account(wx.Panel):
         self.get_private_label()
         self.recipe_input.SetValue("")
 
-    def delete_recipe(self, literallydontknowwhythisvariableneedstoexistbutdeletingdoesntworkwithoutit):
-        print(self.recipe_input.GetValue())
-        self.parent.user.delete_recipe((int(self.recipe_input.GetValue()) - 1))
-        self.recipe_list.SetValue(self.parent.user.get_recipe_names())
+    def delete_recipe(self, event=None):
+        # print("confirm : {}  wants to : {}".format(self.delete_confirm, self.wants_to_delete))
+        if not self.delete_confirm:
+            self.wants_to_delete = self.recipe_input.GetValue()
+            self.recipe_input.SetValue("")
+            self.recipe_input.SetHint("Type CONFIRM to confirm delete\nthen press delete again")
+            self.delete_confirm = True
+        else:
+            if self.recipe_input.GetValue() == "CONFIRM":
+                print(self.wants_to_delete)
+                # print("deleting a recipe!")
+                self.parent.user.delete_recipe((int(self.wants_to_delete) - 1))
+                self.recipe_list.SetValue(self.parent.user.get_recipe_names())
+            self.recipe_input.SetValue("")
+            self.recipe_input.SetHint("Enter a number to modify that recipe")
+            self.wants_to_delete = -1
+            self.delete_confirm = False
 
 
     # Sets default button value
@@ -146,7 +166,6 @@ class Account(wx.Panel):
             self.Units.SetLabel("Imperial")
         #TODO some code here to send the units update to the server, using the user class
 
-
     # similar function as metric but for setting public/private account
     def update_public(self):
         if self.parent.user.public:
@@ -155,14 +174,35 @@ class Account(wx.Panel):
             self.Public.SetLabel("Private")
         #TODO some code here to send the update to the server, using the user class
 
+    # # to be replaced by real function, this is for demo purposes only
+    # def Sign_in_example(self, event):
+    #     if self.parent.user.signed_in:
+    #         self.parent.user.example_guest()
+    #         self.parent.setSignin()
+    #     self.update_user()
+    def sign_out(self, event=None):
+        self.parent.user.logout()
+        self.parent.first_sign_in = True
+        self.parent.setSignin()
 
 
-    # to be replaced by real function, this is for demo purposes only
-    def Sign_in_example(self, event):
-        if self.parent.user.signed_in:
-            self.parent.user.example_guest()
-            self.parent.setSignin()
-        self.update_user()
+    def make_recipe(self, event=None):
+        if self.recipe_position_is_valid():
+            self.parent.user.open_recipe = self.parent.user.recipes[int(self.recipe_input.GetValue())-1]
+            self.parent.setExecution()
+        self.recipe_input.SetValue("")
 
+    def edit_recipe(self, event=None):
+        if self.recipe_position_is_valid():
+            self.parent.user.open_recipe = self.parent.user.recipes[int(self.recipe_input.GetValue())-1]
+            self.parent.setEdit()
+        self.recipe_input.SetValue("")
 
-
+    def recipe_position_is_valid(self):
+        try:
+            return len(self.parent.user.recipes) >= int(self.recipe_input.GetValue())
+        except:
+            print("invalid recipe index\nfor length:")
+            print(len(self.parent.user.recipes))
+            print("got : {}".format(self.recipe_input.GetValue()))
+            return False

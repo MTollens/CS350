@@ -1,5 +1,4 @@
 import wx
-from wx import html
 
 empty = ["", " ", None]
 
