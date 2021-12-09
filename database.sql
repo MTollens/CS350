@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: recipebuddy
 -- ------------------------------------------------------
--- Server version	8.0.27
+-- Server version	8.0.22
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -37,7 +37,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES ('DerickFrito','1357',1,'Metric'),('horickmj','2468',0,'Imperial'),('Matty','54321',0,'Metric'),('maxcolt','12345',0,'Imperial');
+INSERT INTO `account` VALUES ('DerickFrito','1357',1,'Metric'),('horickmj','2468',0,'Imperial'),('Matty','54321',0,'Metric'),('maxcolt','12345',0,'Metric');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,7 +145,7 @@ CREATE TABLE `recipe` (
 
 LOCK TABLES `recipe` WRITE;
 /*!40000 ALTER TABLE `recipe` DISABLE KEYS */;
-INSERT INTO `recipe` VALUES ('Cheese & Chicken Pasta','maxcolt','[[\"Chicken\", 10, \"gram(s)\"], [\"Cheese\", 15, \"ml(s)\"], [\"Noodles\", 20, \"gram(s)\"]]','[\"Pan\", \"Pot\", \"Fork\"]','[\"- Cook chicken on stove with pan\", \"- Boil pasta in water to cook it\", \"- Drain pasta\", \"- Mix pasta with cheese stirring until melted\", \"- Combine with chicken and serve\"]',2,'20 Minutes','[\"Easy\", \"Fast\", \"Cheap\"]',3,'resources/cheese_pasta.jpg'),('Simple Mac and Cheese','horickmj','[[\"Noodles\", \"15\", \"<UNIT>\"], [\"Butter\", \"2\", \"<UNIT>\"], [\"Milk\", \"4\", \"<UNIT>\"], [\"Cheese\", \"4\", \"<UNIT>\"]]','[\"Spoon\", \"Pot\", \"Bowl\"]','[\"- Boil water\", \"- Cook noodles [TIMER:8min] \", \"- Add butter and stir\", \"- Add cheese\", \"- Add milk and stir\"]',4,'15 minutes','[\"cheese\", \"dinner\", \"quick\", \"simple\"]',0,'C:\\Users\\Michael\\Downloads\\220px-Kraft_Dinner_Mac_Cheese_(crop).jpg'),('Well-Done Bread','horickmj','[[\"Flour\", \"5\", \"<UNIT>\"], [\"Egg\", \"2\", \"<UNIT>\"], [\"Sugar\", \"10\", \"<UNIT>\"], [\"Salt\", \"5\", \"<UNIT>\"]]','[\"Bowl\", \"Ladle\"]','[\"- Dissolve yeast and add 1 tbsp of sugar, stir\", \"- Add remaining ingredients and mix\", \"- Knead for 7-10 minutes and then let rise\", \"- Repeat step 3\", \"- Bake the bread [TIMER:3hours] \", \"- After fire department clears your home for re entry, remove from oven\"]',2,'3 Hours','[\"bread\", \"advanced\"]',0,'C:\\Users\\Michael\\Downloads\\d4e58d1b105d561e998080ebe0778bdc.jpg');
+INSERT INTO `recipe` VALUES ('Cheese & Chicken Pasta','maxcolt','[[\"Chicken\", 10, \"gram(s)\"], [\"Cheese\", 15, \"ml(s)\"], [\"Noodles\", 20, \"gram(s)\"]]','[\"Pan\", \"Pot\", \"Fork\"]','[\"- Cook chicken on stove with pan\", \"- Boil pasta in water to cook it\", \"- Drain pasta\", \"- Mix pasta with cheese stirring until melted\", \"- Combine with chicken and serve\"]',2,'20 Minutes','[\"Easy\", \"Fast\", \"Cheap\"]',3,'resources/cheese_pasta.jpg'),('Simple Mac and Cheese','horickmj','[[\"Noodles\", \"15\", \"<UNIT>\"], [\"Butter\", \"2\", \"<UNIT>\"], [\"Milk\", \"4\", \"<UNIT>\"], [\"Cheese\", \"4\", \"<UNIT>\"]]','[\"Spoon\", \"Pot\", \"Bowl\"]','[\"- Boil water\", \"- Cook noodles [TIMER:8min] \", \"- Add butter and stir\", \"- Add cheese\", \"- Add milk and stir\"]',4,'15 minutes','[\"cheese\", \"dinner\", \"quick\", \"simple\"]',0,'images/mac.jpg'),('Tasty Chicken','maxcolt','[[\"Chicken\", \"500\", \"gram(s)\"], [\"Salt\", \"5\", \"ml(s)\"], [\"Garlic\", \"2\", \"clove(s)\"], [\"Onion\", \"1\", \"onion(s)\"], [\"Basil\", \"4\", \"leaf(s)\"], [\"Black Pepper\", \"5\", \"ml(s)\"]]','[\"Pan\"]','[\"- Prep Garlic, finely chopped. Onion, sliced into strips. and Basil, chiffonade.\", \"- Season the Chicken well with Salt and Black Pepper.\", \"- In a large pan combine Chicken, Onion, Garlic and Basil. Cook together flipping the chicken after 6 minutes.  [TIMER:12min] \"]',2,'30 Mins','[]',0,'images/chicken.jpg'),('Well-Done Bread','horickmj','[[\"Flour\", \"5\", \"<UNIT>\"], [\"Egg\", \"2\", \"<UNIT>\"], [\"Sugar\", \"10\", \"<UNIT>\"], [\"Salt\", \"5\", \"<UNIT>\"]]','[\"Bowl\", \"Ladle\"]','[\"- Dissolve yeast and add 1 tbsp of sugar, stir\", \"- Add remaining ingredients and mix\", \"- Knead for 7-10 minutes and then let rise\", \"- Repeat step 3\", \"- Bake the bread [TIMER:3hours] \", \"- After fire department clears your home for re entry, remove from oven\"]',2,'3 Hours','[\"bread\", \"advanced\"]',0,'images/bread.jpg');
 /*!40000 ALTER TABLE `recipe` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -186,4 +186,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-08 22:19:00
+-- Dump completed on 2021-12-09 13:04:50
