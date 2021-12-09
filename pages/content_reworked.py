@@ -128,12 +128,10 @@ class ContentScroller(wx.Panel):
     def __request(self, item):
         # # make a request here
         # # send the following number to the database handler so it knows which result of its search we are on
-        print(item)
         # Handle homepage request. Currently based on highest executions
         if self.parent.user.current_search == "":
             results = self.parent.user.load_featured_recipes()
             isLast = item != len(results)
-            print(item <= len(results))
             if item <= len(results):
                 return isLast, results[item-1]
             else:
@@ -142,7 +140,6 @@ class ContentScroller(wx.Panel):
         else:
             results = self.parent.user.load_featured_recipes()
             isLast = item != len(results)
-            print(item <= len(results))
             if item <= len(results):
                 return isLast, results[item - 1]
             else:
