@@ -37,6 +37,11 @@ class Account(wx.Panel):
         self.recipe_delete = wx.Button(self, label="Delete")
         self.recipe_delete.Bind(wx.EVT_BUTTON, self.delete_recipe)
 
+        # must be true to delete a recipe
+        self.delete_confirm = False
+        # rememberd value for what the user wanted to delete
+        self.wants_to_delete = -1
+
         self.Account_name = wx.StaticText(parent=self, pos=(70, 70), size=(150, 20))
         self.Account_age = wx.StaticText(parent=self, pos=(70, 90), size=(150, 20))
 
@@ -109,10 +114,24 @@ class Account(wx.Panel):
         self.get_private_label()
         self.recipe_input.SetValue("")
 
-    def delete_recipe(self, literallydontknowwhythisvariableneedstoexistbutdeletingdoesntworkwithoutit):
-        print(self.recipe_input.GetValue())
-        self.parent.user.delete_recipe((int(self.recipe_input.GetValue()) - 1))
-        self.recipe_list.SetValue(self.parent.user.get_recipe_names())
+    def delete_recipe(self, event=None):
+        # print("confirm : {}  wants to : {}".format(self.delete_confirm, self.wants_to_delete))
+        if not self.delete_confirm:
+            self.wants_to_delete = self.recipe_input.GetValue()
+            self.recipe_input.SetValue("")
+            self.recipe_input.SetHint("Type CONFIRM to confirm delete\nthen press delete again")
+            self.delete_confirm = True
+        else:
+            if self.recipe_input.GetValue() == "CONFIRM":
+                print(self.wants_to_delete)
+                # print("deleting a recipe!")
+                self.parent.user.delete_recipe((int(self.wants_to_delete) - 1))
+                self.recipe_list.SetValue(self.parent.user.get_recipe_names())
+            self.recipe_input.SetValue("")
+            self.recipe_input.SetHint("Enter a number to modify that recipe")
+            self.wants_to_delete = -1
+            self.delete_confirm = False
+
 
     # Sets default button value
     def get_unit_label(self):
