@@ -341,7 +341,7 @@ class Creation(wx.Panel):
             print(destination)
         self.parent.user.save_recipe(final)
         self.parent.user.open_recipe = recipe.Recipe("CREATOR")
-        # self.parent.setHomepage()
+        self.parent.setHomepage()
         self.load_recipe()
 
     def update_ingredients_display(self):

@@ -123,7 +123,8 @@ class ContentScroller(wx.Panel):
             self.previous.Show()
 
     def update_user(self, event=None):
-        self.reload_recipes()
+        if not self.parent.first_sign_in:
+            self.reload_recipes()
 
     # makes a request to the database and returns a recipe and a status report
     # status, recipe = self.__request(item_number)
