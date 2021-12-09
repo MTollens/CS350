@@ -109,7 +109,7 @@ class Account(wx.Panel):
 
     def delete_recipe(self, literallydontknowwhythisvariableneedstoexistbutdeletingdoesntworkwithoutit):
         print(self.recipe_input.GetValue())
-        self.parent.user.delete_recipe(int(self.recipe_input.GetValue()) - 1)
+        self.parent.user.delete_recipe((int(self.recipe_input.GetValue()) - 1))
         self.recipe_list.SetValue(self.parent.user.get_recipe_names())
 
 
