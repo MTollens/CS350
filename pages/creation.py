@@ -273,8 +273,8 @@ class Creation(wx.Panel):
     # this is where user information should be loaded in
     def update_user(self):
         self.sub = 0
-        if self.parent.user.metric != self.ingredients_list.metric():
-            self.ingredients_list.convert_unit()
+        # if self.parent.user.metric != self.ingredients_list.metric():
+        #     self.ingredients_list.convert_unit()
 
     def display_error(self, message):
         self.error_message.Show()
@@ -344,6 +344,12 @@ class Creation(wx.Panel):
         # self.parent.setHomepage()
         self.load_recipe()
 
+    def update_ingredients_display(self):
+        if self.parent.user.metric:
+            self.ingredients_display.SetValue(self.ingredients_list.pretty())
+        else:
+            self.ingredients_display.SetValue(self.ingredients_list.pretty_imperial())
+
     # load the recipe from a recipe class for editing purposes
     def load_recipe(self):
         new = self.parent.user.open_recipe
@@ -354,7 +360,7 @@ class Creation(wx.Panel):
 
         self.Title_box.SetValue(new.title)
         self.ingredients_list = new.ingredients
-        self.ingredients_display.SetValue(self.ingredients_list.pretty())
+        self.update_ingredients_display()
         self.image_path = new.image
         self.image.SetBitmap(common_utils.load_image(self.image_path, (160,160)))
         self.image.SetLabel("")
@@ -400,8 +406,15 @@ class Creation(wx.Panel):
         self.update_subs()
 
     def set_ingredient_unit(self, event=None):
-        if self.parent.user.database.getIngredientUnit(self.ingredients_item_selector.GetValue()):
-            self.ingredients_amount.SetHint(self.parent.user.database.getIngredientUnit(self.ingredients_item_selector.GetValue()))
+        temp = self.parent.user.database.getIngredientUnit(self.ingredients_item_selector.GetValue())
+        print("temp: {}".format(temp))
+        if temp:
+            if self.parent.user.metric:
+                self.ingredients_amount.SetHint(temp)
+            else:
+                # the unused value key here is because the function always returns 2 items
+                temp, value = common_utils.convert_units_to_imperial(temp, 0)
+                self.ingredients_amount.SetHint(temp)
 
     # specific subpanel action handlers, should be fairly obvious what they do from the names
     def ingredients_category_chosen(self):
@@ -430,12 +443,12 @@ class Creation(wx.Panel):
             return 0
 
         self.ingredients_list.add_item([first, second, third])
-        self.ingredients_display.SetValue(self.ingredients_list.pretty())
+        self.update_ingredients_display()
         self.ingredients_reset()
 
     def ingredients_remove(self, event=None):
         self.ingredients_list.remove_item(-1)
-        self.ingredients_display.SetValue(self.ingredients_list.pretty())
+        self.update_ingredients_display()
 
     def instructions_enter(self, event=None):
         temp = self.instructions_display.GetValue() + "\n- "

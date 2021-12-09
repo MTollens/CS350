@@ -1,9 +1,11 @@
 import json
+from dataManagement import common_utils
 
 class Ingredients:
     def __init__(self):
         # array of x height, and 3 depth:
         """
+               0          1          2
         x     name      amount      unit
         0     chicken     5         pounds
         1     pepper      2         tbsp
@@ -45,6 +47,9 @@ class Ingredients:
     def add_item(self, item):
         assert isinstance(item, list), "item must be a list"
         assert len(item) == 3, "must be a three item list"
+        # check if the unit is metric or imperial
+        if item[2] in ["lb(s)", "oz(s)"]:
+            item[2], item[1] = self.__convert_units_to_metric(item[2], item[1])
         self.items.append(item)
         return self.validate()
 
@@ -72,12 +77,20 @@ class Ingredients:
             temp = temp + "- {}, {} {} \n".format(x[0], x[1], x[2])
         return temp
 
+    def pretty_imperial(self):
+        temp = ""
+        for x in self.items:
+            unit, value = common_utils.convert_units_to_imperial(x[2], x[1])
+            temp = temp + "- {}, {} {} \n".format(x[0], value, unit)
+        return temp
+
     # returns the origin, a string
     def get_origin(self):
         return self.__origin
 
     # changes the unit flag, does not actually convert the listed units or values,
     # units are always generated dynamically
+    @DeprecationWarning
     def convert_unit(self):
         if self.__unit == "metric":
             self.__unit = "imperial"
@@ -101,6 +114,21 @@ class Ingredients:
     def __getitem__(self, item):
         return self.items[item]
 
-
+    @DeprecationWarning
     def metric(self):
         return self.__unit == "metric"
+
+
+    # DO NOT EXPORT THIS FUNCTION TO ANY OTHER PAGES
+    # YOU SHOULD NEVER NEED THIS
+    def __convert_units_to_metric(self, unit, value):
+        # warnings.warn("WARNING: you should not use this method if you can help it, you should just recall the original value")
+        gram_to_lb = 0.002204623
+        ml_to_oz = 0.03519508
+        if unit == "oz(s)":
+            return "ml(s)", str(round(float(value)/ml_to_oz, 3))
+        if unit == "lb(s)":
+            return "gram(s)", str(round(float(value)/gram_to_lb, 3))
+        else:
+            # unit is measured in whole units, so there is no change
+            return unit, value

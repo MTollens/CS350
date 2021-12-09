@@ -92,7 +92,8 @@ class Execution(wx.Panel):
         for x in self.recipe.tools:
             self.tools_parse += x + '\n'
         self.tools_list.SetValue(self.tools_parse)
-        self.ingredients_list.SetValue(self.recipe.ingredients.pretty())
+        # implements changing units for the ingredients readout
+        self.apply_units()
 
         # timer functionality will have to be added
         self.steps = enumerate(self.recipe.instructions, start=1)
@@ -143,11 +144,17 @@ class Execution(wx.Panel):
                                                                    state=wx.LIST_STATE_DONTCARE)
             self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(255, 219, 41))
 
+    def apply_units(self):
+        if self.parent.user.metric:
+            self.ingredients_list.SetValue(self.recipe.ingredients.pretty())
+        else:
+            self.ingredients_list.SetValue(self.recipe.ingredients.pretty_imperial())
+
     def change_units(self, event=None):
-        self.parent.user.metric = not (self.parent.user.metric)
         self.parent.user.change_units()
         self.Units.SetLabel(self.get_unit_label())
         self.ingredients_list.SetValue(self.recipe.ingredients.pretty())
+        self.apply_units()
 
     def get_unit_label(self):
         if self.parent.user.metric:

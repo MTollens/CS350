@@ -47,10 +47,21 @@ tools = Mixer + Utensil + Dish + Other
 
 
 #           unit name       metric * value in chart = imperial
-conversion = {
-       "grams": 0.002204623,
-       "millileter" : 1
-}
+# value in chart = 1 means that the unit is in whole objects, not a measuring system
+# conversion = {
+#        "gram(s)": 0.002204623,      # lbs
+#        "ml(s)": 0.03519508,  # ounce oz
+#        "egg(s)":1,
+#        "lemon(s)":1,
+#        "tomato(es)":1,
+#        "pepper(s)":1,
+#        "crown(s)":1,
+#        "carrot(s)":1,
+#        "clove(s)":1,
+#        "onion(s)":1,
+#        "leaf(s)":1
+# }
+
 
 
 
