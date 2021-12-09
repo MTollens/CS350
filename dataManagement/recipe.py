@@ -86,7 +86,7 @@ class Recipe():
         self.ingredients = ings.Ingredients()
         self.ingredients.example()
         self.image = "resources/nofile.png"
-        self.title = "invalid" # name
+        self.title = "" # name
         self.instructions = []
         # a list of strings
         self.tools = []

@@ -188,15 +188,18 @@ class ContentScroller(wx.Panel):
     # button for either of the left tile buttons
     def left_pressed(self, event=None):
         # print("left pressed")
-        self.open_recipe(self.left_recipe)
+        if self.left_recipe.title != "":
+            self.open_recipe(self.left_recipe)
 
     def mid_pressed(self, event=None):
         # print("mid pressed")
-        self.open_recipe(self.mid_recipe)
+        if self.mid_recipe.title != "":
+            self.open_recipe(self.mid_recipe)
 
     def right_pressed(self, event=None):
         # print("right pressed")
-        self.open_recipe(self.right_recipe)
+        if self.right_recipe.title != "":
+            self.open_recipe(self.right_recipe)
 
     def previous_pressed(self, event=None):
         if self.page > 0:
