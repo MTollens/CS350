@@ -1,5 +1,4 @@
 import wx
-from main import wordwrap as wr
 
 class Pantry(wx.Panel):
     def __init__(self, parent): #, inline=False): # see below for why this is commented

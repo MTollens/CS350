@@ -1,5 +1,5 @@
 import wx
-import wx.lib.scrolledpanel
+# import wx.lib.scrolledpanel
 
 empty = ["", " ", None]
 

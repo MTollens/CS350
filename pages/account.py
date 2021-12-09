@@ -7,7 +7,6 @@ class Account(wx.Panel):
 
         self.parent = parent
 
-
         self.pantry_ingredients = wx.StaticText(self, label="Pantry contents", pos=(50, 355))
         self.pantry_tools = wx.StaticText(self, label="Pantry tools", pos=(50, 355))
         self.recipes = wx.StaticText(self, label="Recipes", pos=(50, 355))
@@ -30,6 +29,7 @@ class Account(wx.Panel):
         self.Public.Bind(wx.EVT_BUTTON, self.change_public)
 
         self.recipe_list = wx.TextCtrl(parent=self, pos=(60, 60), size=(200, 100), style=wx.TE_READONLY | wx.TE_MULTILINE)
+        self.recipe_open = wx.Button(self, label="Open")
         self.recipe_edit = wx.Button(self, label="Edit")
         self.recipe_input = wx.TextCtrl(self)
         self.recipe_input.SetHint("Enter a number to modify that recipe")
@@ -79,10 +79,12 @@ class Account(wx.Panel):
 
         self.recipe_list.SetPosition((int(size[0] / 2) + 20, 60))
         self.recipe_list.SetSize(int(size[0] / 2) - 40, 220)
-        self.recipe_input.SetPosition((int(size[0] / 2) + 120, 60 + 225))
-        self.recipe_input.SetSize(int(size[0] / 2) - 195, 50)
-        self.recipe_edit.SetPosition((int(size[0] / 2) + 20, 60 + 225))
-        self.recipe_edit.SetSize((95, 50))
+        self.recipe_input.SetPosition((int(size[0] / 2) + 180, 60 + 225))
+        self.recipe_input.SetSize(int(size[0] / 2) - 195-70, 50)
+        self.recipe_edit.SetPosition((int(size[0] / 2) + 100, 60 + 225))
+        self.recipe_edit.SetSize((75, 50))
+        self.recipe_open.SetPosition((int(size[0] / 2) + 20, 60 + 225))
+        self.recipe_open.SetSize((75, 50))
         self.recipe_delete.SetPosition((size[0]-70, 60 + 225))
         self.recipe_delete.SetSize(50,50)
 

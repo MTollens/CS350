@@ -83,8 +83,8 @@ class ContentScroller(wx.Panel):
         self.current_page.SetLabel("Page {}".format(self.page+1))
         # left panel starts at 1
         item1 = recipe.Recipe("dummy").invalid()
-        item2 = recipe.Recipe("dummy").invalid()
-        item3 = recipe.Recipe("dummy").invalid()
+        item2 = recipe.Recipe("dummy").no_more_results()
+        item3 = recipe.Recipe("dummy").no_more_results()
 
         status, item1 = self.__request(self.page * 3 + 1)
         self.left_image.SetBitmap(self.load_image(item1.image, self.left_image.GetSize()))
@@ -135,7 +135,7 @@ class ContentScroller(wx.Panel):
             if item <= len(results):
                 return isLast, results[item-1]
             else:
-                return isLast, recipe.Recipe("SEARCH")
+                return isLast, recipe.Recipe("SEARCH").no_more_results()
         # TODO Implement this properly to handle searching
         else:
             results = self.parent.user.load_featured_recipes()
@@ -143,7 +143,7 @@ class ContentScroller(wx.Panel):
             if item <= len(results):
                 return isLast, results[item - 1]
             else:
-                return isLast, recipe.Recipe("SEARCH")
+                return isLast, recipe.Recipe("SEARCH").no_more_results()
 
         # can return invalid if applicable
 
@@ -188,17 +188,17 @@ class ContentScroller(wx.Panel):
     # button for either of the left tile buttons
     def left_pressed(self, event=None):
         # print("left pressed")
-        if self.left_recipe.title != "":
+        if self.left_recipe.title not in dont_open:
             self.open_recipe(self.left_recipe)
 
     def mid_pressed(self, event=None):
         # print("mid pressed")
-        if self.mid_recipe.title != "":
+        if self.mid_recipe.title not in dont_open:
             self.open_recipe(self.mid_recipe)
 
     def right_pressed(self, event=None):
         # print("right pressed")
-        if self.right_recipe.title != "":
+        if self.right_recipe.title not in dont_open:
             self.open_recipe(self.right_recipe)
 
     def previous_pressed(self, event=None):
@@ -236,4 +236,5 @@ class ContentScroller(wx.Panel):
         return result
 
 empty = [" ","",None]
+dont_open = ["INVALID", "", " ", "end of results", None]
 

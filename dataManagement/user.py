@@ -146,9 +146,12 @@ class User():
         self.recipes.append(recipe)
 
     def delete_recipe(self, recipe_index):
-        print("DELETING: ", self.recipes[recipe_index].title, " at ", recipe_index)
-        print(self.database.deleteRecipe(self.recipes[recipe_index]), " Row(s) deleted")
-        self.recipes.pop(recipe_index)
+        try:
+            print("DELETING: ", self.recipes[recipe_index].title, " at ", recipe_index)
+            print(self.database.deleteRecipe(self.recipes[recipe_index]), " Row(s) deleted")
+            self.recipes.pop(recipe_index)
+        except:
+            print("no recipes to be deleted")
 
     # Gets a list of recipe objs created by this user
     def load_users_recipes(self):

@@ -1,6 +1,6 @@
 #the main UI library
 import wx
-import wx.lib.scrolledpanel
+
 # the panels from the pages sub directory
 from pages import sign_in as sn, search as sh, pantry as pn, homepage as hp, execution as ex, \
     creation as cr, account as ac, test_page as tt, help as hl, content_reworked as cs

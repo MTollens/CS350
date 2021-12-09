@@ -29,6 +29,7 @@ class Execution(wx.Panel):
 
         # the following fields will be filled with user data
         self.recipe_name = wx.StaticText(parent=self, pos=(20, 70))
+        self.owner = wx.StaticText(self, pos=(220, 70))
 
         self.tools_list = wx.TextCtrl(parent=self, pos=(10, 120), size=(200, 60),
                                       style=wx.TE_READONLY | wx.TE_MULTILINE)
@@ -81,6 +82,7 @@ class Execution(wx.Panel):
     def update_user(self):
         self.recipe = self.parent.user.open_recipe
         self.recipe_name.SetLabel(self.recipe.title)
+        self.owner.SetLabel("Created by: {}".format(self.recipe.owner))
 
         self.tools_parse = ""
         for x in self.recipe.tools:
