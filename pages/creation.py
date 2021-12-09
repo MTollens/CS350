@@ -6,6 +6,7 @@ from pages import custom_widgets as cw
 from dataManagement import recipe as recipe
 import warnings
 import shutil
+from dataManagement import common_utils
 
 # not yet implemented in any way
 # saving this one for someone else to do, so I dont do all the UI
@@ -35,6 +36,8 @@ class Creation(wx.Panel):
         self.image = wx.Button(self, pos=(60,70), size=(160, 160), label="add image")
         self.image.Bind(wx.EVT_BUTTON, self.image_select)
         self.image_path = ""
+        self.web_image = wx.Button(self, pos=(225, 200), label="🌐", size=(30, 30))
+        self.web_image.Bind(wx.EVT_BUTTON, self.find_web_image)
 
         # UI implementation here:
         self.Title_box = wx.TextCtrl(parent=self, pos=(60, 240), size=(200,30))
@@ -65,6 +68,13 @@ class Creation(wx.Panel):
         self.finish.Bind(wx.EVT_BUTTON, self.finish_recipe)
 
         # end of STATIC UI elements
+
+        # web image box
+
+        self.web_image_box = wx.TextCtrl(self, pos=(280, 200), size=(300, 40), style=wx.TE_PROCESS_ENTER)
+        self.web_image_box.SetHint("Enter an Image URL here")
+        self.web_image_box.Hide()
+        self.web_image_box.Bind(wx.EVT_TEXT_ENTER, self.check_web_image)
 
         # XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         # ingredients
@@ -162,6 +172,18 @@ class Creation(wx.Panel):
         self.update_subs()
         self.update_user()
 
+    def find_web_image(self, event=None):
+        self.sub = 0
+        self.update_subs()
+        self.web_image_box.Show()
+
+    def check_web_image(self, event=None):
+        self.web_image_box.Hide()
+        self.image_path = self.web_image_box.GetValue()
+        self.image.SetBitmap(common_utils.web_image(self.image_path, self.image.GetSize()))
+        self.image.SetLabel("")
+
+        # common_utils.find_web_image("url")
 
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
@@ -181,6 +203,8 @@ class Creation(wx.Panel):
         self.tools_sub.SetSize(default_size)
 
         # then we will hide all the things that can be selected between
+        self.web_image_box.Hide()
+
         self.ingredients_title.Hide()
         self.ingredients_category_selector.Hide()
         self.ingredients_item_selector.Hide()
@@ -282,32 +306,11 @@ class Creation(wx.Panel):
 
         # check if the image exists in the system
         if os.path.exists(dlg.GetPath()):
-            self.image.SetBitmap(self.load_image(dlg.GetPath(), self.image.GetSize()))
+            self.image.SetBitmap(common_utils.load_image(dlg.GetPath(), self.image.GetSize()))
             self.image_path = dlg.GetPath()
             self.image.SetLabel("")
         else:
             self.image.SetLabel("Image couldnt\nbe loaded")
-
-    # load file bitmap and return it as a bitmap object
-    # for use with the "image" object
-    def load_image(self, filename, size):
-        # file extension checking not required, because a failure mode is prepared
-        temp = 0
-        try:
-            temp = wx.Bitmap(filename, wx.BITMAP_TYPE_ANY)
-            temp = self.scale_bitmap(temp, size[0], size[1])
-        except:
-            temp = wx.Bitmap("resources/nofile.png", wx.BITMAP_TYPE_ANY)
-            temp = self.scale_bitmap(temp, size[0], size[1])
-
-        return temp
-
-    # scales bitmap, shouldnt need to be touched at all
-    def scale_bitmap(self, bitmap, width, height):
-        image = wx.Bitmap.ConvertToImage(bitmap)
-        image = image.Scale(width, height, wx.IMAGE_QUALITY_HIGH)
-        result = wx.Bitmap(image)
-        return result
 
     # this is where changes are commited, data that was entered on the page is put into a recipe class
     # and the class is passed to the storage handler
@@ -348,7 +351,7 @@ class Creation(wx.Panel):
         self.ingredients_list = new.ingredients
         self.ingredients_display.SetValue(self.ingredients_list.pretty())
         self.image_path = new.image
-        self.image.SetBitmap(self.load_image(self.image_path, (160,160)))
+        self.image.SetBitmap(common_utils.load_image(self.image_path, (160,160)))
         temp = ""
         for x in new.instructions:
             # print(x)

@@ -1,6 +1,6 @@
 # this file is run to ensure that there are no problems with the install
 import os, sys, warnings, subprocess, threading, shutil
-
+print("running setup helper")
 try:
     import wx
     import wx.adv
@@ -8,6 +8,7 @@ try:
     import json
     import platform
     import regex
+    import requests
 except Exception as e:
     print("encountered import error:")
     print(e)

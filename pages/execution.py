@@ -1,6 +1,6 @@
-import sys
 import regex
 import wx
+from dataManagement import common_utils
 
 
 # not yet implemented in any way
@@ -11,6 +11,9 @@ class Execution(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
+
+        font_Title = wx.Font(18, family=wx.FONTFAMILY_MODERN, style=0, weight=100,
+                             underline=False, faceName="", encoding=wx.FONTENCODING_DEFAULT)
 
         self.Back_Button = wx.Button(parent=self, label="Back", pos=(0, 0), size=(50, 50))
         self.Back_Button.Bind(wx.EVT_BUTTON, parent.setPrevious)
@@ -28,8 +31,9 @@ class Execution(wx.Panel):
         self.instructions_text = wx.StaticText(parent=self, label="Instructions:", pos=(10, 280))
 
         # the following fields will be filled with user data
-        self.recipe_name = wx.StaticText(parent=self, pos=(20, 70))
-        self.owner = wx.StaticText(self, pos=(220, 70))
+        self.recipe_name = wx.StaticText(parent=self, pos=(220, 65))
+        self.recipe_name.SetFont(font_Title)
+        self.owner = wx.StaticText(self, pos=(220, 90))
 
         self.tools_list = wx.TextCtrl(parent=self, pos=(10, 120), size=(200, 60),
                                       style=wx.TE_READONLY | wx.TE_MULTILINE)
@@ -47,11 +51,11 @@ class Execution(wx.Panel):
         self.instructions_list.InsertColumn(col=1, heading='Instructions')
         self.instructions_list.SetBackgroundColour(wx.Colour(175, 175, 175))
 
-        self.next_instruction = wx.Button(parent=self, label="Next Step", pos=(600, 220), size=(100, 50))
-        self.next_instruction.Bind(wx.EVT_BUTTON, self.go_next_step)
-
         self.prev_instruction = wx.Button(parent=self, label="Prev Step", pos=(500, 220), size=(100, 50))
         self.prev_instruction.Bind(wx.EVT_BUTTON, self.go_prev_step)
+
+        self.next_instruction = wx.Button(parent=self, label="Next Step", pos=(600, 220), size=(100, 50))
+        self.next_instruction.Bind(wx.EVT_BUTTON, self.go_next_step)
 
         self.Units = wx.Button(parent=self, label=self.get_unit_label(), pos=(700, 220), size=(100, 50))
         self.Units.Bind(wx.EVT_BUTTON, self.change_units)
@@ -113,7 +117,7 @@ class Execution(wx.Panel):
         self.current_step = self.instructions_list.GetTopItem()
         self.go_next_step()
         self.go_prev_step()
-        self.image.SetBitmap(self.load_image(self.recipe.image, self.image.GetSize()))
+        self.image.SetBitmap(common_utils.load_image(self.recipe.image, self.image.GetSize()))
 
         # self.image = (self.recipe.image)
 
@@ -168,27 +172,6 @@ class Execution(wx.Panel):
             self.parent.user.end_timer()
             self.time_start.SetLabel("Start Timer")
             self.time_pause.Hide()
-
-    # load file bitmap and return it as a bitmap object
-    # for use with the "image" object
-    def load_image(self, filename, size):
-        # file extension checking not required, because a failure mode is prepared
-        temp = 0
-        try:
-            temp = wx.Bitmap(filename, wx.BITMAP_TYPE_ANY)
-            temp = self.scale_bitmap(temp, size[0], size[1])
-        except:
-            temp = wx.Bitmap("resources/nofile.png", wx.BITMAP_TYPE_ANY)
-            temp = self.scale_bitmap(temp, size[0], size[1])
-
-        return temp
-
-    # scales bitmap, shouldnt need to be touched at all
-    def scale_bitmap(self, bitmap, width, height):
-        image = wx.Bitmap.ConvertToImage(bitmap)
-        image = image.Scale(width, height, wx.IMAGE_QUALITY_HIGH)
-        result = wx.Bitmap(image)
-        return result
 
 
 # takes in a string, and returns an integer of minutes that the string timer says, will return 0 if no timer found

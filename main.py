@@ -211,6 +211,7 @@ def wordwrap(text, chars):
 
 # this is the python equivelant of "int main()"
 if __name__ == "__main__":
+    from dataManagement import setup_helper
     #create the app
     app = wx.App(False)
 
