@@ -17,7 +17,6 @@ def load_image(filename, size):
         except:
             temp = wx.Bitmap("resources/nofile.png", wx.BITMAP_TYPE_ANY)
             temp = scale_bitmap(temp, size[0], size[1])
-
         return temp
 
 

@@ -36,7 +36,9 @@ class Creation(wx.Panel):
         self.image = wx.Button(self, pos=(60,70), size=(160, 160), label="add image")
         self.image.Bind(wx.EVT_BUTTON, self.image_select)
         self.image_path = ""
-        self.web_image = wx.Button(self, pos=(225, 200), label="🌐", size=(30, 30))
+
+        self.web_image = wx.Button(self, pos=(225, 195), label="🌐", size=(35, 35))
+        self.web_image.SetFont(font_Sub)
         self.web_image.Bind(wx.EVT_BUTTON, self.find_web_image)
 
         # UI implementation here:

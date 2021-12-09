@@ -80,7 +80,7 @@ class Account(wx.Panel):
         self.recipe_list.SetPosition((int(size[0] / 2) + 20, 60))
         self.recipe_list.SetSize(int(size[0] / 2) - 40, 220)
         self.recipe_input.SetPosition((int(size[0] / 2) + 180, 60 + 225))
-        self.recipe_input.SetSize(int(size[0] / 2) - 195-70, 50)
+        self.recipe_input.SetSize(int(size[0] / 2) - 195-60, 50)
         self.recipe_edit.SetPosition((int(size[0] / 2) + 100, 60 + 225))
         self.recipe_edit.SetSize((75, 50))
         self.recipe_open.SetPosition((int(size[0] / 2) + 20, 60 + 225))
