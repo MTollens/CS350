@@ -490,8 +490,8 @@ class Creation(wx.Panel):
         item = recipe.Recipe()
         item.image = self.image_path
         if not os.path.exists(item.image):
-            self.display_error("Please choose a suitable image of your dish")
-            return 0
+            self.display_error("Using default image since none was supplied")
+            item.image = "resources/nofile.png"
         item.owner = self.parent.user.username
         item.ingredients = self.ingredients_list
         temp = item.ingredients.validate()
