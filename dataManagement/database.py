@@ -1,6 +1,7 @@
 import mysql.connector
 import json
 from dataManagement import recipe
+from dataManagement import ingredients
 
 class Database():
     # If an error occurs here bc of bad password make sure the following are true
@@ -199,7 +200,9 @@ class Database():
             for x in range(len(nameRows)):
                 tempRecipe = recipe.Recipe(owner=owner)
                 tempRecipe.title = nameRows[x][0]
-                tempRecipe.ingredients = json.loads(ingredientsRows[x][0])
+                tempIngredients = ingredients.Ingredients()
+                tempIngredients.items = json.loads(ingredientsRows[x][0])
+                tempRecipe.ingredients = tempIngredients
                 tempRecipe.tools = json.loads(appliancesRows[x][0])
                 tempRecipe.instructions = json.loads(instructionsRows[x][0])
                 tempRecipe.servings = serving_sizeRows[x][0]
@@ -208,6 +211,8 @@ class Database():
                 tempRecipe.times_exec = times_executedRows[x][0]
                 tempRecipe.image = imageRows[x][0]
                 recipeList.append(tempRecipe)
+
+                print(type(tempRecipe.ingredients))
 
             return recipeList
         else:
@@ -264,7 +269,9 @@ class Database():
             for x in range(len(nameRows)):
                 tempRecipe = recipe.Recipe(owner=creatorRows[x][0])
                 tempRecipe.title = nameRows[x][0]
-                tempRecipe.ingredients = json.loads(ingredientsRows[x][0])
+                tempIngredients = ingredients.Ingredients()
+                tempIngredients.items = json.loads(ingredientsRows[x][0])
+                tempRecipe.ingredients = tempIngredients
                 tempRecipe.tools = json.loads(appliancesRows[x][0])
                 tempRecipe.instructions = json.loads(instructionsRows[x][0])
                 tempRecipe.servings = serving_sizeRows[x][0]

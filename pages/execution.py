@@ -86,7 +86,6 @@ class Execution(wx.Panel):
         for x in self.recipe.tools:
             self.tools_parse += x + '\n'
         self.tools_list.SetValue(self.tools_parse)
-
         self.ingredients_list.SetValue(self.recipe.ingredients.pretty())
 
         # timer functionality will have to be added
