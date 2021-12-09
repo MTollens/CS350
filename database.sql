@@ -145,7 +145,7 @@ CREATE TABLE `recipe` (
 
 LOCK TABLES `recipe` WRITE;
 /*!40000 ALTER TABLE `recipe` DISABLE KEYS */;
-INSERT INTO `recipe` VALUES ('Cheese & Chicken Pasta','maxcolt','[[\"Chicken\", 10, \"gram(s)\"], [\"Cheese\", 15, \"ml(s)\"], [\"Noodles\", 20, \"gram(s)\"]]','[\"Pan\", \"Pot\", \"Fork\"]','[\"- Cook chicken on stove with pan\", \"- Boil pasta in water to cook it\", \"- Drain pasta\", \"- Mix pasta with cheese stirring until melted\", \"- Combine with chicken and serve\"]',2,'20 Minutes','[\"Easy\", \"Fast\", \"Cheap\"]',3,'resources/cheese_pasta.jpg'),('Simple Mac and Cheese','horickmj','[[\"Noodles\", \"15\", \"<UNIT>\"], [\"Butter\", \"2\", \"<UNIT>\"], [\"Milk\", \"4\", \"<UNIT>\"], [\"Cheese\", \"4\", \"<UNIT>\"]]','[\"Spoon\", \"Pot\", \"Bowl\"]','[\"- Boil water\", \"- Cook noodles [TIMER:8min] \", \"- Add butter and stir\", \"- Add cheese\", \"- Add milk and stir\"]',4,'15 minutes','[\"cheese\", \"dinner\", \"quick\", \"simple\"]',0,'C:\\Users\\Michael\\Downloads\\220px-Kraft_Dinner_Mac_Cheese_(crop).jpg');
+INSERT INTO `recipe` VALUES ('Cheese & Chicken Pasta','maxcolt','[[\"Chicken\", 10, \"gram(s)\"], [\"Cheese\", 15, \"ml(s)\"], [\"Noodles\", 20, \"gram(s)\"]]','[\"Pan\", \"Pot\", \"Fork\"]','[\"- Cook chicken on stove with pan\", \"- Boil pasta in water to cook it\", \"- Drain pasta\", \"- Mix pasta with cheese stirring until melted\", \"- Combine with chicken and serve\"]',2,'20 Minutes','[\"Easy\", \"Fast\", \"Cheap\"]',3,'resources/cheese_pasta.jpg'),('Simple Mac and Cheese','horickmj','[[\"Noodles\", \"15\", \"<UNIT>\"], [\"Butter\", \"2\", \"<UNIT>\"], [\"Milk\", \"4\", \"<UNIT>\"], [\"Cheese\", \"4\", \"<UNIT>\"]]','[\"Spoon\", \"Pot\", \"Bowl\"]','[\"- Boil water\", \"- Cook noodles [TIMER:8min] \", \"- Add butter and stir\", \"- Add cheese\", \"- Add milk and stir\"]',4,'15 minutes','[\"cheese\", \"dinner\", \"quick\", \"simple\"]',0,'C:\\Users\\Michael\\Downloads\\220px-Kraft_Dinner_Mac_Cheese_(crop).jpg'),('Well-Done Bread','horickmj','[[\"Flour\", \"5\", \"<UNIT>\"], [\"Egg\", \"2\", \"<UNIT>\"], [\"Sugar\", \"10\", \"<UNIT>\"], [\"Salt\", \"5\", \"<UNIT>\"]]','[\"Bowl\", \"Ladle\"]','[\"- Dissolve yeast and add 1 tbsp of sugar, stir\", \"- Add remaining ingredients and mix\", \"- Knead for 7-10 minutes and then let rise\", \"- Repeat step 3\", \"- Bake the bread [TIMER:3hours] \", \"- After fire department clears your home for re entry, remove from oven\"]',2,'3 Hours','[\"bread\", \"advanced\"]',0,'C:\\Users\\Michael\\Downloads\\d4e58d1b105d561e998080ebe0778bdc.jpg');
 /*!40000 ALTER TABLE `recipe` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -186,4 +186,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-08 19:57:48
+-- Dump completed on 2021-12-08 22:19:00
