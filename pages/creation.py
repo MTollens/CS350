@@ -315,19 +315,21 @@ class Creation(wx.Panel):
         if not self.are_you_sure:
             self.are_you_sure = True
             self.display_error("Press final once more to confirm you are done")
+            return 0
         else:
             self.are_you_sure = False
 
+        self.display_error("")
         self.parent.user.save_recipe(final)
         self.parent.user.open_recipe = recipe.Recipe("CREATOR")
-        self.parent.setAccount()
+        # self.parent.setAccount()
         self.load_recipe()
 
     # load the recipe from a recipe class for editing purposes
     def load_recipe(self):
         new = self.parent.user.open_recipe
         assert isinstance(new, recipe.Recipe)
-        if new.owner != self.parent.user.username:
+        if (new.owner != self.parent.user.username) and (new.owner not in ["DEFAULT", "CREATOR"]):
             warnings.warn("user trying to edit recipe they dont own")
             return 0
 
