@@ -3,6 +3,7 @@ from dataManagement import database, recipe
 import threading
 import time
 import subprocess
+import platform
 
 class User():
     # initial constructor, this is what runs when it is initialized inside of main.py
@@ -53,6 +54,9 @@ class User():
 
         # timer thread(s)
         self.timers = None
+        # either 'windows' or 'linux' used to work around some inconsitancies between the two, if needed, mac support here as well
+        self.platform = platform.system()
+        print("running on {}".format(self.platform))
 
     # # this is purely for demo purposes, it is not intended for Production in any way, nor is it representative of any final product
     # def example_login(self):
