@@ -159,6 +159,10 @@ class User():
 
         self.recipes = recipes
 
+    def load_featured_recipes(self):
+        recipes = self.database.loadRecipeByFeatured()
+        return recipes
+
     # here the value should be an integer number of seconds
     # here the timer is a reference to the StaticText that represents the remaining time
     def start_timer(self, value, timer=None):
