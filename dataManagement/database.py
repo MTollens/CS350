@@ -211,7 +211,6 @@ class Database():
                 tempRecipe.image = imageRows[x][0]
                 recipeList.append(tempRecipe)
 
-                print(type(tempRecipe.ingredients))
 
             return recipeList
         else:

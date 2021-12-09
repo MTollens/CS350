@@ -137,8 +137,6 @@ class ContentScroller(wx.Panel):
         if self.parent.user.current_search == "":
             results = self.parent.user.load_featured_recipes()
             isntLast = item != len(results)
-            print(isntLast, item , len(results))
-            print(results)
             if item <= len(results):
                 return isntLast, results[item-1]
             else:

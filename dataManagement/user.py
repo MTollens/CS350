@@ -158,10 +158,6 @@ class User():
     # Gets a list of recipe objs created by this user
     def load_users_recipes(self):
         recipes = self.database.loadRecipeByOwner(self.username)
-        print("LOGGED IN USER'S RECIPES: ")
-        for item in recipes:
-            print(item.title)
-
         self.recipes = recipes
 
     def load_featured_recipes(self):
