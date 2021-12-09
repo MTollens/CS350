@@ -65,6 +65,11 @@ class Execution(wx.Panel):
         self.timer_status = wx.TextCtrl(parent=self, pos=(100, 625), style=wx.TE_READONLY)
         self.timer_secs = 0
 
+        # linux compatability here:
+        if self.parent.user.platform == "Linux":
+            self.go_next_step = self.Linux_go_next_step
+            self.go_prev_step = self.Linux_go_prev_step
+
         # load in user dataManagement
         self.update_user()
 
@@ -117,8 +122,6 @@ class Execution(wx.Panel):
         # self.image = (self.recipe.image)
 
     def go_next_step(self, event=None):
-        # if self.current_step == 0:
-        #     self.current_step = -1
         if (self.instructions_list.GetNextItem(self.current_step, wx.LIST_NEXT_BELOW) == -1):
             pass
         else:
@@ -127,9 +130,16 @@ class Execution(wx.Panel):
                                                                    state=wx.LIST_STATE_DONTCARE)
             self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(255, 219, 41))
 
+    def Linux_go_next_step(self, event=None):
+        # if (self.instructions_list.GetNextItem(wx.LIST_NEXT_BELOW) == -1):
+        #     pass
+        # else:
+        self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(175, 175, 175))
+        self.current_step = self.instructions_list.GetNextItem(item=self.current_step, geometry=wx.LIST_NEXT_BELOW,
+                                                               state=wx.LIST_STATE_DONTCARE)
+        self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(255, 219, 41))
+
     def go_prev_step(self, event=None):
-        # if self.current_step == 0:
-        #     self.current_step = -1
         if (self.instructions_list.GetNextItem(self.current_step, wx.LIST_NEXT_ABOVE) == -1):
             pass
         else:
@@ -137,6 +147,15 @@ class Execution(wx.Panel):
             self.current_step = self.instructions_list.GetNextItem(item=self.current_step, geometry=wx.LIST_NEXT_ABOVE,
                                                                    state=wx.LIST_STATE_DONTCARE)
             self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(255, 219, 41))
+
+    def Linux_go_prev_step(self, event=None):
+        # if (self.instructions_list.GetNextItem(wx.LIST_NEXT_ABOVE) == -1):
+        #     pass
+        # else:
+        self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(175, 175, 175))
+        self.current_step = self.instructions_list.GetNextItem(item=self.current_step, geometry=wx.LIST_NEXT_ABOVE,
+                                                               state=wx.LIST_STATE_DONTCARE)
+        self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(255, 219, 41))
 
     def change_units(self, event=None):
         self.parent.user.metric = not (self.parent.user.metric)

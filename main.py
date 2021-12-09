@@ -80,6 +80,7 @@ class Frame(wx.Frame):
         self.__panels[panel].Show()
         if panel in self.secondary:
             self.__ContentScroller.Show()
+            self.__ContentScroller.update_user()
         else:
             self.__ContentScroller.Hide()
         self.Layout()

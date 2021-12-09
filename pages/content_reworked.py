@@ -121,6 +121,10 @@ class ContentScroller(wx.Panel):
         else:
             self.previous.Show()
 
+    def update_user(self, event=None):
+        self.reload_recipes()
+
+
     # makes a request to the database and returns a recipe and a status report
     # status, recipe = self.__request(item_number)
     # returns TRUE as the status report, if there remain some results to display
