@@ -1,5 +1,5 @@
 # this file is run to ensure that there are no problems with the install
-import os, sys, warnings, subprocess, threading
+import os, sys, warnings, subprocess, threading, shutil
 
 try:
     import wx

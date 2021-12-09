@@ -15,7 +15,7 @@ class Account(wx.Panel):
         self.Back_Button.Bind(wx.EVT_BUTTON, parent.setPrevious)
 
         self.Sign_in = wx.Button(parent=self, label="Sign out", pos=(350, 0), size=(80, 50))
-        self.Sign_in.Bind(wx.EVT_BUTTON, self.Sign_in_example)
+        self.Sign_in.Bind(wx.EVT_BUTTON, self.sign_out)
 
         self.Home_button = wx.Button(parent=self, label="Home", pos=(350, 0), size=(80, 50))
         self.Home_button.Bind(wx.EVT_BUTTON, parent.setHomepage)
@@ -159,12 +159,17 @@ class Account(wx.Panel):
 
 
 
-    # to be replaced by real function, this is for demo purposes only
-    def Sign_in_example(self, event):
-        if self.parent.user.signed_in:
-            self.parent.user.example_guest()
-            self.parent.setSignin()
-        self.update_user()
+    # # to be replaced by real function, this is for demo purposes only
+    # def Sign_in_example(self, event):
+    #     if self.parent.user.signed_in:
+    #         self.parent.user.example_guest()
+    #         self.parent.setSignin()
+    #     self.update_user()
+
+    def sign_out(self, event=None):
+        self.parent.user.logout()
+        self.parent.first_sign_in = True
+        self.parent.setSignin()
 
 
 

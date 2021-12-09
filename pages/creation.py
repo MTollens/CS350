@@ -5,6 +5,7 @@ from dataManagement import ingredients
 from pages import custom_widgets as cw
 from dataManagement import recipe as recipe
 import warnings
+import shutil
 
 # not yet implemented in any way
 # saving this one for someone else to do, so I dont do all the UI
@@ -322,6 +323,14 @@ class Creation(wx.Panel):
             self.are_you_sure = False
 
         self.display_error("")
+        # copy the image files to the images directory
+        source = final.image
+        destination = "images/{}".format(os.path.basename(source))
+        shutil.copy(source, destination)
+        # set the new file location as the image location
+        final.image = destination
+        print(source)
+        print(destination)
         self.parent.user.save_recipe(final)
         self.parent.user.open_recipe = recipe.Recipe("CREATOR")
         # self.parent.setAccount()
@@ -385,8 +394,6 @@ class Creation(wx.Panel):
         if self.parent.user.database.getIngredientUnit(self.ingredients_item_selector.GetValue()):
             self.ingredients_amount.SetHint(self.parent.user.database.getIngredientUnit(self.ingredients_item_selector.GetValue()))
 
-
-
     # specific subpanel action handlers, should be fairly obvious what they do from the names
     def ingredients_category_chosen(self):
         val = self.ingredients_category_selector.GetValue()
@@ -425,7 +432,6 @@ class Creation(wx.Panel):
         temp = self.instructions_display.GetValue() + "\n- "
         self.instructions_display.SetValue(temp)
         self.instructions_display.SetInsertionPointEnd()
-
 
     def add_timer(self, event=None):
         temp = self.instructions_display.GetValue() + " [TIMER:5min] "

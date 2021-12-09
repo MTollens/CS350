@@ -88,7 +88,9 @@ class User():
 
     # these are the function that are acessable publicly
     def logout(self):
-        pass
+        self.signed_in = False
+        self.username = "Guest"
+        self.end_timer()
 
     def login(self, username, password):
         attempt = self.database.verifyLogin(username, password)
