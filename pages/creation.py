@@ -30,7 +30,7 @@ class Creation(wx.Panel):
 
         self.controls_box = wx.StaticBox(self, pos=(50,50), size=(220,525))
 
-        self.page_name = wx.StaticText(parent=self, label="Recipe Editor", pos=(70, 10), size=(200,30))
+        self.page_name = wx.StaticText(parent=self, label="Recipe Editor", pos=(60, 10), size=(200,30))
         self.page_name.SetFont(font_Title)
 
         self.image = wx.Button(self, pos=(60,70), size=(160, 160), label="add image")
@@ -181,6 +181,8 @@ class Creation(wx.Panel):
 
     def check_web_image(self, event=None):
         self.web_image_box.Hide()
+        if self.web_image_box.GetValue() in empty:
+            return 0
         self.image_path = self.web_image_box.GetValue()
         self.image.SetBitmap(common_utils.web_image(self.image_path, self.image.GetSize()))
         self.image.SetLabel("")
@@ -322,7 +324,7 @@ class Creation(wx.Panel):
             return 0
         if not self.are_you_sure:
             self.are_you_sure = True
-            self.display_error("Press final once more to confirm you are done")
+            self.display_error("Press [Finish] once more to confirm you are done")
             return 0
         else:
             self.are_you_sure = False
@@ -331,14 +333,15 @@ class Creation(wx.Panel):
         # copy the image files to the images directory
         source = final.image
         destination = "images/{}".format(os.path.basename(source))
-        shutil.copy(source, destination)
-        # set the new file location as the image location
-        final.image = destination
-        print(source)
-        print(destination)
+        if not os.path.exists(destination):
+            shutil.copy(source, destination)
+            # set the new file location as the image location
+            final.image = destination
+            print(source)
+            print(destination)
         self.parent.user.save_recipe(final)
         self.parent.user.open_recipe = recipe.Recipe("CREATOR")
-        # self.parent.setAccount()
+        # self.parent.setHomepage()
         self.load_recipe()
 
     # load the recipe from a recipe class for editing purposes
@@ -354,6 +357,7 @@ class Creation(wx.Panel):
         self.ingredients_display.SetValue(self.ingredients_list.pretty())
         self.image_path = new.image
         self.image.SetBitmap(common_utils.load_image(self.image_path, (160,160)))
+        self.image.SetLabel("")
         temp = ""
         for x in new.instructions:
             # print(x)

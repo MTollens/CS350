@@ -1,6 +1,5 @@
 import wx
 
-
 class Account(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
@@ -30,7 +29,9 @@ class Account(wx.Panel):
 
         self.recipe_list = wx.TextCtrl(parent=self, pos=(60, 60), size=(200, 100), style=wx.TE_READONLY | wx.TE_MULTILINE)
         self.recipe_open = wx.Button(self, label="Open")
+        self.recipe_open.Bind(wx.EVT_BUTTON, self.make_recipe)
         self.recipe_edit = wx.Button(self, label="Edit")
+        self.recipe_edit.Bind(wx.EVT_BUTTON, self.edit_recipe)
         self.recipe_input = wx.TextCtrl(self)
         self.recipe_input.SetHint("Enter a number to modify that recipe")
         self.recipe_delete = wx.Button(self, label="Delete")
@@ -64,7 +65,6 @@ class Account(wx.Panel):
         # self.self_sizer.Add(self.pantry_sizer, 1, wx.ALL | wx.EXPAND, 20)
         #
         # self.SetSizer(self.self_sizer)
-
 
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
@@ -114,7 +114,6 @@ class Account(wx.Panel):
         self.parent.user.delete_recipe((int(self.recipe_input.GetValue()) - 1))
         self.recipe_list.SetValue(self.parent.user.get_recipe_names())
 
-
     # Sets default button value
     def get_unit_label(self):
         if self.parent.user.metric:
@@ -148,7 +147,6 @@ class Account(wx.Panel):
             self.Units.SetLabel("Imperial")
         #TODO some code here to send the units update to the server, using the user class
 
-
     # similar function as metric but for setting public/private account
     def update_public(self):
         if self.parent.user.public:
@@ -157,19 +155,35 @@ class Account(wx.Panel):
             self.Public.SetLabel("Private")
         #TODO some code here to send the update to the server, using the user class
 
-
-
     # # to be replaced by real function, this is for demo purposes only
     # def Sign_in_example(self, event):
     #     if self.parent.user.signed_in:
     #         self.parent.user.example_guest()
     #         self.parent.setSignin()
     #     self.update_user()
-
     def sign_out(self, event=None):
         self.parent.user.logout()
         self.parent.first_sign_in = True
         self.parent.setSignin()
 
 
+    def make_recipe(self, event=None):
+        if self.recipe_position_is_valid():
+            self.parent.user.open_recipe = self.parent.user.recipes[int(self.recipe_input.GetValue())-1]
+            self.parent.setExecution()
+        self.recipe_input.SetValue("")
 
+    def edit_recipe(self, event=None):
+        if self.recipe_position_is_valid():
+            self.parent.user.open_recipe = self.parent.user.recipes[int(self.recipe_input.GetValue())-1]
+            self.parent.setEdit()
+        self.recipe_input.SetValue("")
+
+    def recipe_position_is_valid(self):
+        try:
+            return len(self.parent.user.recipes) >= int(self.recipe_input.GetValue())
+        except:
+            print("invalid recipe index\nfor length:")
+            print(len(self.parent.user.recipes))
+            print("got : {}".format(self.recipe_input.GetValue()))
+            return False

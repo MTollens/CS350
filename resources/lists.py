@@ -42,8 +42,15 @@ Utensil = database.getTools("Utensil")
 Dish = database.getTools("Dish")
 Other = database.getTools("Other")
 
-all_tools = {"Mixer":Mixer, "Utensil":Utensil, "Dish":Dish, "Other":Other}
+all_tools = {"Mixer": Mixer, "Utensil": Utensil, "Dish":Dish, "Other":Other}
 tools = Mixer + Utensil + Dish + Other
+
+
+#           unit name       metric * value in chart = imperial
+conversion = {
+       "grams": 0.002204623,
+       "millileter" : 1
+}
 
 
 

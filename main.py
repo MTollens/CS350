@@ -147,6 +147,7 @@ class Frame(wx.Frame):
         panel = 4
         self.__setPanel_visible(panel)
 
+    # set creation and set edit are not the same
     def setCreation(self, event=None):
         panel = 5
         if not self.user.signed_in:
@@ -167,6 +168,7 @@ class Frame(wx.Frame):
         panel = 8
         self.__setPanel_visible(panel)
 
+    # set edit and set creation are not the same
     def setEdit(self, event=None):
         panel = 5
         if not self.user.signed_in:

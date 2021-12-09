@@ -147,7 +147,6 @@ class Database():
 
         return self.dbcursor.rowcount
 
-
     def loadRecipeByOwner(self, owner):
         recipeList = []
 
@@ -284,8 +283,6 @@ class Database():
             return recipeList
         else:
             return []
-
-
 
     # Tool Fetching
     def getTools(self, category):
