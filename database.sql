@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: recipebuddy
 -- ------------------------------------------------------
--- Server version	8.0.22
+-- Server version	8.0.27
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -145,7 +145,7 @@ CREATE TABLE `recipe` (
 
 LOCK TABLES `recipe` WRITE;
 /*!40000 ALTER TABLE `recipe` DISABLE KEYS */;
-INSERT INTO `recipe` VALUES ('Cheese & Chicken Pasta','maxcolt','[[\"Chicken\", 10, \"gram(s)\"], [\"Cheese\", 15, \"ml(s)\"], [\"Noodles\", 20, \"gram(s)\"]]','[\"Pan\", \"Pot\", \"Fork\"]','[\"- Cook chicken on stove with pan\", \"- Boil pasta in water to cook it\", \"- Drain pasta\", \"- Mix pasta with cheese stirring until melted\", \"- Combine with chicken and serve\"]',2,'20 Minutes','[\"Easy\", \"Fast\", \"Cheap\"]',3,'resources/cheese_pasta.jpg');
+INSERT INTO `recipe` VALUES ('Cheese & Chicken Pasta','maxcolt','[[\"Chicken\", 10, \"gram(s)\"], [\"Cheese\", 15, \"ml(s)\"], [\"Noodles\", 20, \"gram(s)\"]]','[\"Pan\", \"Pot\", \"Fork\"]','[\"- Cook chicken on stove with pan\", \"- Boil pasta in water to cook it\", \"- Drain pasta\", \"- Mix pasta with cheese stirring until melted\", \"- Combine with chicken and serve\"]',2,'20 Minutes','[\"Easy\", \"Fast\", \"Cheap\"]',3,'resources/cheese_pasta.jpg'),('Simple Mac and Cheese','horickmj','[[\"Noodles\", \"15\", \"<UNIT>\"], [\"Butter\", \"2\", \"<UNIT>\"], [\"Milk\", \"4\", \"<UNIT>\"], [\"Cheese\", \"4\", \"<UNIT>\"]]','[\"Spoon\", \"Pot\", \"Bowl\"]','[\"- Boil water\", \"- Cook noodles [TIMER:8min] \", \"- Add butter and stir\", \"- Add cheese\", \"- Add milk and stir\"]',4,'15 minutes','[\"cheese\", \"dinner\", \"quick\", \"simple\"]',0,'C:\\Users\\Michael\\Downloads\\220px-Kraft_Dinner_Mac_Cheese_(crop).jpg');
 /*!40000 ALTER TABLE `recipe` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -186,4 +186,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-07 17:18:05
+-- Dump completed on 2021-12-08 19:57:48
