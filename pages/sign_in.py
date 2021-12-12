@@ -74,28 +74,33 @@ class Sign(wx.Panel):
         self.Create_account.Hide()
 
     def submit(self, event=None):
-        pass
-        # DEPRECATED CODE LIKELY NOT TO BE USED
-        # passwords match
-        # if self.Password.GetValue() != self.Confirm_Password.GetValue():
-        #     print(self.Password.GetValue())
-        #     print(self.Confirm_Password.GetValue())
-        #     self.error.SetLabel("Passwords do not match")
-        #     return 0
-        #
-        # # password long enough
-        # if len(self.Password.GetValue()) < 4:
-        #     self.error.SetLabel("Passwords must exceed\n four characters")
-        #     return 0
-        #
-        # # other password requirements
-        #
-        # if self.Password.GetValue() in empty:
-        #     self.error.SetLabel("Username Invalid")
-        #     return 0
-        #
-        # # if username taken
-        # self.return_to_default()
+
+        #passwords match
+        if self.Password.GetValue() != self.Confirm_Password.GetValue():
+            self.error.SetLabel("Passwords do not match")
+            return 0
+
+        # password long enough
+        if len(self.Password.GetValue()) < 4:
+            self.error.SetLabel("Passwords must exceed\n four characters")
+            return 0
+
+        # other password requirements
+        if self.Password.GetValue() in empty:
+            self.error.SetLabel("Username Invalid")
+            return 0
+
+        # if username taken
+        if self.Username.GetValue() in self.parent.user.database.getUsernames():
+            self.error.SetLabel("Username taken")
+            return 0
+
+        if self.parent.user.database.createAccount(self.Username.GetValue(), self.Password.GetValue()) == 0:
+            self.error.SetLabel("Unexpected account creation error")
+            return 0
+
+        self.error.SetLabel("Account created")
+        self.return_to_default()
 
     def return_to_default(self):
         self.Confirm.Show()

@@ -49,6 +49,33 @@ class Database():
             print("Login failed!")
             pass
 
+    def createAccount(self, username, password):
+        query = "INSERT INTO account VALUES (%s, %s, 0, 'Metric')"
+        inputs = (username, password, )
+
+        self.dbcursor.execute(query, inputs)
+
+        self.db.commit()
+        return self.dbcursor.rowcount
+
+    def getUsernames(self):
+        query = "SELECT username FROM account"
+
+        self.dbcursor.execute(query)
+
+        result = self.dbcursor.fetchall()
+
+        if result:
+            cleanList = []
+            for x in result:
+                cleanList.append(x[0])
+            return cleanList
+        else:
+            return
+
+
+
+
     def getAccountInfo(self, username):
         query = "SELECT private, measurement_system FROM account WHERE username = %s"
         input = (username, )
@@ -136,6 +163,7 @@ class Database():
         self.db.commit()
 
         return self.dbcursor.rowcount
+
 
     def deleteRecipe(self, recipe):
         query = "DELETE FROM recipe WHERE name = %s"
