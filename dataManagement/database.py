@@ -129,6 +129,21 @@ class Database():
         else:
             return
 
+    def getAllIngredients(self):
+        query = "SELECT name FROM ingredient"
+        self.dbcursor.execute(query, )
+
+        result = self.dbcursor.fetchall()
+
+        if result:
+            cleanList = []
+            for x in result:
+                cleanList.append(x[0])
+
+            return cleanList
+        else:
+            return
+
     def getIngredientUnit(self, ingredient):
         query = "SELECT unit FROM ingredient WHERE name = %s"
         input = (ingredient, )
@@ -174,6 +189,54 @@ class Database():
         self.db.commit()
 
         return self.dbcursor.rowcount
+
+    def __searchSort(self, val):
+        return val.times_exec
+
+    def loadRecipeBySearch(self, search):
+        recipeList = []
+        resultList = []
+        query = "SELECT * FROM recipe"
+
+        self.dbcursor.execute(query)
+        result = self.dbcursor.fetchall()
+
+        if result:
+            for item in result:
+                tempRecipe = recipe.Recipe(owner=item[1])
+                tempRecipe.title = item[0]
+                tempIngredients = ingredients.Ingredients()
+                tempIngredients.items = json.loads(item[2])
+                tempRecipe.ingredients = tempIngredients
+                tempRecipe.tools = json.loads(item[3])
+                tempRecipe.instructions = json.loads(item[4])
+                tempRecipe.servings = item[5]
+                tempRecipe.prep_time = item[6]
+                tempRecipe.tags = json.loads(item[7])
+                tempRecipe.times_exec = item[8]
+                tempRecipe.image = item[9]
+                recipeList.append(tempRecipe)
+            for item in recipeList:
+                ingSearch = search[0].upper() + search[1:].lower()
+                if ingSearch in self.getAllIngredients():
+                    # Get recipe's ingredient names
+                    recipeIngredientNames = []
+                    for ing in item.ingredients.items:
+                        recipeIngredientNames.append(ing[0])
+
+                    if ingSearch in recipeIngredientNames:
+                        resultList.append(item)
+                elif search.lower() in item.title.lower():
+                    resultList.append(item)
+
+            if resultList:
+                resultList.sort(key=self.__searchSort)
+                return resultList
+            else:
+                return []
+
+        else:
+            return []
 
     def loadRecipeByOwner(self, owner):
         recipeList = []

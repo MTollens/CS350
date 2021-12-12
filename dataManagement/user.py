@@ -163,6 +163,9 @@ class User():
     def load_featured_recipes(self):
         recipes = self.database.loadRecipeByFeatured()
         return recipes
+    def load_searched_recipes(self):
+        recipes = self.database.loadRecipeBySearch(self.current_search)
+        return recipes
 
     # here the value should be an integer number of seconds
     # here the timer is a reference to the StaticText that represents the remaining time

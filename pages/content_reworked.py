@@ -83,11 +83,17 @@ class ContentScroller(wx.Panel):
 
         self.current_page.SetLabel("Page {}".format(self.page+1))
         # left panel starts at 1
-        item1 = recipe.Recipe("dummy").invalid()
+        item1 = recipe.Recipe("dummy").no_more_results()
         item2 = recipe.Recipe("dummy").no_more_results()
         item3 = recipe.Recipe("dummy").no_more_results()
 
         status, item1 = self.__request(self.page * 3 + 1)
+
+        # Check if search results found
+        if not item1:
+            item1 = recipe.Recipe("dummy").no_more_results()
+            self.current_page.SetLabel("No results found!")
+
         self.left_image.SetBitmap(common_utils.load_image(item1.image, self.left_image.GetSize()))
         self.left_info.SetLabel(item1.generate_description(64))
         self.left_recipe = item1
@@ -144,13 +150,13 @@ class ContentScroller(wx.Panel):
                 return isntLast, None
         # TODO Implement this properly to handle searching
         else:
-            results = self.parent.user.load_featured_recipes()
-            isLast = item - 1 != len(results)
-            if item - 1 <= len(results):
-                return isLast, results[item - 1]
+            results = self.parent.user.load_searched_recipes()
+            isntLast = item != len(results)
+            if item <= len(results):
+                return isntLast, results[item - 1]
             else:
                 # i forgot, you dont need to pass a recipe if you are returning false
-                return isLast, None
+                return False, None
 
         # can return invalid if applicable
 
