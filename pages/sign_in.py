@@ -100,6 +100,10 @@ class Sign(wx.Panel):
             self.error.SetLabel("Passwords must exceed\n four characters")
             return 0
 
+        if len(self.Password.GetValue()) > 32:
+            self.error.SetLabel("Passwords cannot exceed\n 32 characters")
+            return 0
+
         # other password requirements
         if self.Password.GetValue() in empty:
             self.error.SetLabel("Username Invalid")

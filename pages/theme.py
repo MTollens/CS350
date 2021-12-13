@@ -25,9 +25,9 @@ dark = black
 light = white
 
 # option 1
-primary = light_red
-secondary = light_orange
-accent = light_blue
+# primary = light_red
+# secondary = light_orange
+# accent = light_blue
 
 # option 2
 # primary = orange
@@ -35,9 +35,9 @@ accent = light_blue
 # accent = green
 
 # # option 3
-# primary = firestorm
-# secondary = sand
-# accent = slime
+primary = firestorm
+secondary = sand
+accent = slime
 
 # vibrant
 # primary = velvet
