@@ -1,4 +1,5 @@
 import wx
+from pages import theme
 
 empty = ["", " ", None]
 
@@ -32,13 +33,28 @@ class Homepage(wx.Panel):
 
         self.Help = wx.Button(parent=self, label="Help", pos=(0, 50), size=(50, 50))
         self.Help.Bind(wx.EVT_BUTTON, parent.setHelp)
-        self.Favorites = wx.Button(parent=self, label="Picks", pos=(0, 100), size=(50, 50))
-        self.Recent = wx.Button(parent=self, label="Recent", pos=(0, 150), size=(50, 50))
+        # self.Favorites = wx.Button(parent=self, label="Picks", pos=(0, 100), size=(50, 50))
+        # self.Recent = wx.Button(parent=self, label="Recent", pos=(0, 150), size=(50, 50))
 
         # do not delete
         # self.Test = wx.Button(parent=self, label="Test", pos=(0, 200), size=(50, 50))
         # # self.Test.Bind(wx.EVT_BUTTON, parent.setExecution)
         # self.Test.Bind(wx.EVT_BUTTON, parent.setTest)
+
+        if theme.enable and self.parent.user.platform == "Windows":
+            if theme.dark_theme:
+                self.SetBackgroundColour(theme.dark)
+                self.SetForegroundColour(theme.light)
+                self.Searchbar.SetForegroundColour(theme.light)
+                self.Searchbar.SetBackgroundColour(theme.dark)
+            self.New_recipe.SetBackgroundColour(theme.primary)
+            self.Search.SetBackgroundColour(theme.primary)
+            self.Account.SetBackgroundColour(theme.secondary)
+            self.Pantry.SetBackgroundColour(theme.secondary)
+            self.Help.SetBackgroundColour(theme.secondary)
+
+
+
 
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):

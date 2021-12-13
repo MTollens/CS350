@@ -1,7 +1,7 @@
 import regex
 import wx
 from dataManagement import common_utils
-
+from pages import theme
 
 # not yet implemented in any way
 # saving this one for someone else to do, so I dont do all the UI
@@ -72,6 +72,11 @@ class Execution(wx.Panel):
 
         # load in user dataManagement
         self.update_user()
+
+        if theme.enable and self.parent.user.platform == "Windows":
+            if theme.dark_theme:
+                self.SetBackgroundColour(theme.dark)
+                self.SetForegroundColour(theme.light)
 
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):

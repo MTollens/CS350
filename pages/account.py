@@ -1,4 +1,5 @@
 import wx
+from pages import theme
 
 class Account(wx.Panel):
     def __init__(self, parent):
@@ -70,6 +71,37 @@ class Account(wx.Panel):
         # self.self_sizer.Add(self.pantry_sizer, 1, wx.ALL | wx.EXPAND, 20)
         #
         # self.SetSizer(self.self_sizer)
+
+        if theme.enable and self.parent.user.platform == "Windows":
+            if theme.dark_theme:
+                self.SetBackgroundColour(theme.dark)
+                self.SetForegroundColour(theme.light)
+                self.pantry_tools.SetForegroundColour(theme.light)
+                self.pantry_ingredients.SetForegroundColour(theme.light)
+                self.recipes.SetForegroundColour(theme.light)
+                self.recipe_list.SetBackgroundColour(theme.dark)
+                self.recipe_list.SetForegroundColour(theme.light)
+                self.ingredients_list.SetForegroundColour(theme.light)
+                self.ingredients_list.SetBackgroundColour(theme.dark)
+                self.tools_list.SetBackgroundColour(theme.dark)
+                self.tools_list.SetForegroundColour(theme.light)
+                self.Account_age.SetForegroundColour(theme.light)
+                self.Account_name.SetForegroundColour(theme.light)
+
+            self.ingredient_add.SetBackgroundColour(theme.primary)
+            self.ingredient_del.SetBackgroundColour(theme.primary)
+            self.tool_add.SetBackgroundColour(theme.primary)
+            self.tool_del.SetBackgroundColour(theme.primary)
+            self.recipe_edit.SetBackgroundColour(theme.accent)
+            self.recipe_delete.SetBackgroundColour(theme.primary)
+            self.recipe_open.SetBackgroundColour(theme.secondary)
+            self.Units.SetBackgroundColour(theme.secondary)
+            self.Public.SetBackgroundColour(theme.secondary)
+            self.Back_Button.SetBackgroundColour(theme.secondary)
+            self.Home_button.SetBackgroundColour(theme.primary)
+            self.Sign_in.SetBackgroundColour(theme.secondary)
+
+
 
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):

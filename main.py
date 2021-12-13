@@ -79,8 +79,8 @@ class Frame(wx.Frame):
         self.__panels[panel].Bind(wx.EVT_SIZE, self.__panels[panel].resize_main)
         self.__panels[panel].Show()
         if panel in self.secondary:
-            self.__ContentScroller.Show()
             self.__ContentScroller.update_user()
+            self.__ContentScroller.Show()
         else:
             self.__ContentScroller.Hide()
         self.Layout()

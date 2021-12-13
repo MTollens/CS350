@@ -5,20 +5,21 @@ import warnings
 # load file bitmap and return it as a bitmap object
 # for use with the "image" object
 def load_image(filename, size):
-    if filename[-4:] == ".lnk":
-        # we are dealing with an internet image now
-        with open(filename, "r") as file:
-            pass
-    else:
-        # file extension checking not required, because a failure mode is prepared
-        temp = 0
-        try:
-            temp = wx.Bitmap(filename, wx.BITMAP_TYPE_ANY)
-            temp = scale_bitmap(temp, size[0], size[1])
-        except:
-            temp = wx.Bitmap("resources/nofile.png", wx.BITMAP_TYPE_ANY)
-            temp = scale_bitmap(temp, size[0], size[1])
-        return temp
+    # if filename[-4:] == ".lnk":
+    #     # we are dealing with an internet image now
+    #     with open(filename, "r") as file:
+    #         pass
+    # else:
+    # file extension checking not required, because a failure mode is prepared
+    temp = 0
+    try:
+        temp = wx.Bitmap(filename, wx.BITMAP_TYPE_ANY)
+        temp = scale_bitmap(temp, size[0], size[1])
+    except Exception as e:
+        print(e)
+        temp = wx.Bitmap("resources/nofile.png", wx.BITMAP_TYPE_ANY)
+        temp = scale_bitmap(temp, size[0], size[1])
+    return temp
 
 
 # scales bitmap, shouldnt need to be touched at all
