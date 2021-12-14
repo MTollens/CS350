@@ -1,4 +1,5 @@
 import wx
+from pages import theme
 
 
 # a very simple sign in page
@@ -40,6 +41,20 @@ class Sign(wx.Panel):
         self.Submit.Hide()
 
         self.error = wx.StaticText(parent=self, label="", pos=(500, 180))
+
+        # load in theme
+        if theme.enable and self.parent.user.platform == "Windows":
+            if theme.dark_theme:
+                self.SetBackgroundColour(theme.dark)
+                self.SetForegroundColour(theme.light)
+                self.Username_title.SetForegroundColour(theme.light)
+                self.Password_title.SetForegroundColour(theme.light)
+                self.Confirm_title.SetForegroundColour(theme.light)
+            self.Confirm.SetBackgroundColour(theme.primary)
+            self.Create_account.SetBackgroundColour(theme.accent)
+            self.Cancel.SetBackgroundColour(theme.secondary)
+            self.Guest.SetBackgroundColour(theme.secondary)
+            self.Submit.SetBackgroundColour(theme.primary)
 
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
@@ -83,6 +98,10 @@ class Sign(wx.Panel):
         # password long enough
         if len(self.Password.GetValue()) < 4:
             self.error.SetLabel("Passwords must exceed\n four characters")
+            return 0
+
+        if len(self.Password.GetValue()) > 32:
+            self.error.SetLabel("Passwords cannot exceed\n 32 characters")
             return 0
 
         # other password requirements

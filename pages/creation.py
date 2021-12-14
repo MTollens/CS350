@@ -7,6 +7,7 @@ from dataManagement import recipe as recipe
 import warnings
 import shutil
 from dataManagement import common_utils
+from pages import theme
 
 # not yet implemented in any way
 # saving this one for someone else to do, so I dont do all the UI
@@ -173,6 +174,14 @@ class Creation(wx.Panel):
         # load in user dataManagement
         self.update_subs()
         self.update_user()
+
+
+        if theme.enable and self.parent.user.platform == "Windows":
+            if theme.dark_theme:
+                self.SetBackgroundColour(theme.dark)
+                self.SetForegroundColour(theme.light)
+
+
 
     def find_web_image(self, event=None):
         self.sub = 0

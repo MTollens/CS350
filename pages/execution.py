@@ -1,7 +1,7 @@
 import regex
 import wx
 from dataManagement import common_utils
-
+from pages import theme
 
 # not yet implemented in any way
 # saving this one for someone else to do, so I dont do all the UI
@@ -70,8 +70,18 @@ class Execution(wx.Panel):
         self.timer_status = wx.TextCtrl(parent=self, pos=(100, 625), style=wx.TE_READONLY)
         self.timer_secs = 0
 
+
+        if self.parent.user.platform == "Linux":
+            self.go_prev_step = self.go_prev_step_LINUX
+            self.go_next_step = self.go_next_step_LINUX
+
         # load in user dataManagement
         self.update_user()
+
+        if theme.enable and self.parent.user.platform == "Windows":
+            if theme.dark_theme:
+                self.SetBackgroundColour(theme.dark)
+                self.SetForegroundColour(theme.light)
 
     # one of the most important UI functions, this is where the window resize gets handled
     def resize_main(self, event=None):
@@ -123,8 +133,17 @@ class Execution(wx.Panel):
         # self.image = (self.recipe.image)
 
     def go_next_step(self, event=None):
-        # if self.current_step == 0:
-        #     self.current_step = -1
+        if (self.instructions_list.GetNextItem(self.current_step, wx.LIST_NEXT_BELOW) == -1):
+            pass
+        else:
+            self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(175, 175, 175))
+            self.current_step = self.instructions_list.GetNextItem(item=self.current_step, geometry=wx.LIST_NEXT_BELOW,
+                                                                   state=wx.LIST_STATE_DONTCARE)
+            self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(255, 219, 41))
+
+    def go_next_step_LINUX(self, event=None):
+        if self.current_step == 0:
+            self.current_step = 1
         if (self.instructions_list.GetNextItem(self.current_step, wx.LIST_NEXT_BELOW) == -1):
             pass
         else:
@@ -134,8 +153,18 @@ class Execution(wx.Panel):
             self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(255, 219, 41))
 
     def go_prev_step(self, event=None):
-        # if self.current_step == 0:
-        #     self.current_step = -1
+        if (self.instructions_list.GetNextItem(self.current_step, wx.LIST_NEXT_ABOVE) == -1):
+            pass
+        else:
+            self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(175, 175, 175))
+            self.current_step = self.instructions_list.GetNextItem(item=self.current_step, geometry=wx.LIST_NEXT_ABOVE,
+                                                                   state=wx.LIST_STATE_DONTCARE)
+            self.instructions_list.SetItemBackgroundColour(self.current_step, wx.Colour(255, 219, 41))
+
+    def go_prev_step_LINUX(self, event=None):
+        if self.current_step == 0:
+            self.current_step = 1
+
         if (self.instructions_list.GetNextItem(self.current_step, wx.LIST_NEXT_ABOVE) == -1):
             pass
         else:

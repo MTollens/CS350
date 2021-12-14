@@ -1,6 +1,7 @@
 import wx
 from dataManagement import recipe
 from dataManagement import common_utils
+from pages import theme
 
 
 class ContentScroller(wx.Panel):
@@ -18,7 +19,7 @@ class ContentScroller(wx.Panel):
         self.page = 0
 
         self.sizer = wx.BoxSizer()
-        self.image_size = (200, 200)
+        self.image_size = (300, 300)
         self.info_size = (200, 50)
 
         # left
@@ -75,6 +76,16 @@ class ContentScroller(wx.Panel):
         self.SetSizer(self.sizer)
 
         self.reload_recipes()
+
+        if theme.enable and self.parent.user.platform == "Windows":
+            if theme.dark_theme:
+                self.SetBackgroundColour(theme.dark)
+                self.current_page.SetForegroundColour(theme.light)
+            self.left_info.SetBackgroundColour(theme.primary)
+            self.mid_info.SetBackgroundColour(theme.primary)
+            self.right_info.SetBackgroundColour(theme.primary)
+            self.next.SetBackgroundColour(theme.secondary)
+            self.previous.SetBackgroundColour(theme.secondary)
 
     # takes into consideration the page, and how many tiles are on screen
     def reload_recipes(self):
