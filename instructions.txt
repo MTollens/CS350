@@ -1,0 +1,9 @@
+How to run the program
+1. Download my sql community edition https://dev.mysql.com/downloads/installer/
+2. Run and follow installer steps. Set up root account.
+3. Once installed, run the mysql command line, login as root, and run the following command: "CREATE DATABASE recipebuddy;"
+4. Install Python3 and pip (python needs to be a newer version, around 3.7 or higher I believe).
+5. Run the following pip installs: "pip install regex requests mysql-connector" and "pip install -U wxPython"
+6. In the CS350 directory, make a file called "password" (no file extension) and put your mysql root password in there
+7. Run the following command in the command line "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql" -uroot -p -h127.0.0.1 recipebuddy < database.sql (adjust first path accordingly if necessary)
+8. Run main.py with python3
